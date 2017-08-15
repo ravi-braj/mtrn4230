@@ -19,6 +19,7 @@ global exit;
 
 while (~exit)
     
+    a = 0;
     
 end
 
