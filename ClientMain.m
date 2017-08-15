@@ -20,6 +20,7 @@ global exit;
 while (~exit)
     
     a = 0;
+    b = 10;
     
 end
 
