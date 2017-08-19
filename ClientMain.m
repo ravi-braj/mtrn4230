@@ -9,6 +9,9 @@
 
 global exit;
 
+%----- START GUI -------
+clientGui = gui();
+GUIData = guidata(clientGui);
 
 %%%%%%%%%%%%% 2 INITIALISATIONS %%%%%%%%%%%%
 
