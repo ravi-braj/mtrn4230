@@ -1,7 +1,7 @@
 %%%% CALLBACK FUNCTION FOR CLIENTMAIN TIMER
 
 
-function timerCallback(obj, event, interface) 
+function timerCallback(obj, event, ui) 
 
     %av_period = get(obj, 'AveragePeriod')
     fprintf("Timer callback executed. %f seconds since last call\n", get(obj, 'InstantPeriod'));
@@ -19,7 +19,7 @@ function timerCallback(obj, event, interface)
     % 3) update status of i/o s
     
     
-    interface.updateIOs(randi([0 1],1,4));
+    ui.updateIOs(randi([0 1],1,4));
     
     %% ---------- request pose of the robot and update ui ------
     % 1) send request packet to robot
@@ -27,7 +27,7 @@ function timerCallback(obj, event, interface)
     % 3) update interface
     
     
-    interface.updatePose(rand(), rand(), rand());
+    ui.updatePose(rand(), rand(), rand());
     
     
     
@@ -36,10 +36,10 @@ function timerCallback(obj, event, interface)
     % 2) use gui plot handle for setting the data in the camera plot
 
      %some dummy data
-    x = get(interface.h_camConveyor, 'XData');
+    x = get(ui.h_camConveyor, 'XData');
     x = [x(end), x(1:end-1)];
 
-    set(interface.h_camConveyor, 'XData', x);
+    set(ui.h_camConveyor, 'XData', x);
 
     
     
@@ -47,9 +47,9 @@ function timerCallback(obj, event, interface)
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the camera plot
     
-    x = get(interface.h_camTable, 'XData');
+    x = get(ui.h_camTable, 'XData');
     x = [x(2:end), x(1)];
-    set(interface.h_camTable, 'XData', x);
+    set(ui.h_camTable, 'XData', x);
 
     
     

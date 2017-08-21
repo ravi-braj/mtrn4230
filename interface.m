@@ -8,6 +8,9 @@ classdef interface
         clientGUI
         clientGUIData
         
+        %tcp object
+        robotTCP
+        
         % handles
         h_camConveyor
         h_camTable
@@ -19,6 +22,9 @@ classdef interface
         function obj = interface()
             obj.clientGUI = gui();
             obj.clientGUIData = guidata(obj.clientGUI);
+            
+            %----------- robot tcp -------------------%
+            obj.robotTCP = abb_tcp();
             
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as

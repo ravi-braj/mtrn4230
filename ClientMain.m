@@ -10,11 +10,11 @@
 global exit;
 exit = false;
 
-ui = interface();
+
 
 %----- START GUI -------
-%clientGui = gui();
-%GUIData = guidata(clientGui);
+% gui is constructed in interface constructor function
+ui = interface();
 
 %----- Set up timer
 mainTimer = timer();
