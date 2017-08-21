@@ -16,6 +16,18 @@ function timerCallback(obj, event, interface)
     %% ---------- request status of i/o via tcp from robot -----
     % 1) send a request packet to the robot
     % 2) receive the i/o packet from the robot
+    % 3) update status of i/o s
+    
+    
+    interface.updateIOs(randi([0 1],1,4));
+    
+    %% ---------- request pose of the robot and update ui ------
+    % 1) send request packet to robot
+    % 2) receive the packet from the robot
+    % 3) update interface
+    
+    
+    interface.updatePose(rand(), rand(), rand());
     
     
     
@@ -37,7 +49,6 @@ function timerCallback(obj, event, interface)
     
     x = get(interface.h_camTable, 'XData');
     x = [x(2:end), x(1)];
-
     set(interface.h_camTable, 'XData', x);
 
     
