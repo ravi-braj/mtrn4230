@@ -23,7 +23,7 @@ classdef interface
             %(or other) which are child classes of axes
             
             %%dummy data
-            x = linspace(1, 720, 100);
+            x = linspace(1, 20, 100);
             y = sin(x);
             obj.h_camConveyor = plot(obj.clientGUIData.camera_conveyor, x, y);
             obj.h_camTable = plot(obj.clientGUIData.camera_table, x, y);
