@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 19-Aug-2017 18:48:47
+% Last Modified by GUIDE v2.5 21-Aug-2017 13:05:01
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -42,7 +42,7 @@ else
     gui_mainfcn(gui_State, varargin{:});
 end
 % End initialization code - DO NOT EDIT
-
+end
 
 % --- Executes just before gui is made visible.
 function gui_OpeningFcn(hObject, eventdata, handles, varargin)
@@ -60,7 +60,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes gui wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-
+end
 
 % --- Outputs from this function are returned to the command line.
 function varargout = gui_OutputFcn(hObject, eventdata, handles) 
@@ -71,3 +71,14 @@ function varargout = gui_OutputFcn(hObject, eventdata, handles)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
+end
+
+
+% --- Executes on button press in button_exit.
+function button_exit_Callback(hObject, eventdata, handles)
+% hObject    handle to button_exit (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global exit;
+    exit = true;
+end
