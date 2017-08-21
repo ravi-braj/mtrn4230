@@ -36,10 +36,10 @@ function timerCallback(obj, event, ui)
     % 2) use gui plot handle for setting the data in the camera plot
 
      %some dummy data
-    x = get(ui.h_camConveyor, 'XData');
-    x = [x(end), x(1:end-1)];
+    y = get(ui.h_camConveyor, 'YData');
+    y = [y(end), y(1:end-1)];
 
-    set(ui.h_camConveyor, 'XData', x);
+    set(ui.h_camConveyor, 'YData', y);
 
     
     
@@ -47,9 +47,9 @@ function timerCallback(obj, event, ui)
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the camera plot
     
-    x = get(ui.h_camTable, 'XData');
-    x = [x(2:end), x(1)];
-    set(ui.h_camTable, 'XData', x);
+    y = get(ui.h_camTable, 'YData');
+    y = [y(2:end), y(1)];
+    set(ui.h_camTable, 'YData', y);
 
     
     
