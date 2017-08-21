@@ -3,16 +3,18 @@
 % User interface for ABB robot
 
 
-%%%%%%%%%%%%% 1 SETUP %%%%%%%%%%%%%%
+%% %%%%%%%%%%% 1 SETUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %----- GLOBAL FLAGS ----
 
 global exit;
 exit = false;
 
+ui = interface();
+
 %----- START GUI -------
-clientGui = gui();
-GUIData = guidata(clientGui);
+%clientGui = gui();
+%GUIData = guidata(clientGui);
 
 %----- Set up timer
 mainTimer = timer();
@@ -21,26 +23,27 @@ mainTimer.Period = 0.1;
 mainTimer.ExecutionMode = 'fixedRate';
 
 
-%%%%%%%%%%%%% 2 INITIALISATIONS %%%%%%%%%%%%
+%% %%%%%%%%%%% 2 INITIALISATIONS %%%%%%%%%%%%%%%%%%%%%%%
 
 %set start up function of the timer
-mainTimer.StartFcn = @timerSetup;
+mainTimer.StartFcn = {@timerSetup, ui};
 
 
-%%%%%%%%%%%%% 3 TIMER CALLBACK FUNCTION %%%%%%%%%%%%%%%
+%% %%%%%%%%%%% 3 TIMER CALLBACK FUNCTION %%%%%%%%%%%%%%%
 
 %set the call function of the timer
-mainTimer.TimerFcn = @timerCallback;
+mainTimer.TimerFcn = {@timerCallback, ui};
 
-%%%%%%%%%%%%% 4 RUN TIMER %%%%%%%%%%%%%%%%
+%% %%%%%%%%%%% 4 RUN TIMER %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 start(mainTimer);
 
-%%%%%%%%%%%%% 4 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%%%%%%
+%% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
 while((get(mainTimer, 'Running') ~= "off"))
     pause(0.1);
 end
 
 disp("closing");
-delete(clientGui);
+delete(ui.clientGUI);
 delete(mainTimer);
 

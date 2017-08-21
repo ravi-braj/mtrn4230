@@ -1,8 +1,7 @@
 
 
-function timerSetup(obj, event)
-    %----- START GUI -------
-    clientGui = gui();
-    GUIData = guidata(clientGui);
+function timerSetup(obj, event, interface)
+
+
 
 end

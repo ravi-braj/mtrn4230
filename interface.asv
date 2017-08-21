@@ -1,0 +1,10 @@
+classdef interface
+    properties
+        clientGUI
+        clientGUIData
+        
+    end
+    methods
+        function obj = inter
+    end
+end
