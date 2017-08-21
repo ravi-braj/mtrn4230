@@ -18,7 +18,7 @@ function timerCallback(obj, event, ui)
     % 2) receive the i/o packet from the robot
     % 3) update status of i/o s
     
-    
+    %currently fills io status on gui to junk data
     ui.updateIOs(randi([0 1],1,4));
     
     %% ---------- request pose of the robot and update ui ------
