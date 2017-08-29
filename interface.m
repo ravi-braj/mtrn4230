@@ -15,6 +15,9 @@ classdef interface < handle
         h_camConveyor
         h_camTable
         
+        %rgb data
+        camData
+        
     end
     methods
         
@@ -26,7 +29,7 @@ classdef interface < handle
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
             
-            obj.robotTCP.openTCP('127.0.0.1', 1025);
+            %obj.robotTCP.openTCP('127.0.0.1', 1025);
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as
             % the handle in the plot constructor and assign to a new handle
@@ -57,6 +60,13 @@ classdef interface < handle
             set(obj.clientGUIData.io_solenoid_on, 'String', ioArray(2));
             set(obj.clientGUIData.io_conveyor_enable, 'String', ioArray(3));
             set(obj.clientGUIData.io_conveyor_direction, 'String', ioArray(4));
+        end
+        
+        % get serial data from camera on conveyor - updates camData
+        % property (rgb)
+        function obj = datafromConveyorCam(obj)
+            %obj.camData = blahblahgetserial
+            %update rgb data in camdata
         end
         
     end
