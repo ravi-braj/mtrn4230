@@ -31,10 +31,15 @@ function timerCallback(obj, event, ui)
     
     
     
-    %% ---------- receive tcp from camera ---------------------
-    % 1) receive the tcp
+    %% ---------- receive serial from camera ---------------------
+    % 1) receive the serial data
+    ui.datafromConveyorCam();
+    %box(ui.camData); commented out since camData is currently just stub
     % 2) use gui plot handle for setting the data in the camera plot
 
+    
+    
+    
      %some dummy data
     y = get(ui.h_camConveyor, 'YData');
     y = [y(end), y(1:end-1)];
@@ -53,8 +58,8 @@ function timerCallback(obj, event, ui)
 
     
     %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
-    disp("first read?");
-    ui.robotTCP.firstRead();
+    %disp("first read?");
+    %ui.robotTCP.firstRead();
     
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
