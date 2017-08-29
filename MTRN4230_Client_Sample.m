@@ -13,6 +13,7 @@ robot_port = 1025;
 fclose('all');
 % Open a TCP connection to the robot.
 socket = tcpip(robot_IP_address, robot_port);
+socket.ByteOrder = 'littleEndian';   %Set Endian to convert
 set(socket, 'ReadAsyncMode', 'continuous');
 fopen(socket);
 
@@ -32,10 +33,12 @@ while quit == false
 
     % Read a line from the socket. Note the line feed appended to the message in the RADID sample code.
     disp('Reading from socket...');
-    data = fread(socket,3,'uint8');
-
+    
+    %data = fread(socket,3,'uint8');    % To read bytes
+    data = fread(socket,3,'float32');   % To read rawbytes
+    
     % Print the data that we got.
-    disp(data); 
+    disp(data);
 end
 
 % Close the socket.
