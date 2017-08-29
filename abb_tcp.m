@@ -15,9 +15,11 @@ classdef abb_tcp
         
         %opens connection and returns true if successful or false if
         %invalid
-        function valid = openTCP(obj, ip_address, port)
+        function obj = openTCP(obj, ip_address, port)
             % Open a TCP connection to the robot.
             obj.socket = tcpip(ip_address, port);
+            
+            pause(0.5);
             set(obj.socket, 'ReadAsyncMode', 'continuous');
             fopen(obj.socket);
 
@@ -54,6 +56,15 @@ classdef abb_tcp
         
         %tells the robot to execute some command (like go to this point)
         function sendCommand(command)
+        end
+        
+        function firstRead(obj) 
+            disp("inside first read");
+            % Send a sample string to the server on the robot.
+            fwrite(obj.socket, num2str(45645456456));
+            disp('attempting to read data');
+            data = fgetl(obj.socket);
+            disp(data);
         end
         
     end
