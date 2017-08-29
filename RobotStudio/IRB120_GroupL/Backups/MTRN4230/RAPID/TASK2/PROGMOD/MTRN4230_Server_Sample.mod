@@ -4,22 +4,25 @@ MODULE MTRN4230_Server_Sample
     VAR socketdev client_socket;
     
     ! The host and port that we will be listening for a connection on.
+    !CONST string host := "192.168.2.1";
     CONST string host := "127.0.0.1";
     CONST num port := 1025;
     
     PROC MainServer()
         
         VAR string received_str;
-        
+        VAR rawbytes messageOut;
+        VAR num message;
+        message:= 18923901;
         
         ListenForAndAcceptConnection;
-            
+        
         ! Receive a string from the client.
         SocketReceive client_socket \Str:=received_str;
             
         ! Send the string back to the client, adding a line feed character.
-        SocketSend client_socket \Str:=(received_str + "\0A");
-        
+        !SocketSend client_socket \Str:=(received_str+"\0A");
+        SocketSend client_socket \RawData:=messageOut;
         CloseConnection;
 		
     ENDPROC
