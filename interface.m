@@ -2,7 +2,7 @@
 % designed to stop globals being passed around everywhere. Instead just
 % pass an 'interface' object to access all your handles.
 
-classdef interface
+classdef interface < handle
     properties (Access = public)
         %user interface
         clientGUI
@@ -26,7 +26,7 @@ classdef interface
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
             
-            %obj.robotTCP.openTCP('127.0.0.1', 1025);
+            obj.robotTCP.openTCP('127.0.0.1', 1025);
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as
             % the handle in the plot constructor and assign to a new handle
@@ -45,14 +45,14 @@ classdef interface
         end
         
         %updates the pose displayed by the interface.
-        function updatePose(obj, pos_x, pos_y, pos_z)
+        function obj = updatePose(obj, pos_x, pos_y, pos_z)
             set(obj.clientGUIData.pose_x, 'String', pos_x);
             set(obj.clientGUIData.pose_y, 'String', pos_y);
             set(obj.clientGUIData.pose_z, 'String', pos_z);
         end
         
         %takes in the array of i/o statuses and updates interface
-        function updateIOs(obj, ioArray)
+        function obj = updateIOs(obj, ioArray)
             set(obj.clientGUIData.io_vacuum_on, 'String', ioArray(1));
             set(obj.clientGUIData.io_solenoid_on, 'String', ioArray(2));
             set(obj.clientGUIData.io_conveyor_enable, 'String', ioArray(3));

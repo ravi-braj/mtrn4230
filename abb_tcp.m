@@ -2,7 +2,7 @@
 %%% protocols inbuilt
 
 
-classdef abb_tcp 
+classdef abb_tcp < handle
     properties
         socket;
     end
