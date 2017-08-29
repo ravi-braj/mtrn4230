@@ -52,7 +52,9 @@ function timerCallback(obj, event, ui)
     set(ui.h_camTable, 'YData', y);
 
     
-    
+    %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
+    disp("first read?");
+    ui.robotTCP.firstRead();
     
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%

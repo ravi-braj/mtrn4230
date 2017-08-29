@@ -26,6 +26,7 @@ classdef interface
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
             
+            %obj.robotTCP.openTCP('127.0.0.1', 1025);
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as
             % the handle in the plot constructor and assign to a new handle
