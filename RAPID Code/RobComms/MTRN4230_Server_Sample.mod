@@ -1,6 +1,5 @@
 MODULE MTRN4230_Server_Sample    
-    !test shit removed
-    !dans edits
+	
     ! The socket connected to the client.
     VAR socketdev client_socket;
     
@@ -50,11 +49,13 @@ MODULE MTRN4230_Server_Sample
         
         ! Output data to client
         VAR rawbytes raw_data;
-        VAR num pose{3};
-        VAR num io_states{5};
+        VAR num pose_out{3};
+        VAR num io_states_out{5};
+        VAR num pose_in{3};
+        VAR num io_states_in{5};
         
-        pose{1}:=1123.4; pose{2}:=232.05; pose{3}:=6.242;
-        io_states{1} := 1; io_states{2}:=0; io_states{3}:=0; io_states{4}:=1; io_states{5}:=1; 
+        pose_out{1}:=1123.4; pose_out{2}:=232.05; pose_out{3}:=6.242;
+        io_states_out{1} := 1; io_states_out{2}:=0; io_states_out{3}:=0; io_states_out{4}:=1; io_states_out{5}:=1; 
         
         ListenForAndAcceptConnection;
         
@@ -63,22 +64,42 @@ MODULE MTRN4230_Server_Sample
         
         WHILE request <> "c" DO     ! Keep server alive until close command recieved
             ClearRawBytes raw_data;
-        
+
             IF request = "p" THEN   ! Client requested pose data
                 
-                FOR i FROM 1 TO Dim(pose,1) DO
-                    PackRawBytes pose{i}, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+                FOR i FROM 1 TO Dim(pose_out,1) DO
+                    PackRawBytes pose_out{i}, raw_data, (RawBytesLen(raw_data)+1) \Float4;
                 ENDFOR
                 
                 SocketSend client_socket \RawData:=raw_data;
             
             ELSEIF request = "i" THEN   ! Client requested io_states data
                 
-                FOR i FROM 1 TO Dim(pose,1) DO
-                    PackRawBytes io_states{i}, raw_data, (RawBytesLen(raw_data)+1) \IntX := INT;
+                FOR i FROM 1 TO Dim(pose_out,1) DO
+                    PackRawBytes io_states_out{i}, raw_data, (RawBytesLen(raw_data)+1) \IntX := INT;
                 ENDFOR
                 SocketSend client_socket \RawData:=raw_data;
-                
+            
+            ELSEIF request = "P" THEN !Client wants to command
+                SocketReceive client_socket \RawData:=raw_data;   
+                IF RawBytesLen(raw_data) = 12 THEN
+                    FOR i FROM 1 TO Dim(pose_in,1) DO
+                        UnpackRawBytes raw_data, 4*(i-1) + 1, pose_in{i} \Float4;
+                    ENDFOR
+                    SocketSend client_socket \Str := "Acknowledged Y";
+                ELSE
+                    SocketSend client_socket \Str := "Acknowledged N";
+                ENDIF
+            ELSEIF request = "I" THEN !Client wants to command
+                IF RawBytesLen(raw_data) = 5 THEN
+                    SocketReceive client_socket \RawData:=raw_data;   
+                    FOR i FROM 1 TO Dim(io_states_in,1) DO
+                        UnpackRawBytes raw_data, 4*(i-1) + 1, io_states_in{i} \IntX:=USINT;
+                    ENDFOR
+                    SocketSend client_socket \Str := "Acknowledged Y";
+                ELSE
+                    SocketSend client_socket \Str := "Acknowledged N";
+                ENDIF
             ENDIF
             
             ! Receive a new request from the client.
