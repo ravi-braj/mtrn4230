@@ -1,5 +1,6 @@
 MODULE MTRN4230_Server_Sample    
     !test shit removed
+    !dans edits
     ! The socket connected to the client.
     VAR socketdev client_socket;
     
