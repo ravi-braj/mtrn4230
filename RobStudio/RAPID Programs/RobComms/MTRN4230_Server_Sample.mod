@@ -1,5 +1,5 @@
 MODULE MTRN4230_Server_Sample    
-
+    !this is a test
     ! The socket connected to the client.
     VAR socketdev client_socket;
     
