@@ -86,9 +86,9 @@ MODULE MTRN4230_Server_Sample
                     FOR i FROM 1 TO Dim(pose_in,1) DO
                         UnpackRawBytes raw_data, 4*(i-1) + 1, pose_in{i} \Float4;
                     ENDFOR
-                    SocketSend client_socket \Str := "Acknowledged Y";
+                    !SocketSend client_socket \Str := "Acknowledged Y";
                 ELSE
-                    SocketSend client_socket \Str := "Acknowledged N";
+                    !SocketSend client_socket \Str := "Acknowledged N";
                 ENDIF
             ELSEIF request = "I" THEN !Client wants to command
                 IF RawBytesLen(raw_data) = 5 THEN
@@ -96,9 +96,9 @@ MODULE MTRN4230_Server_Sample
                     FOR i FROM 1 TO Dim(io_states_in,1) DO
                         UnpackRawBytes raw_data, 4*(i-1) + 1, io_states_in{i} \IntX:=USINT;
                     ENDFOR
-                    SocketSend client_socket \Str := "Acknowledged Y";
+                    !SocketSend client_socket \Str := "Acknowledged Y";
                 ELSE
-                    SocketSend client_socket \Str := "Acknowledged N";
+                    !SocketSend client_socket \Str := "Acknowledged N";
                 ENDIF
             ENDIF
             

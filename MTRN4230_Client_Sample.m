@@ -33,12 +33,12 @@ while quit == false
     fwrite(socket, 'P');
     fwrite(socket, pose,'float32');
     
-    disp('Freadsocket');
+    %disp('Freadsocket');
     % Read a line from the socket. Note the line feed appended to the message in the RADID sample code.
-    data = fread(socket);
+    %data = fread(socket);
 
     % Print the data that we got.
-    fprintf(char(data));
+    %fprintf(char(data));
     
     %data = fread(socket,3,'uint8');    % To read bytes
     %data = fread(socket,3,'float32');   % To read rawbytes
