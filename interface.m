@@ -119,17 +119,21 @@ classdef interface < handle
             
             nextCommand = obj.commandQueue(1);
             
-            %execute command
-            switch nextCommand
-                %send pose
-                case 1
-                    obj.robotTCP.setIOs(obj.setIOs)
-                case 2
-                    obj.robotTCP.setPose(obj.setPose);
-                    disp('sending pose');
+            %only execute command queue if the robot is connected
+            %still tries and removes commands (so queue doesnt bank)
+            if(obj.robotTCP.connected == true)
+                %execute command
+                switch nextCommand
+                    %send pose
+                    case 1
+                        obj.robotTCP.setIOs(obj.setIOs)
+                    case 2
+                        obj.robotTCP.setPose(obj.setPose);
+                        disp('sending pose');
 
-                otherwise
-                    disp('cannot decipher queue object');
+                    otherwise
+                        disp('cannot decipher queue object');
+                end
             end
             
             %remove item from command queue
