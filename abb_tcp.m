@@ -5,6 +5,9 @@
 classdef abb_tcp < handle
     properties
         socket;
+        
+        %this gets set after each method
+        error;
     end
     methods
         %constructor
@@ -42,23 +45,78 @@ classdef abb_tcp < handle
         
         %------------ Requesting data ---------------
         %attempts to get the pose off the robot
-        function pose = requestPose()
+        function pose = requestPose(obj)
+            
+            %send request for pose
+            fwrite(obj.socket, 'p', 'char');
+            
+            %read the pose
+            pose = fread(obj.socket, 4, 'int32');
+            
+            %read error message
+            obj.error = fread(obj.socket, 1, 'char');
+           
         end
       
         %attempts to get the ios off the robot
-        function ios = requestIOs()
+        function ios = requestIOs(obj)
+            
+            disp('requesting IOs');
+            
+            %send request to RAPID for i/o data
+            fwrite(obj.socket, 'i', 'char');
+            
+            %read the i/o data
+            ios = fread(obj.socket, 6, 'int32');
+            
+            %read error message
+            obj.error = fread(obj.socket, 1, 'char');
         end
         
         %------------ Sending data ------------------
         %attempts to set the ios off the robot
-        function setIOs(ioArray)
+        function error = setIOs(obj, ioArray)
             disp('Sending IOarrays')
-            fwrite(obj.socket, 'I');
-            fwrite(obj.socket, ioArray);
+            
+            %send request to send RAPID the i/o array
+            fwrite(obj.socket, 'I', 'char');
+            
+            %send RAPID the i/o array
+            fwrite(obj.socket, ioArray, 'Integer');
+            
+            obj.error = fread(obj.socket, 1, 'char');
+        end
+       
+        
+        function pauseRobot(obj)
+            %send pause request message to robot
+            fwrite(obj.socket, 'p', 'char');
+           
+            %read error message
+            obj.error = fread(obj.socket, 1, 'char');
+           
         end
         
-        %tells the robot to execute some command (like go to this point)
-        function sendCommand(command)
+        function setMotionMode(obj, mode)
+           %send request to set motion mode
+           fwrite(obj.socket, 'M', 'char');
+           
+           %write motion mode
+           fwrite(obj.socket, mode', 'int32');
+           
+           %read error message
+           obj.error = fread(obj.socket, 1, 'char');
+        end
+        
+        function setSpeed(obj, speed)
+           %send request ot set speed
+           fwrite(obj.socket, 'S', 'char');
+           
+           %write speed
+           fwrite(obj.socket, speed, 'int32');
+           
+           %read error message
+           obj.error = fread(obj.socket, 1, 'char');
         end
         
         function firstRead(obj) 

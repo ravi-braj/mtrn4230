@@ -18,6 +18,8 @@ classdef interface < handle
         %rgb data
         camData
         
+        
+        
     end
     methods
         
