@@ -242,6 +242,7 @@ end
 
 % --- Executes on button press in send_pose.
 function send_pose_Callback(hObject, eventdata, handles)
+    global ui;
     ui.commandQueue = [ui.commandQueue, 2];
 % hObject    handle to send_pose (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
