@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 02-Sep-2017 17:33:09
+    % Last Modified by GUIDE v2.5 02-Sep-2017 19:43:12
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -247,4 +247,20 @@ function send_pose_Callback(hObject, eventdata, handles)
 % hObject    handle to send_pose (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+end
+
+
+% --- Executes on button press in connect_tcp.
+function connect_tcp_Callback(hObject, eventdata, handles)
+% hObject    handle to connect_tcp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.robotTCP.openTCP('127.0.0.1', 1025);
+            
+    %disable connect button
+    if(ui.robotTCP.connected)
+        set(handles.connect_tcp,'Enable','off');
+        set(handles.connect_tcp,'String','Connected'); 
+    end
 end

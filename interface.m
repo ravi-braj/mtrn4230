@@ -61,6 +61,12 @@ classdef interface < handle
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
             
+            %disable connect button
+            if(obj.robotTCP.connected)
+                set(obj.clientGUIData.connect_tcp,'Enable','off');
+                set(obj.clientGUIData.connect_tcp,'String','Connected'); 
+            end
+            
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as
             % the handle in the plot constructor and assign to a new handle

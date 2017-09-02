@@ -5,7 +5,7 @@
 classdef abb_tcp < handle
     properties
         socket;
-        
+        connected;
         %this gets set after each method
         error;
     end
@@ -19,21 +19,28 @@ classdef abb_tcp < handle
         %opens connection and returns true if successful or false if
         %invalid
         function obj = openTCP(obj, ip_address, port)
+            obj.connected = false;
             % Open a TCP connection to the robot.
             obj.socket = tcpip(ip_address, port);
+
             obj.socket.ByteOrder = 'littleEndian';
             
             pause(0.5);
             set(obj.socket, 'ReadAsyncMode', 'continuous');
-            fopen(obj.socket);
+            try 
+                fopen(obj.socket);
+            catch 
+                disp('Could not connect to tcp')
+                return;
+            end
 
             % Check if the connection is valid.
             if(~isequal(get(obj.socket, 'Status'), 'open'))
                 warning(['Could not open TCP connection to ', ip_address, ' on port ', port]);
-                valid = false;
+                obj.connected = false;
                 return;
             end
-            valid = true;
+            obj.connected = true;
         end
         
         %closes the socket.

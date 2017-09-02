@@ -24,8 +24,8 @@ startCheckUI = StartUpCheckList();
 %----- START GUI -------
 % gui is constructed in interface constructor function
 
+%program hangs while checklist is not declared complete
 while(checklist_complete == false)
-    disp('yes')
     pause(1);
 end
 delete(startCheckUI);
@@ -55,7 +55,13 @@ mainTimer.TimerFcn = {@timerCallback, ui};
 start(mainTimer);
 
 %% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
-while((get(mainTimer, 'Running') ~= 'off'))
+while(1)
+    try 
+        if(get(mainTimer, 'Running') == 'off')
+            break;
+        end
+    catch
+    end
     pause(0.1);
 end
 
