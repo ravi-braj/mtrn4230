@@ -12,7 +12,7 @@ classdef abb_tcp < handle
     methods
         %constructor
         function obj = abb_tcp()
-            fprintf("created abb_tcp object\n");
+            fprintf('created abb_tcp object\n');
             fclose('all');
         end
         
@@ -137,7 +137,7 @@ classdef abb_tcp < handle
         end
         
         function firstRead(obj) 
-            disp("inside first read");
+            disp('inside first read');
             % Send a sample string to the server on the robot.
             fwrite(obj.socket, num2str(45645456456));
             disp('attempting to read data');

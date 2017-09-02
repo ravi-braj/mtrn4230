@@ -4,7 +4,7 @@
 function timerCallback(obj, event, ui) 
 
     %av_period = get(obj, 'AveragePeriod')
-    fprintf("Timer callback executed. %f seconds since last call\n", get(obj, 'InstantPeriod'));
+    fprintf('Timer callback executed. %f seconds since last call\n', get(obj, 'InstantPeriod'));
     
     %% %%%%%%%%%%%% CONDITIONAL EXECUTIONS %%%%%%%%%%%%%%
     
@@ -73,7 +73,7 @@ function timerCallback(obj, event, ui)
     %exit button pressed, stop the timer
     global exit;
     if(exit == true)
-        disp("stopping");
+        disp('stopping');
         stop(obj);
     end
 

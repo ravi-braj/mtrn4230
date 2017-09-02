@@ -10,18 +10,26 @@
 global exit;
 exit = false;
 
+
+global checklist_complete;
+
 global ui;
+
 checklist_complete = false;
 
-%----- START CHECKLIST GUI -----
+%----- START CHECKLIST GUI 
+startCheckUI = StartUpCheckList();
+
 %end of checklist gui sets flag checklist_complete
-
-
 %----- START GUI -------
 % gui is constructed in interface constructor function
-%while(checklist_complete == false)
-    %donothing
-%end
+
+while(checklist_complete == false)
+    disp('yes')
+    pause(1);
+end
+delete(startCheckUI);
+
 ui = interface();
 
 %----- Set up timer
@@ -47,11 +55,11 @@ mainTimer.TimerFcn = {@timerCallback, ui};
 start(mainTimer);
 
 %% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
-while((get(mainTimer, 'Running') ~= "off"))
+while((get(mainTimer, 'Running') ~= 'off'))
     pause(0.1);
 end
 
-disp("closing");
+disp('closing');
 delete(ui.clientGUI);
 delete(mainTimer);
 
