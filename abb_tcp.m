@@ -46,7 +46,6 @@ classdef abb_tcp < handle
         %------------ Requesting data ---------------
         %attempts to get the pose off the robot
         function pose = requestPose(obj)
-            
             disp('requesting Pose');
             
             %send request for pose
@@ -62,7 +61,6 @@ classdef abb_tcp < handle
       
         %attempts to get the ios off the robot
         function ios = requestIOs(obj)
-            
             disp('requesting IOs');
             
             %send request to RAPID for i/o data
@@ -96,9 +94,9 @@ classdef abb_tcp < handle
             
             %send request to send RAPID the i/o array
             fwrite(obj.socket, 'I', 'uchar');
-            
+            sz = size(ioArray)
             %send RAPID the i/o array
-            fwrite(obj.socket, logical(ioArray), 'uint8');
+            fwrite(obj.socket, ioArray, 'uint8');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');

@@ -59,7 +59,8 @@ classdef interface < handle
             
             obj.IOs = [0, 0, 0, 0];
             
-            %obj.robotTCP.openTCP('127.0.0.1', 1025);
+            obj.robotTCP.openTCP('127.0.0.1', 1025);
+            
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as
             % the handle in the plot constructor and assign to a new handle
@@ -116,7 +117,7 @@ classdef interface < handle
             switch nextCommand
                 %send pose
                 case 1
-                    %obj.robotTCP.setIOs(obj.setIOs)
+                    obj.robotTCP.setIOs(obj.setIOs)
 
                 otherwise
                     disp('cannot decipher queue object');
