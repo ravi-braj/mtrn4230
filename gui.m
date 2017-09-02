@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
 % Edit the above text to modify the response to help gui
 
-% Last Modified by GUIDE v2.5 21-Aug-2017 13:05:01
+% Last Modified by GUIDE v2.5 02-Sep-2017 16:33:46
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -82,3 +82,33 @@ function button_exit_Callback(hObject, eventdata, handles)
     global exit;
     exit = true;
 end
+
+
+% --- Executes on button press in vacuum_toggle.
+function vacuum_toggle_Callback(hObject, eventdata, handles)
+% hObject    handle to vacuum_toggle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in solenoid_toggle.
+function solenoid_toggle_Callback(hObject, eventdata, handles)
+% hObject    handle to solenoid_toggle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in toggle_conveyor.
+function toggle_conveyor_Callback(hObject, eventdata, handles)
+% hObject    handle to toggle_conveyor (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of toggle_conveyor
+
+
+% --- Executes on button press in toggle_conveyor_dir.
+function toggle_conveyor_dir_Callback(hObject, eventdata, handles)
+% hObject    handle to toggle_conveyor_dir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

@@ -2,6 +2,15 @@
 % designed to stop globals being passed around everywhere. Instead just
 % pass an 'interface' object to access all your handles.
 
+% command queue protocol
+% 1 = 
+% 2 = 
+% 3 = 
+% 4 = 
+% 5 = 
+
+
+
 classdef interface < handle
     properties (Access = public)
         %user interface
@@ -18,6 +27,21 @@ classdef interface < handle
         %rgb data
         camData
         
+        %Queue stuff
+        commandQueue
+        
+        
+        %variables for sending
+        setSpeed
+        setPose
+        setMotionMode
+        setIOs
+        
+        %variables for reading (Telem variables)
+        speed
+        pose
+        motionMode
+        IOs
         
         
     end
