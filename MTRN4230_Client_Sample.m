@@ -29,16 +29,19 @@ quit = false;
 while quit == false
    % Send a sample string to the server on the robot.
     disp('Writing to socket...');
-    fwrite(socket, "p");
-
+    pose = [202.1, 4673.4, 60.23];
+    fwrite(socket, 'P');
+    fwrite(socket, pose,'float32');
+    
+    %disp('Freadsocket');
     % Read a line from the socket. Note the line feed appended to the message in the RADID sample code.
-    disp('Reading from socket...');
+    %data = fread(socket);
+
+    % Print the data that we got.
+    %fprintf(char(data));
     
     %data = fread(socket,3,'uint8');    % To read bytes
-    data = fread(socket,3,'float32');   % To read rawbytes
-    
-    % Print the data that we got.
-    disp(data);
+    %data = fread(socket,3,'float32');   % To read rawbytes
 end
 
 % Close the socket.
