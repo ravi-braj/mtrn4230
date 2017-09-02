@@ -21,6 +21,7 @@ classdef abb_tcp < handle
         function obj = openTCP(obj, ip_address, port)
             % Open a TCP connection to the robot.
             obj.socket = tcpip(ip_address, port);
+            obj.socket.ByteOrder = 'littleEndian';
             
             pause(0.5);
             set(obj.socket, 'ReadAsyncMode', 'continuous');
@@ -96,7 +97,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'I', 'uchar');
             sz = size(ioArray)
             %send RAPID the i/o array
-            fwrite(obj.socket, ioArray, 'uint8');
+            fwrite(obj.socket, ioArray, 'uchar');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
