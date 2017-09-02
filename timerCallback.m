@@ -19,7 +19,8 @@ function timerCallback(obj, event, ui)
     % 3) update status of i/o s
     
     %currently fills io status on gui to junk data
-    ui.updateIOs(randi([0 1],1,4));
+    
+    ui.updateIOs(ui.IOs);
     
     %% ---------- request pose of the robot and update ui ------
     % 1) send request packet to robot
@@ -57,10 +58,14 @@ function timerCallback(obj, event, ui)
     set(ui.h_camTable, 'YData', y);
 
     
+    %%----------- execute queued commands (added by GUI) ------
+    ui.nextCommand();
+    
     %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
     %disp("first read?");
     %ui.robotTCP.firstRead();
     
+    %
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
     

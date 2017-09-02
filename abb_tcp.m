@@ -75,7 +75,7 @@ classdef abb_tcp < handle
         
         %------------ Sending data ------------------
         %attempts to set the ios off the robot
-        function error = setIOs(obj, ioArray)
+        function setIOs(obj, ioArray)
             disp('Sending IOarrays')
             
             %send request to send RAPID the i/o array
