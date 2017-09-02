@@ -10,100 +10,73 @@ MODULE MTRN4230_Server_Sample
     
     PROC MainServer()
         
-        ! Message request from client
-        VAR string request;
-        
-        ! Output data to client
-        VAR num pose{3};
-        VAR num io_states{5};
-        
-        pose{1}:=150; pose{2}:=230; pose{3}:=62;
-        io_states{1} := 1; io_states{2}:=0; io_states{3}:=0; io_states{4}:=1; io_states{5}:=1;  
-        
-        ListenForAndAcceptConnection;
-        
-        ! Receive a new request from the client.
-        SocketReceive client_socket \Str:=request;
-        
-        WHILE request <> "c" DO     ! Keep server alive until close command recieved
-            
-            IF request = "p" THEN   ! Client requested pose data
-                SocketSend client_socket \Data := pose \NoOfBytes := Dim(pose,1); 
-            ELSEIF request = "i" THEN   ! Client requested io_states data
-                SocketSend client_socket \Data := io_states \NoOfBytes := Dim(io_states,1); 
-            ENDIF
-            
-            ! Receive a new request from the client.
-            SocketReceive client_socket \Str:=request;
-            
-        ENDWHILE
-
-        CloseConnection;
-		
-    ENDPROC
-
-    PROC MainServer_test()
-        
-        ! Message request from client
-        VAR string request;
-        
-        ! Output data to client
+        ! RawBytes buffer for data manipulation
         VAR rawbytes raw_data;
-        VAR num pose_out{3};
-        VAR num io_states_out{5};
-        VAR num pose_in{3};
-        VAR num io_states_in{5};
         
-        pose_out{1}:=1123.4; pose_out{2}:=232.05; pose_out{3}:=6.242;
-        io_states_out{1} := 1; io_states_out{2}:=0; io_states_out{3}:=0; io_states_out{4}:=1; io_states_out{5}:=1; 
+        ! Message requests and replies
+        VAR byte requestMsg{1};
+        VAR byte errorMsg{1};
+        !errorMsg{1} := StrToByte("y" \Char);
+        
+        ! Data stores
+        VAR num pose_state{4};        ! x, y, z, theta
+        VAR bool io_state{4};   ! DI10_1, DO10_1, DO10_2, DO10_3, DO10_4
+        !VAR num speed{4};       ! v_tcp, v_ori, v_leax, v_reax
+        !VAR bool mode;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
+        !VAR bool pause;         ! pause = 0 (moving), pause = 1 (paused) 
+        
+        pose_state{1} := 0; pose_state{2} := 0; pose_state{3} := 0; pose_state{4} := 0; ! Initialise
         
         ListenForAndAcceptConnection;
         
         ! Receive a new request from the client.
-        SocketReceive client_socket \Str:=request;
+        SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;
         
-        WHILE request <> "c" DO     ! Keep server alive until close command recieved
+        WHILE requestMsg{1} <> StrToByte("c" \Char) DO     ! Keep server alive until close command recieved
             ClearRawBytes raw_data;
 
-            IF request = "p" THEN   ! Client requested pose data
+            IF requestMsg{1} = StrToByte("p" \Char) THEN   ! Client requested pose_state data
                 
-                FOR i FROM 1 TO Dim(pose_out,1) DO
-                    PackRawBytes pose_out{i}, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+                FOR i FROM 1 TO Dim(pose_state,1) DO
+                    PackRawBytes pose_state{i}, raw_data, (RawBytesLen(raw_data)+1) \Float4;
                 ENDFOR
                 
-                SocketSend client_socket \RawData:=raw_data;
+                SocketSend client_socket \RawData:=raw_data;    ! Send pose
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
             
-            ELSEIF request = "i" THEN   ! Client requested io_states data
+            ELSEIF requestMsg{1} = StrToByte("i" \Char) THEN   ! Client requested io_state data
                 
-                FOR i FROM 1 TO Dim(pose_out,1) DO
-                    PackRawBytes io_states_out{i}, raw_data, (RawBytesLen(raw_data)+1) \IntX := INT;
+                FOR i FROM 1 TO Dim(io_state,1) DO
+                    PackRawBytes io_state{i}, raw_data, (RawBytesLen(raw_data)+1) \IntX:=USINT;
                 ENDFOR
-                SocketSend client_socket \RawData:=raw_data;
+                
+                SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
             
-            ELSEIF request = "P" THEN !Client wants to command
+            ELSEIF requestMsg{1} = StrToByte("P" \Char) THEN   ! Client wants to set pose
+                
                 SocketReceive client_socket \RawData:=raw_data;   
-                IF RawBytesLen(raw_data) = 12 THEN
-                    FOR i FROM 1 TO Dim(pose_in,1) DO
-                        UnpackRawBytes raw_data, 4*(i-1) + 1, pose_in{i} \Float4;
-                    ENDFOR
-                    !SocketSend client_socket \Str := "Acknowledged Y";
-                ELSE
-                    !SocketSend client_socket \Str := "Acknowledged N";
-                ENDIF
-            ELSEIF request = "I" THEN !Client wants to command
-                IF RawBytesLen(raw_data) = 5 THEN
-                    SocketReceive client_socket \RawData:=raw_data;   
-                    FOR i FROM 1 TO Dim(io_states_in,1) DO
-                        UnpackRawBytes raw_data, 4*(i-1) + 1, io_states_in{i} \IntX:=USINT;
-                    ENDFOR
-                    !SocketSend client_socket \Str := "Acknowledged Y";
-                ELSE
-                    !SocketSend client_socket \Str := "Acknowledged N";
-                ENDIF
+                
+                FOR i FROM 1 TO Dim(pose_state,1) DO
+                    UnpackRawBytes raw_data, 4*(i-1) + 1, pose_state{i} \Float4;  ! 4 bytes per value
+                ENDFOR
+                
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+                
+            ELSEIF requestMsg{1} = StrToByte("I" \Char) THEN   ! Client wants to set
+
+                SocketReceive client_socket \RawData:=raw_data;
+                
+                FOR i FROM 1 TO Dim(io_state,1) DO
+                    UnpackRawBytes raw_data, i, io_state{i} \IntX:=USINT;   ! 1 byte per value
+                ENDFOR
+                
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+                
             ENDIF
             
             ! Receive a new request from the client.
-            SocketReceive client_socket \Str:=request;
+            SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;
             
         ENDWHILE
 
