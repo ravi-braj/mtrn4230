@@ -117,6 +117,8 @@ classdef interface < handle
                 %send pose
                 case 1
                     %obj.robotTCP.setIOs(obj.setIOs)
+                case 2
+                    obj.robotTCP.setPose(obj.setPose);
 
                 otherwise
                     disp('cannot decipher queue object');

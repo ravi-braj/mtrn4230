@@ -139,6 +139,9 @@ end
 
 
 function set_pose_x_Callback(hObject, eventdata, handles)
+
+    global ui;
+    ui.setPose(1) = str2double(get(hObject,'String'));
 % hObject    handle to set_pose_x (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -162,6 +165,8 @@ end
 
 
 function set_pose_y_Callback(hObject, eventdata, handles)
+    global ui;
+    ui.setPose(2) = str2double(get(hObject,'String'));
 % hObject    handle to set_pose_y (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -186,6 +191,8 @@ end
 
 
 function set_pose_z_Callback(hObject, eventdata, handles)
+    global ui;
+    ui.setPose(3) = str2double(get(hObject,'String'));
 % hObject    handle to set_pose_z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -209,6 +216,8 @@ end
 
 
 function set_pose_theta_Callback(hObject, eventdata, handles)
+    global ui;
+    ui.setPose(4) = str2double(get(hObject,'String'));
 % hObject    handle to set_pose_theta (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -233,6 +242,7 @@ end
 
 % --- Executes on button press in send_pose.
 function send_pose_Callback(hObject, eventdata, handles)
+    ui.commandQueue = [ui.commandQueue, 2];
 % hObject    handle to send_pose (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
