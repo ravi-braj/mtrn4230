@@ -52,6 +52,9 @@ classdef abb_tcp < handle
         %------------ Sending data ------------------
         %attempts to set the ios off the robot
         function setIOs(ioArray)
+            disp('Sending IOarrays')
+            fwrite(obj.socket, 'I');
+            fwrite(obj.socket, ioArray);
         end
         
         %tells the robot to execute some command (like go to this point)
