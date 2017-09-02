@@ -34,18 +34,19 @@ function timerCallback(obj, event, ui)
     
     %% ---------- receive serial from camera ---------------------
     % 1) receive the serial data
-    ui.datafromConveyorCam();
-    [ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
+    %ui.datafromConveyorCam();
+    %[ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
     % 2) use gui plot handle for setting the data in the camera plot
     
     
     
     
      %some dummy data
-    y = get(ui.h_camConveyor, 'YData');
-    y = [y(end), y(1:end-1)];
+    %y = get(ui.h_camConveyor, 'YData');
+    %y = [y(end), y(1:end-1)];
 
-    set(ui.h_camConveyor, 'YData', y);
+    %set(ui.h_camConveyor, 'YData', y);
+    set(ui.h_camConveyor, 'CData', NaN(1600, 1200));
 
     
     
@@ -53,9 +54,9 @@ function timerCallback(obj, event, ui)
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the camera plot
     
-    y = get(ui.h_camTable, 'YData');
-    y = [y(2:end), y(1)];
-    set(ui.h_camTable, 'YData', y);
+    %y = get(ui.h_camTable, 'YData');
+    %y = [y(2:end), y(1)];
+    set(ui.h_camTable, 'CData', NaN(1600, 1200));
 
     
     %%----------- execute queued commands (added by GUI) ------

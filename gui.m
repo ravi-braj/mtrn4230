@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 02-Sep-2017 16:33:46
+    % Last Modified by GUIDE v2.5 02-Sep-2017 17:33:09
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -132,6 +132,108 @@ function toggle_conveyor_dir_Callback(hObject, eventdata, handles)
     ui.IOs = ui.setIOs;
     ui.commandQueue = [ui.commandQueue, 1];
 % hObject    handle to toggle_conveyor_dir (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+
+
+function set_pose_x_Callback(hObject, eventdata, handles)
+% hObject    handle to set_pose_x (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of set_pose_x as text
+%        str2double(get(hObject,'String')) returns contents of set_pose_x as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+function set_pose_x_CreateFcn(hObject, eventdata, handles)
+    % hObject    handle to set_pose_x (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    empty - handles not created until after all CreateFcns called
+
+    % Hint: edit controls usually have a white background on Windows.
+    %       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+function set_pose_y_Callback(hObject, eventdata, handles)
+% hObject    handle to set_pose_y (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of set_pose_y as text
+%        str2double(get(hObject,'String')) returns contents of set_pose_y as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+function set_pose_y_CreateFcn(hObject, eventdata, handles)
+    % hObject    handle to set_pose_y (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    empty - handles not created until after all CreateFcns called
+
+    % Hint: edit controls usually have a white background on Windows.
+    %       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+
+function set_pose_z_Callback(hObject, eventdata, handles)
+% hObject    handle to set_pose_z (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of set_pose_z as text
+%        str2double(get(hObject,'String')) returns contents of set_pose_z as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+function set_pose_z_CreateFcn(hObject, eventdata, handles)
+    % hObject    handle to set_pose_z (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    empty - handles not created until after all CreateFcns called
+
+    % Hint: edit controls usually have a white background on Windows.
+    %       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+function set_pose_theta_Callback(hObject, eventdata, handles)
+% hObject    handle to set_pose_theta (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of set_pose_theta as text
+%        str2double(get(hObject,'String')) returns contents of set_pose_theta as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+function set_pose_theta_CreateFcn(hObject, eventdata, handles)
+    % hObject    handle to set_pose_theta (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    empty - handles not created until after all CreateFcns called
+
+    % Hint: edit controls usually have a white background on Windows.
+    %       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+% --- Executes on button press in send_pose.
+function send_pose_Callback(hObject, eventdata, handles)
+% hObject    handle to send_pose (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 end

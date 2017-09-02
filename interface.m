@@ -70,8 +70,8 @@ classdef interface < handle
             %%dummy data to fill plots
             x = linspace(1, 20, 100);
             y = sin(x);
-            obj.h_camConveyor = plot(obj.clientGUIData.camera_conveyor, x, y);
-            obj.h_camTable = plot(obj.clientGUIData.camera_table, x, y);
+            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1600,1200));
+            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1600, 1200));
             
             %----------- OTHER HANDLES ----------------%
             
@@ -97,7 +97,7 @@ classdef interface < handle
         function obj = datafromConveyorCam(obj)
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
-            obj.conveyorRGB = getsnapshot(obj.conveyorObj);
+            %obj.conveyorRGB = getsnapshot(obj.conveyorObj);
             
         end
         

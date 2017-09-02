@@ -90,7 +90,7 @@ classdef abb_tcp < handle
         
         function pauseRobot(obj)
             %send pause request message to robot
-            fwrite(obj.socket, 'p', 'char');
+            fwrite(obj.socket, 'g', 'char');
            
             %read error message
             obj.error = fread(obj.socket, 1, 'char');
