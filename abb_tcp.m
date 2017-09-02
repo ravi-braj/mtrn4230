@@ -82,7 +82,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'I', 'char');
             
             %send RAPID the i/o array
-            fwrite(obj.socket, ioArray, 'Integer');
+            fwrite(obj.socket, ioArray, 'int32');
             
             obj.error = fread(obj.socket, 1, 'char');
         end
