@@ -34,9 +34,9 @@ function timerCallback(obj, event, ui)
     %% ---------- receive serial from camera ---------------------
     % 1) receive the serial data
     ui.datafromConveyorCam();
-    %box(ui.camData); commented out since camData is currently just stub
+    [ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
     % 2) use gui plot handle for setting the data in the camera plot
-
+    
     
     
     

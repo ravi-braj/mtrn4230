@@ -16,7 +16,9 @@ classdef interface < handle
         h_camTable
         
         %rgb data
-        camData
+        conveyorObj
+        conveyorRGB
+        boxPose
         
     end
     methods
@@ -65,8 +67,10 @@ classdef interface < handle
         % get serial data from camera on conveyor - updates camData
         % property (rgb)
         function obj = datafromConveyorCam(obj)
-            %obj.camData = blahblahgetserial
+            %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
+            obj.conveyorRGB = getsnapshot(obj.conveyorObj);
+            
         end
         
     end
