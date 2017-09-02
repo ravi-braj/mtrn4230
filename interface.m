@@ -2,6 +2,15 @@
 % designed to stop globals being passed around everywhere. Instead just
 % pass an 'interface' object to access all your handles.
 
+% command queue protocol
+% 1 = 
+% 2 = 
+% 3 = 
+% 4 = 
+% 5 = 
+
+
+
 classdef interface < handle
     properties (Access = public)
         %user interface
@@ -20,6 +29,23 @@ classdef interface < handle
         conveyorRGB
         boxPose
         
+        %Queue stuff
+        commandQueue
+        
+        
+        %variables for sending
+        setSpeed
+        setPose
+        setMotionMode
+        setIOs
+        
+        %variables for reading (Telem variables)
+        speed
+        pose
+        motionMode
+        IOs
+        
+        
     end
     methods
         
@@ -30,6 +56,8 @@ classdef interface < handle
             
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
+            
+            obj.IOs = [0, 0, 0, 0];
             
             %obj.robotTCP.openTCP('127.0.0.1', 1025);
             %----------- PLOT HANDLES ----------------%
@@ -71,6 +99,36 @@ classdef interface < handle
             %update rgb data in camdata
             obj.conveyorRGB = getsnapshot(obj.conveyorObj);
             
+        end
+        
+        %tries to send the next command in the commandQueue to the robot
+        function obj = nextCommand(obj)
+            disp('executing next command')
+            
+            if(size(obj.commandQueue)  == 0)
+                disp('no commands to execute');
+                return
+            end
+            
+            nextCommand = obj.commandQueue(1);
+            
+            %execute command
+            switch nextCommand
+                %send pose
+                case 1
+                    %obj.robotTCP.setIOs(obj.setIOs)
+
+                otherwise
+                    disp('cannot decipher queue object');
+            end
+            
+            %remove item from command queue
+            if(size(obj.commandQueue) == 1)
+                obj.commandQueue = [];
+            else
+                obj.commandQueue = obj.commandQueue(2:end);
+            end
+   
         end
         
     end
