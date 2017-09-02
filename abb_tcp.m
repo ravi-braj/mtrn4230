@@ -46,55 +46,71 @@ classdef abb_tcp < handle
         %------------ Requesting data ---------------
         %attempts to get the pose off the robot
         function pose = requestPose(obj)
+            disp('requesting Pose');
             
             %send request for pose
-            fwrite(obj.socket, 'p', 'char');
+            fwrite(obj.socket, 'p', 'uchar');
             
             %read the pose
-            pose = fread(obj.socket, 4, 'int32');
+            pose = fread(obj.socket, 4, 'float32');
             
             %read error message
-            obj.error = fread(obj.socket, 1, 'char');
+            obj.error = fread(obj.socket, 1, 'uchar');
            
         end
       
         %attempts to get the ios off the robot
         function ios = requestIOs(obj)
-            
             disp('requesting IOs');
             
             %send request to RAPID for i/o data
-            fwrite(obj.socket, 'i', 'char');
+            fwrite(obj.socket, 'i', 'uchar');
             
             %read the i/o data
-            ios = fread(obj.socket, 6, 'int32');
+            ios = logical(fread(obj.socket, 4, 'uint8'));
             
             %read error message
-            obj.error = fread(obj.socket, 1, 'char');
+            obj.error = fread(obj.socket, 1, 'uchar');
         end
         
         %------------ Sending data ------------------
-        %attempts to set the ios off the robot
-        function error = setIOs(obj, ioArray)
-            disp('Sending IOarrays')
+        %attempts to set the pose of the robot
+        function setPose(obj, poseArray)
+            disp('Sending poseArray')
             
             %send request to send RAPID the i/o array
-            fwrite(obj.socket, 'I', 'char');
+            fwrite(obj.socket, 'P', 'uchar');
             
             %send RAPID the i/o array
-            fwrite(obj.socket, ioArray, 'int32');
+            fwrite(obj.socket, poseArray, 'float32');
             
-            obj.error = fread(obj.socket, 1, 'char');
+            %read error message
+            obj.error = fread(obj.socket, 1, 'uchar');
+        end
+        
+        %attempts to set the ios of the robot
+        function setIOs(obj, ioArray)
+            disp('Sending ioArray')
+            
+            %send request to send RAPID the i/o array
+            fwrite(obj.socket, 'I', 'uchar');
+            sz = size(ioArray)
+            %send RAPID the i/o array
+            fwrite(obj.socket, ioArray, 'uint8');
+            
+            %read error message
+            obj.error = fread(obj.socket, 1, 'uchar');
         end
        
-        
-        function pauseRobot(obj)
+        function pauseRobot(obj, pauseFlag)
             %send pause request message to robot
-            fwrite(obj.socket, 'p', 'char');
-           
+            fwrite(obj.socket, 'G', 'uchar');
+            
+            %send RAPID the pauseFlag
+            fwrite(obj.socket, logical(pauseFlag), 'uint8');
+            
             %read error message
-            obj.error = fread(obj.socket, 1, 'char');
-           
+            obj.error = fread(obj.socket, 1, 'uchar'); 
         end
         
         function setMotionMode(obj, mode)

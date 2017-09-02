@@ -19,7 +19,8 @@ function timerCallback(obj, event, ui)
     % 3) update status of i/o s
     
     %currently fills io status on gui to junk data
-    ui.updateIOs(randi([0 1],1,4));
+    
+    ui.updateIOs(ui.IOs);
     
     %% ---------- request pose of the robot and update ui ------
     % 1) send request packet to robot
@@ -33,18 +34,19 @@ function timerCallback(obj, event, ui)
     
     %% ---------- receive serial from camera ---------------------
     % 1) receive the serial data
-    ui.datafromConveyorCam();
-    %box(ui.camData); commented out since camData is currently just stub
+    %ui.datafromConveyorCam();
+    %[ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
     % 2) use gui plot handle for setting the data in the camera plot
-
+    
     
     
     
      %some dummy data
-    y = get(ui.h_camConveyor, 'YData');
-    y = [y(end), y(1:end-1)];
+    %y = get(ui.h_camConveyor, 'YData');
+    %y = [y(end), y(1:end-1)];
 
-    set(ui.h_camConveyor, 'YData', y);
+    %set(ui.h_camConveyor, 'YData', y);
+    set(ui.h_camConveyor, 'CData', NaN(1600, 1200));
 
     
     
@@ -52,15 +54,19 @@ function timerCallback(obj, event, ui)
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the camera plot
     
-    y = get(ui.h_camTable, 'YData');
-    y = [y(2:end), y(1)];
-    set(ui.h_camTable, 'YData', y);
+    %y = get(ui.h_camTable, 'YData');
+    %y = [y(2:end), y(1)];
+    set(ui.h_camTable, 'CData', NaN(1600, 1200));
 
+    
+    %%----------- execute queued commands (added by GUI) ------
+    ui.nextCommand();
     
     %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
     %disp("first read?");
     %ui.robotTCP.firstRead();
     
+    %
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
     

@@ -10,7 +10,11 @@
 global exit;
 exit = false;
 
+
 global checklist_complete;
+
+global ui;
+
 checklist_complete = false;
 
 %----- START CHECKLIST GUI 
@@ -19,11 +23,13 @@ startCheckUI = StartUpCheckList();
 %end of checklist gui sets flag checklist_complete
 %----- START GUI -------
 % gui is constructed in interface constructor function
+
 while(checklist_complete == false)
     disp('yes')
     pause(1);
 end
 delete(startCheckUI);
+
 ui = interface();
 
 %----- Set up timer
