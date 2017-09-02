@@ -46,11 +46,11 @@ mainTimer.TimerFcn = {@timerCallback, ui};
 start(mainTimer);
 
 %% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
-while((get(mainTimer, 'Running') ~= "off"))
+while((get(mainTimer, 'Running') ~= 'off'))
     pause(0.1);
 end
 
-disp("closing");
+disp('closing');
 delete(ui.clientGUI);
 delete(mainTimer);
 

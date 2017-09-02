@@ -1,7 +1,7 @@
 
 
 function timerSetup(obj, event, interface)
-    disp("setup");
+    disp('setup');
     
     pause(1);
 

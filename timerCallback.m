@@ -67,7 +67,7 @@ function timerCallback(obj, event, ui)
     %exit button pressed, stop the timer
     global exit;
     if(exit == true)
-        disp("stopping");
+        disp('stopping');
         stop(obj);
     end
 
