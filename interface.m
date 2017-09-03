@@ -55,7 +55,7 @@ classdef interface < handle
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
             
-            obj.IOs = uint8(zeros(1,4));
+            obj.IOs = uint8(zeros(1,3));
             obj.pose = zeros(1,4);
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
@@ -126,6 +126,7 @@ classdef interface < handle
                     %send pose
                     case 1
                         obj.robotTCP.setIOs(obj.setIOs)
+                        disp('sending IOs');
                     case 2
                         obj.robotTCP.setPose(obj.setPose);
                         disp('sending pose');

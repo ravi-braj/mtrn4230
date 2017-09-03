@@ -75,7 +75,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'i', 'uchar');
             
             %read the i/o data
-            ios = logical(fread(obj.socket, 4, 'uint8'));
+            ios = fread(obj.socket, 3, 'uint8');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
@@ -104,7 +104,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'I', 'uchar');
             
             %send RAPID the i/o array
-            fwrite(obj.socket, ioArray, 'uchar');
+            fwrite(obj.socket, ioArray, 'uint8');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
@@ -115,7 +115,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'G', 'uchar');
             
             %send RAPID the pauseFlag
-            fwrite(obj.socket, logical(pauseFlag), 'uint8');
+            fwrite(obj.socket, pauseFlag, 'uint8');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar'); 
@@ -123,33 +123,24 @@ classdef abb_tcp < handle
         
         function setMotionMode(obj, mode)
            %send request to set motion mode
-           fwrite(obj.socket, 'M', 'char');
+           fwrite(obj.socket, 'M', 'uchar');
            
            %write motion mode
-           fwrite(obj.socket, mode', 'int32');
+           fwrite(obj.socket, mode', 'uint8');
            
            %read error message
-           obj.error = fread(obj.socket, 1, 'char');
+           obj.error = fread(obj.socket, 1, 'uchar');
         end
         
         function setSpeed(obj, speed)
            %send request ot set speed
-           fwrite(obj.socket, 'S', 'char');
+           fwrite(obj.socket, 'S', 'uchar');
            
            %write speed
-           fwrite(obj.socket, speed, 'int32');
+           fwrite(obj.socket, speed, 'float32');
            
            %read error message
-           obj.error = fread(obj.socket, 1, 'char');
-        end
-        
-        function firstRead(obj) 
-            disp('inside first read');
-            % Send a sample string to the server on the robot.
-            fwrite(obj.socket, num2str(45645456456));
-            disp('attempting to read data');
-            data = fgetl(obj.socket);
-            disp(data);
+           obj.error = fread(obj.socket, 1, 'uchar');
         end
         
     end
