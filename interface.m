@@ -32,7 +32,6 @@ classdef interface < handle
         %Queue stuff
         commandQueue
         
-        
         %variables for sending
         setSpeed
         setPose
@@ -45,7 +44,6 @@ classdef interface < handle
         motionMode
         IOs
         
-        
     end
     methods
         
@@ -57,7 +55,8 @@ classdef interface < handle
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
             
-            obj.IOs = [0, 0, 0, 0];
+            obj.IOs = uint8(zeros(1,4));
+            obj.pose = zeros(1,4);
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
             
@@ -117,7 +116,9 @@ classdef interface < handle
             switch nextCommand
                 %send pose
                 case 1
-                    obj.robotTCP.setIOs(obj.setIOs)
+                    obj.robotTCP.setIOs(obj.setIOs);
+                    
+                    obj.robotTCP.setPose(obj.setPose);
 
                 otherwise
                     disp('cannot decipher queue object');

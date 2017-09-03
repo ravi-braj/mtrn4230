@@ -94,7 +94,7 @@ classdef abb_tcp < handle
             
             %send request to send RAPID the i/o array
             fwrite(obj.socket, 'I', 'uchar');
-            sz = size(ioArray)
+            
             %send RAPID the i/o array
             fwrite(obj.socket, ioArray, 'uint8');
             
