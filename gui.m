@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 02-Sep-2017 19:43:12
+    % Last Modified by GUIDE v2.5 03-Sep-2017 22:45:59
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -262,5 +262,54 @@ function connect_tcp_Callback(hObject, eventdata, handles)
     if(ui.robotTCP.connected)
         set(handles.connect_tcp,'Enable','off');
         set(handles.connect_tcp,'String','Connected'); 
+    end
+end
+
+
+% --- Executes on button press in choosePoint_table.
+function choosePoint_table_Callback(hObject, eventdata, handles)
+% hObject    handle to choosePoint_table (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    %figure(handles.camera_table);
+    [x, y] = getpts(handles.camera_table);
+    ui.setPose(1) = x(end)
+    ui.setPose(2) = y(end)
+end
+
+% --- Executes on button press in choosePoint_conveyor.
+function choosePoint_conveyor_Callback(hObject, eventdata, handles)
+    global ui;
+
+    [x, y] = getpts(handles.camera_conveyor);
+    ui.setPose(1) = x(end)
+    ui.setPose(2) = y(end)
+% hObject    handle to choosePoint_conveyor (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+
+% --- Executes on selection change in command_history.
+function command_history_Callback(hObject, eventdata, handles)
+    % hObject    handle to command_history (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    structure with handles and user data (see GUIDATA)
+
+    % Hints: contents = cellstr(get(hObject,'String')) returns command_history contents as cell array
+    %        contents{get(hObject,'Value')} returns selected item from command_history
+end
+
+% --- Executes during object creation, after setting all properties.
+function command_history_CreateFcn(hObject, eventdata, handles)
+    % hObject    handle to command_history (see GCBO)
+    % eventdata  reserved - to be defined in a future version of MATLAB
+    % handles    empty - handles not created until after all CreateFcns called
+
+    % Hint: listbox controls usually have a white background on Windows.
+    %       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
     end
 end
