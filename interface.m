@@ -60,6 +60,12 @@ classdef interface < handle
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
             
+            %disable connect button
+            if(obj.robotTCP.connected)
+                set(obj.clientGUIData.connect_tcp,'Enable','off');
+                set(obj.clientGUIData.connect_tcp,'String','Connected'); 
+            end
+            
             %----------- PLOT HANDLES ----------------%
             % set up plots for the handles - use the 'tag' in the GUI as
             % the handle in the plot constructor and assign to a new handle
@@ -112,16 +118,20 @@ classdef interface < handle
             
             nextCommand = obj.commandQueue(1);
             
-            %execute command
-            switch nextCommand
-                %send pose
-                case 1
-                    obj.robotTCP.setIOs(obj.setIOs);
-                    
-                    obj.robotTCP.setPose(obj.setPose);
-
-                otherwise
-                    disp('cannot decipher queue object');
+            %only execute command queue if the robot is connected
+            %still tries and removes commands (so queue doesnt bank)
+            if(obj.robotTCP.connected == true)
+                %execute command
+                switch nextCommand
+                    %send pose
+                    case 1
+                        obj.robotTCP.setIOs(obj.setIOs)
+                    case 2
+                        obj.robotTCP.setPose(obj.setPose);
+                        disp('sending pose');
+                    otherwise
+                        disp('cannot decipher queue object');
+                end
             end
             
             %remove item from command queue

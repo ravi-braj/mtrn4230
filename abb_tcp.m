@@ -5,34 +5,42 @@
 classdef abb_tcp < handle
     properties
         socket;
-        
+        connected;
         %this gets set after each method
         error;
     end
     methods
         %constructor
         function obj = abb_tcp()
-            fprintf("created abb_tcp object\n");
+            fprintf('created abb_tcp object\n');
             fclose('all');
         end
         
         %opens connection and returns true if successful or false if
         %invalid
         function obj = openTCP(obj, ip_address, port)
+            obj.connected = false;
             % Open a TCP connection to the robot.
             obj.socket = tcpip(ip_address, port);
+
+            obj.socket.ByteOrder = 'littleEndian';
             
             pause(0.5);
             set(obj.socket, 'ReadAsyncMode', 'continuous');
-            fopen(obj.socket);
+            try 
+                fopen(obj.socket);
+            catch 
+                disp('Could not connect to tcp')
+                return;
+            end
 
             % Check if the connection is valid.
             if(~isequal(get(obj.socket, 'Status'), 'open'))
                 warning(['Could not open TCP connection to ', ip_address, ' on port ', port]);
-                valid = false;
+                obj.connected = false;
                 return;
             end
-            valid = true;
+            obj.connected = true;
         end
         
         %closes the socket.
@@ -96,7 +104,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'I', 'uchar');
             
             %send RAPID the i/o array
-            fwrite(obj.socket, ioArray, 'uint8');
+            fwrite(obj.socket, ioArray, 'uchar');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
@@ -136,7 +144,7 @@ classdef abb_tcp < handle
         end
         
         function firstRead(obj) 
-            disp("inside first read");
+            disp('inside first read');
             % Send a sample string to the server on the robot.
             fwrite(obj.socket, num2str(45645456456));
             disp('attempting to read data');
