@@ -31,7 +31,8 @@ classdef interface < handle
         
         %Queue stuff
         commandQueue
-        
+        %Array of strings to display historic commands to robot
+        commandHistory
         
         %variables for sending
         setSpeed
@@ -58,6 +59,8 @@ classdef interface < handle
             obj.robotTCP = abb_tcp();
             
             obj.IOs = [0, 0, 0, 0];
+            obj.pose = [0,0,0,0];
+            obj.setPose = [0, 0, 0, 0];
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
             
@@ -119,23 +122,33 @@ classdef interface < handle
             
             nextCommand = obj.commandQueue(1);
             
+            
+            
             %only execute command queue if the robot is connected
             %still tries and removes commands (so queue doesnt bank)
-            if(obj.robotTCP.connected == true)
+            %add command to command queue
+            %if(obj.robotTCP.connected == true)
                 %execute command
                 switch nextCommand
                     %send pose
                     case 1
-                        obj.robotTCP.setIOs(obj.setIOs)
+                        %obj.robotTCP.setIOs(obj.setIOs)
+                        comm = sprintf('Setting I/Os: [%d, %d, %d, %d]', obj.setIOs(1), obj.setIOs(2), obj.setIOs(3), obj.setIOs(4))
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
                     case 2
-                        obj.robotTCP.setPose(obj.setPose);
+                        %obj.robotTCP.setPose(obj.setPose);
+                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3), obj.setPose(4))
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                        size(obj.commandHistory)
                         disp('sending pose');
 
                     otherwise
                         disp('cannot decipher queue object');
                 end
-            end
+            %end
             
+            set(obj.clientGUIData.command_history,'String',obj.commandHistory);
+            size(obj.commandHistory)
             %remove item from command queue
             if(size(obj.commandQueue) == 1)
                 obj.commandQueue = [];
