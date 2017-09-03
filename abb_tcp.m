@@ -1,7 +1,6 @@
 %%% class for tcp communication with abb robot
 %%% protocols inbuilt
 
-
 classdef abb_tcp < handle
     properties
         socket;
@@ -60,7 +59,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'p', 'uchar');
             
             %read the pose
-            pose = fread(obj.socket, 4, 'float32');
+            pose = fread(obj.socket, 7, 'float32');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
