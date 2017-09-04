@@ -38,12 +38,17 @@ classdef interface < handle
         setPose
         setMotionMode
         setIOs
+        setJOG
+        
         
         %variables for reading (Telem variables)
         speed
         pose
-        motionMode
         IOs
+        
+
+        %control variables
+        motionMode
         
     end
     methods
@@ -56,10 +61,16 @@ classdef interface < handle
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
             
-            obj.IOs = uint8(zeros(1,3));
-            obj.pose = zeros(1,7);
+            obj.IOs = [0, 0, 0, 0];
+            obj.pose = [0, 0, 0, 0]; %zeros(1,7);
+            obj.setPose = [0,0,0,0];
+            
+            obj.motionMode = "linear";
+            
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
+            
+            
             
             %disable connect button
             if(obj.robotTCP.connected)
@@ -117,33 +128,38 @@ classdef interface < handle
                 return
             end
             
-            nextCommand = obj.commandQueue(1);
+            nextCommand = obj.commandQueue(1)
         
             %only execute command queue if the robot is connected
             %still tries and removes commands (so queue doesnt bank)
             %add command to command queue
-            if(obj.robotTCP.connected == true)
+            %if(obj.robotTCP.connected == true)
                 %execute command
                 switch nextCommand
                     %send pose
                     case 1
-                        obj.robotTCP.setIOs(obj.setIOs)
+                        %obj.robotTCP.setIOs(obj.setIOs)
                         comm = sprintf('Setting I/Os: [%d, %d, %d, %d]', obj.setIOs(1), obj.setIOs(2), obj.setIOs(3), obj.setIOs(4))
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending IOs');
                     case 2
-                        obj.robotTCP.setPose(obj.setPose);
+                        %obj.robotTCP.setPose(obj.setPose);
                         comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3), obj.setPose(4))
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending pose');
+
+                    case 3
+                        disp('sending JOG command');
+                        %obj.robotTCP.setJOG(obj.setJOG);
+
                     otherwise
                         disp('cannot decipher queue object');
                 end
-            end
+            %end
             
             set(obj.clientGUIData.command_history,'String',obj.commandHistory);
-            size(obj.commandHistory)
-            
+       
+
             %remove item from command queue
             if(size(obj.commandQueue) == 1)
                 obj.commandQueue = [];
@@ -152,6 +168,9 @@ classdef interface < handle
             end
    
         end
+        
+        
+        
         
     end
 end

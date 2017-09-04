@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 03-Sep-2017 22:45:59
+    % Last Modified by GUIDE v2.5 04-Sep-2017 17:02:47
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -291,14 +291,96 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
 end
 
 
+% --- Executes on button press in jog_x_minus.
+function jog_x_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_x_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 2;
+    
+end
+
+% --- Executes on button press in jog_x_plus.
+function jog_x_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_x_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 1;
+end
+
+% --- Executes on button press in jog_y_minus.
+function jog_y_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_y_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 4;
+end
+
+% --- Executes on button press in jog_y_plus.
+function jog_y_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_y_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 3;
+end
+
+% --- Executes on button press in jog_z_minus.
+function jog_z_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_z_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 6;
+end
+
+% --- Executes on button press in jog_z_plus.
+function jog_z_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_z_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 5;
+end
+
+% --- Executes on button press in jog_theta_minus.
+function jog_theta_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_theta_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 8;
+end
+
+% --- Executes on button press in jog_theta_plus.
+function jog_theta_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_theta_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 7;
+end
+
+
 % --- Executes on selection change in command_history.
 function command_history_Callback(hObject, eventdata, handles)
-    % hObject    handle to command_history (see GCBO)
-    % eventdata  reserved - to be defined in a future version of MATLAB
-    % handles    structure with handles and user data (see GUIDATA)
+% hObject    handle to command_history (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 
-    % Hints: contents = cellstr(get(hObject,'String')) returns command_history contents as cell array
-    %        contents{get(hObject,'Value')} returns selected item from command_history
+% Hints: contents = cellstr(get(hObject,'String')) returns command_history contents as cell array
+%        contents{get(hObject,'Value')} returns selected item from command_history
 end
 
 % --- Executes during object creation, after setting all properties.
