@@ -1,22 +1,5 @@
 MODULE MTRN4230_IO_Sample
     
-    PROC MainIO()
-        
-        TurnVacOn;
-        
-        ! Time to wait in seconds.
-        WaitTime 2;
-        
-        TurnVacOff;
-        
-        TurnConOnSafely;
-        
-        WaitTime 2;
-        
-        TurnConOff;
-        
-    ENDPROC
-    
     PROC TurnVacOn()
         
         ! Set VacRun on.
