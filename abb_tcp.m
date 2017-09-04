@@ -59,7 +59,8 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'p', 'uchar');
             
             %read the pose
-            pose = fread(obj.socket, 7, 'float32');
+            tmp = fread(obj.socket, 7, 'float32');
+            pose = tmp(1:4);
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
@@ -74,7 +75,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'i', 'uchar');
             
             %read the i/o data
-            ios = fread(obj.socket, 3, 'uint8');
+            ios = fread(obj.socket, 4, 'uint8');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
@@ -88,8 +89,11 @@ classdef abb_tcp < handle
             %send request to send RAPID the i/o array
             fwrite(obj.socket, 'P', 'uchar');
             
+            tmp = zeros(1,7);
+            tmp(1:4) = poseArray;
+            
             %send RAPID the i/o array
-            fwrite(obj.socket, poseArray, 'float32');
+            fwrite(obj.socket, tmp, 'float32');
             
             %read error message
             obj.error = fread(obj.socket, 1, 'uchar');
@@ -147,7 +151,7 @@ classdef abb_tcp < handle
            fwrite(obj.socket, 'J', 'char');
            
            %write speed
-           fwrite(obj.socket, jog, 'uchar');
+           fwrite(obj.socket, jog, 'uint8');
            
            %read error message
            obj.error = fread(obj.socket, 1, 'uchar');

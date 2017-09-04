@@ -133,17 +133,17 @@ classdef interface < handle
             %only execute command queue if the robot is connected
             %still tries and removes commands (so queue doesnt bank)
             %add command to command queue
-            %if(obj.robotTCP.connected == true)
+            if(obj.robotTCP.connected == true)
                 %execute command
                 switch nextCommand
                     %send pose
                     case 1
-                        %obj.robotTCP.setIOs(obj.setIOs)
+                        obj.robotTCP.setIOs(obj.setIOs)
                         comm = sprintf('Setting I/Os: [%d, %d, %d, %d]', obj.setIOs(1), obj.setIOs(2), obj.setIOs(3), obj.setIOs(4))
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending IOs');
                     case 2
-                        %obj.robotTCP.setPose(obj.setPose);
+                        obj.robotTCP.setPose(obj.setPose);
                         comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3), obj.setPose(4))
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending pose');
@@ -155,7 +155,7 @@ classdef interface < handle
                     otherwise
                         disp('cannot decipher queue object');
                 end
-            %end
+            end
             
             set(obj.clientGUIData.command_history,'String',obj.commandHistory);
        

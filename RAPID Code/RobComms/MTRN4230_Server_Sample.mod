@@ -8,22 +8,25 @@ MODULE MTRN4230_Server_Sample
     CONST string host := "127.0.0.1";
     CONST num port := 1025;
     
+    ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
+    PERS pose pose_state := [[175,0,140],[0,0,-1,0]];  ! pos(x, y, z), orient(q1,q2,q3,q4), begun at table home
+    PERS speeddata speed := [100,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS byte io_state{4} := [1,0,1,0];   ! DI10_1, DO10_1, DO10_2, DO10_3 (off = 0, on = 1)
+    PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
+    PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
+    PERS byte jog_input := 0;
+    PERS bool quit := FALSE;
+    
     PROC MainServer()
         
         ! RawBytes buffer for data manipulation
         VAR rawbytes raw_data;
+        VAR num tmpf := 0;
+        VAR byte tmpb := 0;
         
         ! Message requests and replies
         VAR byte requestMsg{1};
         VAR byte errorMsg{1};
-        
-        ! Data stores   (variables are persistent across tasks)
-        PERS pose pose_state := [[0,0,0],[0,0,0,0]];  ! pos(x, y, z), orient(q1,q2,q3,q4)
-        PERS speeddata speed := [0,0,0,0];       ! v_tcp, v_ori, v_leax, v_reax
-        PERS byte io_state{3} := [0,0,0];   ! DI10_1, DO10_1, DO10_3 (off = 0, on = 1)
-        PERS byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
-        PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
-        PERS bool quit := FALSE;
         
         ListenForAndAcceptConnection;
         
@@ -33,7 +36,7 @@ MODULE MTRN4230_Server_Sample
         WHILE quit = FALSE DO     ! Keep server alive until close command recieved
             ClearRawBytes raw_data;
             
-            IF requestMsg{1} <> StrToByte("c" \Char) THEN   ! Client requesting to close connection
+            IF requestMsg{1} = StrToByte("c" \Char) THEN   ! Client requesting to close connection
             
                 quit := TRUE;
 
@@ -64,14 +67,20 @@ MODULE MTRN4230_Server_Sample
                 
                 SocketReceive client_socket \RawData:=raw_data;
                 
-                UnpackRawBytes raw_data, 1, pose_state.trans.x \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 5, pose_state.trans.y \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 9, pose_state.trans.z \Float4;  ! 4 bytes per value
-                
-                UnpackRawBytes raw_data, 13, pose_state.rot.q1 \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 17, pose_state.rot.q2 \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 21, pose_state.rot.q3 \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 25, pose_state.rot.q4 \Float4;  ! 4 bytes per value
+                UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
+                pose_state.trans.x := tmpf;
+                UnpackRawBytes raw_data, 5, tmpf \Float4;  ! 4 bytes per value
+                pose_state.trans.y := tmpf;
+                UnpackRawBytes raw_data, 9, tmpf \Float4;  ! 4 bytes per value
+                pose_state.trans.z := tmpf;
+                UnpackRawBytes raw_data, 13, tmpf \Float4;  ! 4 bytes per value
+                pose_state.rot.q1 := tmpf;
+                UnpackRawBytes raw_data, 17, tmpf \Float4;  ! 4 bytes per value
+                pose_state.rot.q2 := tmpf;
+                UnpackRawBytes raw_data, 21, tmpf \Float4;  ! 4 bytes per value
+                pose_state.rot.q3 := tmpf;
+                UnpackRawBytes raw_data, 25, tmpf \Float4;  ! 4 bytes per value
+                pose_state.rot.q4 := tmpf;
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
                 
@@ -80,7 +89,8 @@ MODULE MTRN4230_Server_Sample
                 SocketReceive client_socket \RawData:=raw_data;
                 
                 FOR i FROM 1 TO Dim(io_state,1) DO
-                    UnpackRawBytes raw_data, i, io_state{i} \Hex1;   ! 1 byte per value
+                    UnpackRawBytes raw_data, i, tmpb \Hex1;   ! 1 byte per value
+                    io_state{i} := tmpb;
                 ENDFOR
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
@@ -89,10 +99,14 @@ MODULE MTRN4230_Server_Sample
 
                 SocketReceive client_socket \RawData:=raw_data;   
                 
-                UnpackRawBytes raw_data, 1, speed.v_leax \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 5, speed.v_ori \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 9, speed.v_reax \Float4;  ! 4 bytes per value
-                UnpackRawBytes raw_data, 13, speed.v_tcp \Float4;  ! 4 bytes per value
+                UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
+                speed.v_leax := tmpf;
+                UnpackRawBytes raw_data, 5, tmpf \Float4;  ! 4 bytes per value
+                speed.v_ori := tmpf;
+                UnpackRawBytes raw_data, 9, tmpf \Float4;  ! 4 bytes per value
+                speed.v_reax := tmpf;
+                UnpackRawBytes raw_data, 13, tmpf \Float4;  ! 4 bytes per value
+                speed.v_tcp := tmpf;
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
                 
@@ -100,7 +114,8 @@ MODULE MTRN4230_Server_Sample
 
                 SocketReceive client_socket \RawData:=raw_data;
                 
-                UnpackRawBytes raw_data, 1, mode \Hex1;   ! 1 byte per value
+                UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
+                mode := tmpb;
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
                 
@@ -108,7 +123,17 @@ MODULE MTRN4230_Server_Sample
 
                 SocketReceive client_socket \RawData:=raw_data;
                 
-                UnpackRawBytes raw_data, 1, pause \Hex1;   ! 1 byte per value
+                UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
+                pause := tmpb;
+                
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
+                
+            ELSEIF requestMsg{1} = StrToByte("J" \Char) THEN   ! Client wants to set pause state
+
+                SocketReceive client_socket \RawData:=raw_data;
+                
+                UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
+                jog_input := tmpb;
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
             
