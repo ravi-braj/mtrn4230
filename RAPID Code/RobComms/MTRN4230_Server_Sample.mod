@@ -18,12 +18,12 @@ MODULE MTRN4230_Server_Sample
         VAR byte errorMsg{1};
         
         ! Data stores   (variables are persistent across tasks)
-        PERS pose pose_state := [[0,0,0],[0,0,0,0]];  ! pos(x, y, z), orient(q1,q2,q3,q4)
-        PERS speeddata speed := [0,0,0,0];       ! v_tcp, v_ori, v_leax, v_reax
-        PERS byte io_state{3} := [0,0,0];   ! DI10_1, DO10_1, DO10_3 (off = 0, on = 1)
-        PERS byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
-        PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
-        PERS bool quit := FALSE;
+        VAR pose pose_state := [[0,0,0],[0,0,0,0]];  ! pos(x, y, z), orient(q1,q2,q3,q4)
+        VAR speeddata speed := [0,0,0,0];       ! v_tcp, v_ori, v_leax, v_reax
+        VAR byte io_state{4} := [0,0,0,0];   ! DI10_1, DO10_1, DO10_2, DO10_3 (off = 0, on = 1)
+        VAR byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
+        VAR byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
+        VAR bool quit := FALSE;
         
         ListenForAndAcceptConnection;
         

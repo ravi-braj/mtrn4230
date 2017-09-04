@@ -1,4 +1,5 @@
 MODULE MTRN4230_Move_Sample
+    
     ! Data stores   (variables are persistent across tasks)
     PERS pose pose_state;  ! pos(x, y, z), orient(q1,q2,q3,q4)
     PERS speeddata speed;       ! v_tcp, v_ori, v_leax, v_reax
@@ -12,26 +13,26 @@ MODULE MTRN4230_Move_Sample
         
         WHILE quit = FALSE DO
             
-            ! Motion commands
-            IF mode = 0 THEN    ! Execute linear move
-                MoveL Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
-            ELSEIF mode = 1 THEN    ! Execute joint move
-                MoveJ Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
-            ENDIF
+!            ! Motion commands
+!            IF mode = 0 THEN    ! Execute linear move
+!                MoveL Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
+!            ELSEIF mode = 1 THEN    ! Execute joint move
+!                MoveJ Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
+!            ENDIF
             
-            ! IO commands (Vacuum)
-            IF io_state{2} = 1 THEN
-                TurnVacOn;
-            ELSEIF io_state{2} = 0 THEN
-                TurnVacOff;
-            ENDIF
+!            ! IO commands (Vacuum)
+!            IF io_state{2} = 1 THEN
+!                TurnVacOn;
+!            ELSEIF io_state{2} = 0 THEN
+!                TurnVacOff;
+!            ENDIF
             
-            ! IO commannds (Conveyor)
-            IF io_state{3} = 1 THEN
-                TurnConOnSafely;
-            ELSEIF io_state{3} = 0 THEN
-                TurnConOff;
-            ENDIF
+!            ! IO commannds (Conveyor)
+!            IF io_state{3} = 1 THEN
+!                TurnConOnSafely;
+!            ELSEIF io_state{3} = 0 THEN
+!                TurnConOff;
+!            ENDIF
             
         ENDWHILE
         
