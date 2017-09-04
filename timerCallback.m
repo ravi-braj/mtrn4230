@@ -62,6 +62,7 @@ function timerCallback(obj, event, ui)
     %%----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
     
+
     %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
     %disp("first read?");
     %ui.robotTCP.firstRead();

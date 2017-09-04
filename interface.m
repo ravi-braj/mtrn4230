@@ -39,13 +39,16 @@ classdef interface < handle
         setPose
         setMotionMode
         setIOs
+        setJOG
+        
         
         %variables for reading (Telem variables)
         speed
         pose
-        motionMode
         IOs
         
+        %control variables
+        motionMode
         
     end
     methods
@@ -62,7 +65,12 @@ classdef interface < handle
             obj.pose = [0,0,0,0];
             obj.setPose = [0, 0, 0, 0];
             
+            obj.motionMode = "linear";
+            
+            
             obj.robotTCP.openTCP('127.0.0.1', 1025);
+            
+            
             
             %disable connect button
             if(obj.robotTCP.connected)
@@ -141,14 +149,17 @@ classdef interface < handle
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         size(obj.commandHistory)
                         disp('sending pose');
-
+                    case 3
+                        disp('sending JOG command');
+                        %obj.robotTCP.setJOG(obj.setJOG);
+                        
                     otherwise
                         disp('cannot decipher queue object');
                 end
             %end
             
             set(obj.clientGUIData.command_history,'String',obj.commandHistory);
-            size(obj.commandHistory)
+
             %remove item from command queue
             if(size(obj.commandQueue) == 1)
                 obj.commandQueue = [];
@@ -157,6 +168,9 @@ classdef interface < handle
             end
    
         end
+        
+        
+        
         
     end
 end

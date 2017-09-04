@@ -152,6 +152,16 @@ classdef abb_tcp < handle
             disp(data);
         end
         
+        function setJOG(obj, jog)
+                       %send request ot set speed
+           fwrite(obj.socket, 'J', 'char');
+           
+           %write speed
+           fwrite(obj.socket, jog, 'uchar');
+           
+           %read error message
+           obj.error = fread(obj.socket, 1, 'uchar');
+        end
     end
 end
     
