@@ -277,8 +277,8 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
     [x, y] = ginput(1);
 
     z = 10.00;
-    y =1600 - y;
-    if(x>1200) || (y>1600) || (x<0) || (y<0)
+    y =1200 - y;
+    if(x>1600) || (y>1200) || (x<0) || (y<0)
         x = NaN;
         y = NaN;
         z = NaN;
@@ -303,8 +303,8 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
 
     [x, y] = ginput(1);
     z = 10.00;
-    y =1600 - y;
-    if(x>1200) || (y>1600) || (x<0) || (y<0)
+    y =1200 - y;
+    if(x>1600) || (y>1200) || (x<0) || (y<0)
         x = NaN;
         y = NaN;
         z = NaN;
