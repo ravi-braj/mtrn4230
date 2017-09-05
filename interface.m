@@ -22,10 +22,14 @@ classdef interface < handle
         h_camConveyor
         h_camTable
         
-        %rgb data
+        %rgb data conveyor
         conveyorObj
         conveyorRGB
         boxPose
+        
+        %rgb data table
+        tableObj
+        tableRGB
         
         %Queue stuff
         commandQueue
@@ -110,12 +114,21 @@ classdef interface < handle
             set(obj.clientGUIData.io_conveyor_direction, 'String', ioArray(4));
         end
         
-        % get serial data from camera on conveyor - updates camData
+        % get serial data from camera on conveyor - updates conveyorRGB
         % property (rgb)
         function obj = datafromConveyorCam(obj)
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
-            %obj.conveyorRGB = getsnapshot(obj.conveyorObj);
+            obj.conveyorRGB = getsnapshot(obj.conveyorObj);
+            
+        end
+        
+        % get serial data from camera on table - updates tableRGB
+        % property (rgb)
+        function obj = datafromTableCam(obj)
+            %obj.camRGB = blahblahgetserial
+            %update rgb data in camdata
+            %obj.tableRGB = getsnapshot(obj.tableObj);
             
         end
         
