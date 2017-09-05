@@ -27,8 +27,8 @@ function timerCallback(obj, event, ui)
     % 2) receive the packet from the robot
     % 3) update interface
     
-    
-    ui.updatePose(rand(), rand(), rand());
+    ui.pose = ui.robotTCP.requestPose();
+    ui.updatePose(ui.pose(1), ui.pose(2), ui.pose(3));
     
     
     

@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 04-Sep-2017 17:02:47
+    % Last Modified by GUIDE v2.5 05-Sep-2017 17:25:39
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -352,9 +352,9 @@ function jog_z_plus_Callback(hObject, eventdata, handles)
     ui.setJOG = 5;
 end
 
-% --- Executes on button press in jog_theta_minus.
-function jog_theta_minus_Callback(hObject, eventdata, handles)
-% hObject    handle to jog_theta_minus (see GCBO)
+% --- Executes on button press in jog_j1_minus.
+function jog_j1_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j1_minus (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
@@ -362,9 +362,9 @@ function jog_theta_minus_Callback(hObject, eventdata, handles)
     ui.setJOG = 8;
 end
 
-% --- Executes on button press in jog_theta_plus.
-function jog_theta_plus_Callback(hObject, eventdata, handles)
-% hObject    handle to jog_theta_plus (see GCBO)
+% --- Executes on button press in jog_j1_plus.
+function jog_j1_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j1_plus (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
@@ -394,4 +394,105 @@ function command_history_CreateFcn(hObject, eventdata, handles)
     if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor','white');
     end
+end
+
+
+% --- Executes on button press in jog_j2_minus.
+function jog_j2_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j2_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 10;
+end
+
+% --- Executes on button press in jog_j2_plus.
+function jog_j2_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j2_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 9;
+end
+
+% --- Executes on button press in jog_j3_minus.
+function jog_j3_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j3_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 12;
+end
+
+% --- Executes on button press in jog_j3_plus.
+function jog_j3_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j3_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 11;
+end
+
+% --- Executes on button press in jog_j4_minus.
+function jog_j4_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j4_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 14;
+end
+
+% --- Executes on button press in jog_j4_plus.
+function jog_j4_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j4_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 13;
+end
+
+% --- Executes on button press in jog_j5_minus.
+function jog_j5_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j5_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 16;
+end
+
+% --- Executes on button press in jog_j5_plus.
+function jog_j5_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j5_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 15;
+end
+
+% --- Executes on button press in jog_j6_minus.
+function jog_j6_minus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j6_minus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 18;
+end
+
+% --- Executes on button press in jog_j6_plus.
+function jog_j6_plus_Callback(hObject, eventdata, handles)
+% hObject    handle to jog_j6_plus (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 3];
+    ui.setJOG = 17;
 end
