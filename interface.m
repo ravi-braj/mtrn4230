@@ -66,8 +66,8 @@ classdef interface < handle
             obj.robotTCP = abb_tcp();
             
             obj.IOs = [0, 0, 0, 0];
-            obj.pose = [0, 0, 0, 0]; %zeros(1,7);
-            obj.setPose = [0,0,0,0];
+            obj.pose = [0, 0, 0]; %zeros(1,7);
+            obj.setPose = [0,0,0];
             
             obj.motionMode = "linear";
             
@@ -163,7 +163,7 @@ classdef interface < handle
 
                     case 3
                         disp('sending JOG command');
-                        %obj.robotTCP.setJOG(obj.setJOG);
+                        obj.robotTCP.setJOG(obj.setJOG);
 
                     otherwise
                         disp('cannot decipher queue object');

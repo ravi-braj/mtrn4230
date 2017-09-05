@@ -55,15 +55,19 @@ classdef abb_tcp < handle
         function pose = requestPose(obj)
             disp('requesting Pose');
             
-            %send request for pose
-            fwrite(obj.socket, 'p', 'uchar');
-            
-            %read the pose
-            tmp = fread(obj.socket, 7, 'float32');
-            pose = tmp(1:4);
-            
-            %read error message
-            obj.error = fread(obj.socket, 1, 'uchar');
+            if(obj.connected)
+                %send request for pose
+                fwrite(obj.socket, 'p', 'uchar');
+
+                %read the pose
+                tmp = fread(obj.socket, 7, 'float32');
+                pose = tmp(1:4);
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            else
+                pose = [NaN, NaN, NaN];
+            end
            
         end
       
@@ -71,14 +75,18 @@ classdef abb_tcp < handle
         function ios = requestIOs(obj)
             disp('requesting IOs');
             
-            %send request to RAPID for i/o data
-            fwrite(obj.socket, 'i', 'uchar');
-            
-            %read the i/o data
-            ios = fread(obj.socket, 4, 'uint8');
-            
-            %read error message
-            obj.error = fread(obj.socket, 1, 'uchar');
+            if(obj.connected)
+                %send request to RAPID for i/o data
+                fwrite(obj.socket, 'i', 'uchar');
+
+                %read the i/o data
+                ios = fread(obj.socket, 4, 'uint8');
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            else
+                ios = [NaN, NaN, NaN, NaN];
+            end
         end
         
         %------------ Sending data ------------------
