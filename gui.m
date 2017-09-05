@@ -274,6 +274,7 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
     global ui;
     %figure(handles.camera_table);
     [x, y] = getpts(handles.camera_table);
+    handles.camera_table
     ui.setPose(1) = x(end)
     ui.setPose(2) = y(end)
 end
