@@ -93,7 +93,9 @@ classdef interface < handle
             x = linspace(1, 20, 100);
             y = sin(x);
             obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1600,1200));
+            set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
             obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1600, 1200));
+            set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
             
             %----------- OTHER HANDLES ----------------%
             
