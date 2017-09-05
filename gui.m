@@ -273,7 +273,9 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
 
+
     [x, y] = ginput(1);
+
     z = 10.00;
     y =1600 - y;
     if(x>1200) || (y>1600) || (x<0) || (y<0)
@@ -286,7 +288,7 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
     ui.setPose(2) = y;
     ui.setPose(3) = z;
     
-
+    
     set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
     set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
     set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
