@@ -55,7 +55,7 @@ classdef abb_tcp < handle
         function pose = requestPose(obj)
             disp('requesting Pose');
             
-            if(obj.connected)
+            if(obj.connected == true)
                 %send request for pose
                 fwrite(obj.socket, 'p', 'uchar');
 
@@ -75,7 +75,7 @@ classdef abb_tcp < handle
         function ios = requestIOs(obj)
             disp('requesting IOs');
             
-            if(obj.connected)
+            if(obj.connected == true)
                 %send request to RAPID for i/o data
                 fwrite(obj.socket, 'i', 'uchar');
 
@@ -98,7 +98,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'P', 'uchar');
             
             tmp = zeros(1,7);
-            tmp(1:4) = poseArray;
+            tmp(1:3) = poseArray;
             
             %send RAPID the i/o array
             fwrite(obj.socket, tmp, 'float32');

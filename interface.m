@@ -159,7 +159,7 @@ classdef interface < handle
                         disp('sending IOs');
                     case 2
                         obj.robotTCP.setPose(obj.setPose);
-                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3), obj.setPose(4))
+                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3))
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending pose');
 
