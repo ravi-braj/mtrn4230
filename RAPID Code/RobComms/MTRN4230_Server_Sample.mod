@@ -9,13 +9,15 @@ MODULE MTRN4230_Server_Sample
     CONST num port := 1025;
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS pose pose_state := [[175,0,140],[0,0,-1,0]];  ! pos(x, y, z), orient(q1,q2,q3,q4), begun at table home
+    PERS pose pose_state := [[100,100,100],[0,0,0,0]];  ! pos(x, y, z), orient(q1,q2,q3,q4), begun at table home
     PERS speeddata speed := [100,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
-    PERS byte io_state{4} := [1,0,1,0];   ! DI10_1, DO10_1, DO10_2, DO10_3 (off = 0, on = 1)
+    PERS byte io_state{4} := [1,1,1,1];   ! DI10_1, DO10_1, DO10_2, DO10_3 (off = 0, on = 1)
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     PERS byte jog_input := 0;
     PERS bool quit := FALSE;
+    
+    PERS byte command := 0;
     
     PROC MainServer()
         
@@ -82,6 +84,11 @@ MODULE MTRN4230_Server_Sample
                 UnpackRawBytes raw_data, 25, tmpf \Float4;  ! 4 bytes per value
                 pose_state.rot.q4 := tmpf;
                 
+                command := 1;   ! Execute move to pose
+                
+                WHILE command <> 0 DO   ! Wait for command to finish executing in RobControl
+                ENDWHILE
+                
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
                 
             ELSEIF requestMsg{1} = StrToByte("I" \Char) THEN   ! Client wants to set io_state
@@ -92,6 +99,11 @@ MODULE MTRN4230_Server_Sample
                     UnpackRawBytes raw_data, i, tmpb \Hex1;   ! 1 byte per value
                     io_state{i} := tmpb;
                 ENDFOR
+                
+                command := 2;   ! Execute io updates
+                
+                WHILE command <> 0 DO   ! Wait for command to finish executing in RobControl
+                ENDWHILE
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
             
@@ -128,12 +140,17 @@ MODULE MTRN4230_Server_Sample
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
                 
-            ELSEIF requestMsg{1} = StrToByte("J" \Char) THEN   ! Client wants to set pause state
+            ELSEIF requestMsg{1} = StrToByte("J" \Char) THEN   ! Client wants to jog robot
 
                 SocketReceive client_socket \RawData:=raw_data;
                 
                 UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
                 jog_input := tmpb;
+                
+                command := 3;   ! Execute move to pose
+                
+                WHILE command <> 0 DO   ! Wait for command to finish executing in RobControl
+                ENDWHILE
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
             

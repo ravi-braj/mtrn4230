@@ -8,33 +8,61 @@ MODULE MTRN4230_Move_Sample
     PERS byte pause;         ! pause = 0 (moving), pause = 1 (paused)
     PERS byte jog_input;
     PERS bool quit;
+    PERS byte command;
     
     ! The Main prodedure. When you select 'PP to Main' on the FlexPendant, it will go to this procedure.
     PROC MainMove()
         
         WHILE quit = FALSE DO
             
-            ! Motion commands
-            IF mode = 0 THEN    ! Execute linear move
-                MoveL Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
-            ELSEIF mode = 1 THEN    ! Execute joint move
-                MoveJ Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
+            IF command = 1 THEN     ! Update pose
+                
+                ! Motion commands
+                IF mode = 0 THEN    ! Execute linear move
+                    MoveL Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
+                ELSEIF mode = 1 THEN    ! Execute joint move
+                    MoveJ Offs(pTableHome, pose_state.trans.x, pose_state.trans.y, pose_state.trans.z), speed, fine, tSCup;
+                ENDIF
+                
+                command := 0;
+                
+            ELSEIF command = 2 THEN     ! Update states
+                    
+                ! IO commands (Set Vaccum power)
+                IF io_state{1} = 1 THEN
+                    TurnVacOn;
+                ELSEIF io_state{1} = 0 THEN
+                    TurnVacOff;
+                ENDIF
+                
+                ! IO commands (
+                IF io_state{2} = 1 THEN
+                    TurnVacSolOn;
+                ELSEIF io_state{2} = 0 THEN
+                    TurnVacSolOff;
+                ENDIF
+                
+                ! IO commands (Conveyor)
+                IF io_state{3} = 1 THEN
+                    TurnConOnSafely;
+                ELSEIF io_state{3} = 0 THEN
+                    TurnConOff;
+                ENDIF
+                
+                ! IO commands (Change conveyor direction)
+                IF io_state{4} = 1 THEN
+                    ConDirTowards;
+                ELSEIF io_state{4} = 0 THEN
+                    ConDirAway;
+                ENDIF
+                
+                command := 0;
+                
+            ELSEIF command = 3 THEN     ! Jog
+            
+            ELSEIF command = 4 THEN     ! Click to move input
+            
             ENDIF
-            
-!            ! IO commands (Vacuum)
-!            IF io_state{2} = 1 THEN
-!                TurnVacOn;
-!            ELSEIF io_state{2} = 0 THEN
-!                TurnVacOff;
-!            ENDIF
-            
-!            ! IO commannds (Conveyor)
-!            IF io_state{3} = 1 THEN
-!                TurnConOnSafely;
-!            ELSEIF io_state{3} = 0 THEN
-!                TurnConOff;
-!            ENDIF
-            
         ENDWHILE
         
     ENDPROC
