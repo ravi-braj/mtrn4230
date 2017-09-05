@@ -4,7 +4,7 @@
 function timerCallback(obj, event, ui) 
 
     %av_period = get(obj, 'AveragePeriod')
-    fprintf("Timer callback executed. %f seconds since last call\n", get(obj, 'InstantPeriod'));
+    fprintf('Timer callback executed. %f seconds since last call\n', get(obj, 'InstantPeriod'));
     
     %% %%%%%%%%%%%% CONDITIONAL EXECUTIONS %%%%%%%%%%%%%%
     
@@ -19,7 +19,8 @@ function timerCallback(obj, event, ui)
     % 3) update status of i/o s
     
     %currently fills io status on gui to junk data
-    ui.updateIOs(randi([0 1],1,4));
+    
+    ui.updateIOs(ui.IOs);
     
     %% ---------- request pose of the robot and update ui ------
     % 1) send request packet to robot
@@ -31,15 +32,21 @@ function timerCallback(obj, event, ui)
     
     
     
-    %% ---------- receive tcp from camera ---------------------
-    % 1) receive the tcp
+    %% ---------- receive serial from camera ---------------------
+    % 1) receive the serial data
+    %ui.datafromConveyorCam();
+    %[ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
     % 2) use gui plot handle for setting the data in the camera plot
-
+    
+    
+    
+    
      %some dummy data
-    y = get(ui.h_camConveyor, 'YData');
-    y = [y(end), y(1:end-1)];
+    %y = get(ui.h_camConveyor, 'YData');
+    %y = [y(end), y(1:end-1)];
 
-    set(ui.h_camConveyor, 'YData', y);
+    %set(ui.h_camConveyor, 'YData', y);
+    set(ui.h_camConveyor, 'CData', NaN(1600, 1200));
 
     
     
@@ -47,22 +54,27 @@ function timerCallback(obj, event, ui)
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the camera plot
     
-    y = get(ui.h_camTable, 'YData');
-    y = [y(2:end), y(1)];
-    set(ui.h_camTable, 'YData', y);
+    %y = get(ui.h_camTable, 'YData');
+    %y = [y(2:end), y(1)];
+    set(ui.h_camTable, 'CData', NaN(1600, 1200));
 
     
-    %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
-    disp("first read?");
-    ui.robotTCP.firstRead();
+    %%----------- execute queued commands (added by GUI) ------
+    ui.nextCommand();
     
+
+    %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
+    %disp("first read?");
+    %ui.robotTCP.firstRead();
+    
+    %
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
     
     %exit button pressed, stop the timer
     global exit;
     if(exit == true)
-        disp("stopping");
+        disp('stopping');
         stop(obj);
     end
 

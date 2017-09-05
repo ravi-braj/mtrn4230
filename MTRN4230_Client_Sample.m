@@ -13,6 +13,7 @@ robot_port = 1025;
 fclose('all');
 % Open a TCP connection to the robot.
 socket = tcpip(robot_IP_address, robot_port);
+socket.ByteOrder = 'littleEndian';   %Set Endian to convert
 set(socket, 'ReadAsyncMode', 'continuous');
 fopen(socket);
 
@@ -23,14 +24,25 @@ if(~isequal(get(socket, 'Status'), 'open'))
     return;
 end
 
-% Send a sample string to the server on the robot.
-fwrite(socket, num2str(45645456456));
+quit = false;
 
-% Read a line from the socket. Note the line feed appended to the message in the RADID sample code.
-data = fgetl(socket);
+while quit == false
+   % Send a sample string to the server on the robot.
+    disp('Writing to socket...');
+    pose = [202.1, 4673.4, 60.23];
+    fwrite(socket, 'P');
+    fwrite(socket, pose,'float32');
+    
+    %disp('Freadsocket');
+    % Read a line from the socket. Note the line feed appended to the message in the RADID sample code.
+    %data = fread(socket);
 
-% Print the data that we got.
-fprintf(char(data));
+    % Print the data that we got.
+    %fprintf(char(data));
+    
+    %data = fread(socket,3,'uint8');    % To read bytes
+    %data = fread(socket,3,'float32');   % To read rawbytes
+end
 
 % Close the socket.
 fclose(socket);
