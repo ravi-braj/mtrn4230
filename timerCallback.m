@@ -36,7 +36,7 @@ function timerCallback(obj, event, ui)
     % 1) receive the serial data
     try
         ui.datafromConveyorCam();
-        [ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
+        %[ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     catch
         set(ui.h_camConveyor, 'CData', NaN(1600, 1200));

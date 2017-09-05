@@ -121,7 +121,7 @@ classdef interface < handle
         function obj = datafromConveyorCam(obj)
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
-            obj.conveyorRGB = getsnapshot(obj.conveyorObj);
+            obj.conveyorRGB = snapshot(obj.conveyorObj);
             
         end
         
@@ -130,7 +130,7 @@ classdef interface < handle
         function obj = datafromTableCam(obj)
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
-            %obj.tableRGB = getsnapshot(obj.tableObj);
+            obj.tableRGB = snapshot(obj.tableObj);
             
         end
         

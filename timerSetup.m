@@ -6,8 +6,9 @@ function timerSetup(obj, event, interface)
 
     % Serial connections for camera
     try
-        interface.tableObj = videoinput('winvideo', 1, 'RGB24_1600x1200'); % table
-        interface.converyorObj = videoinput('winvideo', 2, 'RGB24_1600x1200'); %conveyor
+        interface.tableObj = webcam(1); % table
+        interface.conveyorObj = webcam(2); %conveyor
+        disp('yes');
     catch
         
     end
