@@ -69,7 +69,7 @@ classdef interface < handle
             obj.pose = [0, 0, 0]; %zeros(1,7);
             obj.setPose = [0,0,0];
             
-            obj.motionMode = "linear";
+            obj.motionMode = string('linear');
             
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
