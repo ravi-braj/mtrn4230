@@ -272,22 +272,52 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    %figure(handles.camera_table);
-    [x, y] = getpts(handles.camera_table);
-    ui.setPose(1) = x(end)
-    ui.setPose(2) = y(end)
+
+
+    [x, y] = ginput(1);
+
+    z = 10.00;
+    y =1600 - y;
+    if(x>1200) || (y>1600) || (x<0) || (y<0)
+        x = NaN;
+        y = NaN;
+        z = NaN;
+    end
+    
+    ui.setPose(1) = x;
+    ui.setPose(2) = y;
+    ui.setPose(3) = z;
+    
+    
+    set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
+    set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
+    set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
 end
 
 % --- Executes on button press in choosePoint_conveyor.
 function choosePoint_conveyor_Callback(hObject, eventdata, handles)
-    global ui;
-
-    [x, y] = getpts(handles.camera_conveyor);
-    ui.setPose(1) = x(end)
-    ui.setPose(2) = y(end)
-% hObject    handle to choosePoint_conveyor (see GCBO)
+% hObject    handle to choosePoint_table (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    global ui;
+
+    [x, y] = ginput(1);
+    z = 10.00;
+    y =1600 - y;
+    if(x>1200) || (y>1600) || (x<0) || (y<0)
+        x = NaN;
+        y = NaN;
+        z = NaN;
+    end
+    
+    ui.setPose(1) = x;
+    ui.setPose(2) = y;
+    ui.setPose(3) = z;
+    
+
+    set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
+    set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
+    set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
 end
 
 
