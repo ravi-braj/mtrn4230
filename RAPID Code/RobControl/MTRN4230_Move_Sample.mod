@@ -24,7 +24,7 @@ MODULE MTRN4230_Move_Sample
         
         VAR robtarget pTarget; ! temporary variable for translational jogging
         VAR jointtarget jTarget;    ! temporary variable for joint jogging
-        VAR num jogT_rate := 2; ! mm/s
+        VAR num jogT_rate := 10; ! mm/s
         VAR num jogJ_rate := 2; ! deg/s
         
         MoveL Offs(pTableHome, 0, 0, 0), speed, fine, tSCup;
