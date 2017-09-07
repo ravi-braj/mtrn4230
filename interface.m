@@ -66,14 +66,14 @@ classdef interface < handle
             obj.robotTCP = abb_tcp();
             
             obj.IOs = [0, 0, 0, 0];
-            obj.pose = [0, 0, 0]; %zeros(1,7);
+            obj.pose = [0, 0, 0]; 
             obj.setPose = [0,0,0];
             
             obj.motionMode = string('linear');
             
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
-            
+            %obj.robotTCP.openTCP('192.168.125.1', 1025);
             
             
             %disable connect button
