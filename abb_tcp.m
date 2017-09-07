@@ -51,7 +51,7 @@ classdef abb_tcp < handle
         %% %%%%%%%%%%%%% METHODS FOR GETTING DATA OFF ROBOT %%%%%%%%%%%
         
         %------------ Requesting data ---------------
-        %attempts to get the pose off the robot
+        %attempts to get the pose off the robot gets joint and xyz
         function pose = requestPose(obj)
             disp('requesting Pose');
             
@@ -60,13 +60,13 @@ classdef abb_tcp < handle
                 fwrite(obj.socket, 'p', 'uchar');
 
                 %read the pose
-                tmp = fread(obj.socket, 7, 'float32');
-                pose = tmp(1:4);
+                pose = fread(obj.socket, 9, 'float32');
+
 
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
             else
-                pose = [NaN, NaN, NaN];
+                pose = [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN];
             end
            
         end
@@ -148,7 +148,7 @@ classdef abb_tcp < handle
            fwrite(obj.socket, 'S', 'uchar');
            
            %write speed
-           fwrite(obj.socket, speed, 'float32');
+           fwrite(obj.socket, speed, 'uint32');
            
            %read error message
            obj.error = fread(obj.socket, 1, 'uchar');

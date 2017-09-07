@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 05-Sep-2017 17:25:39
+    % Last Modified by GUIDE v2.5 07-Sep-2017 15:27:29
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -327,8 +327,9 @@ function jog_x_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 2;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
     
 end
 
@@ -338,8 +339,9 @@ function jog_x_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 1;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_y_minus.
@@ -348,8 +350,9 @@ function jog_y_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 4;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_y_plus.
@@ -358,8 +361,9 @@ function jog_y_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 3;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_z_minus.
@@ -368,8 +372,9 @@ function jog_z_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 6;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_z_plus.
@@ -378,8 +383,9 @@ function jog_z_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 5;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j1_minus.
@@ -388,8 +394,9 @@ function jog_j1_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 8;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j1_plus.
@@ -398,8 +405,9 @@ function jog_j1_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 7;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 
@@ -433,8 +441,9 @@ function jog_j2_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 10;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j2_plus.
@@ -443,8 +452,9 @@ function jog_j2_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 9;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j3_minus.
@@ -453,8 +463,9 @@ function jog_j3_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 12;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j3_plus.
@@ -463,8 +474,9 @@ function jog_j3_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 11;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j4_minus.
@@ -473,8 +485,9 @@ function jog_j4_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 14;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j4_plus.
@@ -483,8 +496,9 @@ function jog_j4_plus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 13;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j5_minus.
@@ -493,8 +507,9 @@ function jog_j5_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 16;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j5_plus.
@@ -513,8 +528,9 @@ function jog_j6_minus_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 18;
+    ui.commandQueue = [ui.commandQueue, 3];
+    
 end
 
 % --- Executes on button press in jog_j6_plus.
@@ -525,4 +541,59 @@ function jog_j6_plus_Callback(hObject, eventdata, handles)
     global ui;
     ui.commandQueue = [ui.commandQueue, 3];
     ui.setJOG = 17;
+end
+
+
+% --- Executes on button press in motion_joint.
+function motion_joint_Callback(hObject, eventdata, handles)
+% hObject    handle to motion_joint (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.setMotionMode = 0;
+    ui.commandQueue = [ui.commandQueue, 4];
+    
+    set(ui.clientGUIData.motion_linear, 'Value', 0);
+% Hint: get(hObject,'Value') returns toggle state of motion_joint
+end
+
+
+% --- Executes on button press in motion_linear.
+function motion_linear_Callback(hObject, eventdata, handles)
+    global ui;
+    ui.setMotionMode = 1;
+    ui.commandQueue = [ui.commandQueue, 4];
+    
+    set(ui.clientGUIData.motion_joint, 'Value', 0);
+% hObject    handle to motion_linear (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of motion_linear
+end
+
+
+% --- Executes on slider movement.
+function speed_Callback(hObject, eventdata, handles)
+% hObject    handle to speed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.setSpeed = get(hObject,'Value');
+    ui.commandQueue = [ui.commandQueue, 5];
+    
+% Hints: get(hObject,'Value') returns position of slider
+%        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
+end
+
+% --- Executes during object creation, after setting all properties.
+function speed_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to speed (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: slider controls usually have a light gray background.
+    if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor',[.9 .9 .9]);
+    end
 end
