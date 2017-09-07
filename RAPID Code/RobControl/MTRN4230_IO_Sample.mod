@@ -29,6 +29,7 @@ MODULE MTRN4230_IO_Sample
     
     PROC TurnVacSolOn()
         SetDO DO10_2, 1;
+        
     ENDPROC
     
     PROC TurnVacSolOff()
