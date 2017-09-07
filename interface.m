@@ -166,6 +166,20 @@ classdef interface < handle
                     case 3
                         disp('sending JOG command');
                         obj.robotTCP.setJOG(obj.setJOG);
+                    case 4
+                        disp('sending motionMode');
+                        if(obj.setMotionMode == 1)
+                            comm = sprintf('Setting joint mode');
+                        else
+                            comm = sprintf('Setting linear mode');
+                        end
+                        obj.robotTCP.setMotionMode(obj.setMotionMode);
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                    case 5
+                        disp('setting speed');
+                        obj.robotTCP.setSpeed(obj.setSpeed);
+                        comm = sprintf("Setting speed: %0.0f", obj.setSpeed);
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
 
                     otherwise
                         disp('cannot decipher queue object');

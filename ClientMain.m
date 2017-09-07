@@ -36,7 +36,7 @@ ui = interface();
 mainTimer = timer();
 mainTimer.StartDelay = 1;
 mainTimer.Period = 0.1;
-mainTimer.ExecutionMode = 'fixedRate';c
+mainTimer.ExecutionMode = 'fixedRate';
 
 
 %% %%%%%%%%%%% 2 INITIALISATIONS %%%%%%%%%%%%%%%%%%%%%%%
