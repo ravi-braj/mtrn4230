@@ -28,7 +28,7 @@ function timerCallback(obj, event, ui)
     % 3) update interface
     
     ui.pose = ui.robotTCP.requestPose();
-    ui.updatePose(ui.pose(1), ui.pose(2), ui.pose(3));
+    ui.updatePose(ui.pose(1), ui.pose(2), ui.pose(3), ui.pose(4:9));
     
     
     

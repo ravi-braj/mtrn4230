@@ -40,6 +40,7 @@ classdef interface < handle
         %variables for sending
         setSpeed
         setPose
+        setPoseJoints
         setMotionMode
         setIOs
         setJOG
@@ -48,6 +49,7 @@ classdef interface < handle
         %variables for reading (Telem variables)
         speed
         pose
+        poseJoints
         IOs
         
 
@@ -66,7 +68,7 @@ classdef interface < handle
             obj.robotTCP = abb_tcp();
             
             obj.IOs = [0, 0, 0, 0];
-            obj.pose = [0, 0, 0]; %zeros(1,7);
+            obj.pose = [0, 0, 0, 0, 0, 0, 0, 0, 0]; %zeros(1,7);
             obj.setPose = [0,0,0];
             
             obj.motionMode = string('linear');
@@ -102,11 +104,19 @@ classdef interface < handle
         end
         
         %updates the pose displayed by the interface.
-        function obj = updatePose(obj, pos_x, pos_y, pos_z)
+        function obj = updatePose(obj, pos_x, pos_y, pos_z, jointArray)
             set(obj.clientGUIData.pose_x, 'String', pos_x);
             set(obj.clientGUIData.pose_y, 'String', pos_y);
             set(obj.clientGUIData.pose_z, 'String', pos_z);
+            set(obj.clientGUIData.pose_j1, 'String', jointArray(1))
+            set(obj.clientGUIData.pose_j2, 'String', jointArray(2))
+            set(obj.clientGUIData.pose_j3, 'String', jointArray(3))
+            set(obj.clientGUIData.pose_j4, 'String', jointArray(4))
+            set(obj.clientGUIData.pose_j5, 'String', jointArray(5))
+            set(obj.clientGUIData.pose_j6, 'String', jointArray(6))
         end
+        
+
         
         %takes in the array of i/o statuses and updates interface
         function obj = updateIOs(obj, ioArray)
