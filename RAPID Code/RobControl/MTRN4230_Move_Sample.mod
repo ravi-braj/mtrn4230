@@ -22,12 +22,14 @@ MODULE MTRN4230_Move_Sample
     ! The Main prodedure. When you select 'PP to Main' on the FlexPendant, it will go to this procedure.
     PROC main()
         
-        VAR robtarget pCurrent := CRobT(\TaskRef:=RobControlId \Tool:=tool0 \WObj:=wobj0);
-        VAR jointtarget jTarget := CJointT(\TaskRef:=RobControlId);
-        VAR num jogT_rate := 5; ! mm/s
-        VAR num jogJ_rate := 5; ! deg/s
+        VAR robtarget pTarget; ! temporary variable for translational jogging
+        VAR jointtarget jTarget;    ! temporary variable for joint jogging
+        VAR num jogT_rate := 2; ! mm/s
+        VAR num jogJ_rate := 2; ! deg/s
         
-        WHILE TRUE DO
+        MoveL Offs(pTableHome, 0, 0, 0), speed, fine, tSCup;
+        
+        WHILE quit = FALSE DO
             
             waituntil command <> 0;
             
@@ -75,23 +77,27 @@ MODULE MTRN4230_Move_Sample
                 command := 0;
                 
             ELSEIF command = 3 THEN     ! Jog
-                pCurrent := CRobT(\TaskRef:=RobControlId \Tool:=tool0 \WObj:=wobj0);
-            
+                pTarget := CRobT(\TaskRef:=RobControlId, \Tool:=tSCup);            
                 IF jog_input < 7 THEN   ! Jog position
-                    pCurrent := CRobT(\TaskRef:=RobControlId \Tool:=tool0 \WObj:=wobj0);
     
                     IF jog_input = 1 THEN   ! x+
-                        MoveL Offs(pCurrent, jogT_rate, 0, 0), speed, fine, tSCup;
+                        pTarget.trans.x := pTarget.trans.x + jogT_rate;
+                        MoveL pTarget, speed, fine, tSCup;
                     ELSEIF jog_input = 2 THEN   ! x-
-                        MoveL Offs(pCurrent, -jogT_rate, 0, 0), speed, fine, tSCup;
+                        pTarget.trans.x := pTarget.trans.x - jogT_rate;
+                        MoveL pTarget, speed, fine, tSCup;
                     ELSEIF jog_input = 3 THEN   ! y+
-                        MoveL Offs(pCurrent, 0, jogT_rate, 0), speed, fine, tSCup;
+                        pTarget.trans.y := pTarget.trans.y + jogT_rate;
+                        MoveL pTarget, speed, fine, tSCup;
                     ELSEIF jog_input = 4 THEN   ! y-
-                        MoveL Offs(pCurrent, 0, -jogT_rate, 0), speed, fine, tSCup;
+                        pTarget.trans.y := pTarget.trans.y - jogT_rate;
+                        MoveL pTarget, speed, fine, tSCup;
                     ELSEIF jog_input = 5 THEN   ! z+
-                        MoveL Offs(pCurrent, 0, 0, jogT_rate), speed, fine, tSCup;
+                        pTarget.trans.z := pTarget.trans.z + jogT_rate;
+                        MoveL pTarget, speed, fine, tSCup;
                     ELSEIF jog_input = 6 THEN   ! z-
-                        MoveL Offs(pCurrent, 0, 0, -jogT_rate), speed, fine, tSCup;
+                        pTarget.trans.z := pTarget.trans.z - jogT_rate;
+                        MoveL pTarget, speed, fine, tSCup;
                     ENDIF
                 ELSE       ! Jog joints
                     jTarget := CJointT(\TaskRef:=RobControlId);

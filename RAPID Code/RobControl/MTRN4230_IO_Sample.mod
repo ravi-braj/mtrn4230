@@ -42,11 +42,9 @@ MODULE MTRN4230_IO_Sample
     
     PROC ConDirTowards()
         SetDO DO10_4, 1;
-        read_io{4} = 1;
     ENDPROC
     
     PROC ConDirAway()
         SetDO DO10_4, 0;
-        read_io{4} = 0;
     ENDPROC
 ENDMODULE

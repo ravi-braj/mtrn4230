@@ -9,7 +9,7 @@ MODULE MTRN4230_Server_Sample
     CONST num port := 1025;
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS byte jog_input := 0;
+    PERS byte jog_input := 1;
 
     PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
@@ -17,14 +17,14 @@ MODULE MTRN4230_Server_Sample
     PERS pos write_position := [0,0,0];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     
-    PERS pos read_position := [0,0,0];
-    PERS jointtarget read_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
+    PERS pos read_position := [248.601,19.9197,222.321];
+    PERS jointtarget read_joints := [[4.57386,15.0972,53.7973,0.0857699,17.1038,4.50416],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    PERS speeddata speed := [0,0,0,0];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS speeddata speed := [100,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
-    PERS byte command := 1;
+    PERS byte command := 0;
     PERS bool quit := FALSE;
     
     PROC main()
@@ -53,13 +53,13 @@ MODULE MTRN4230_Server_Sample
         mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
         pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
         
-        command := 1;
+        command := 0;
         quit := FALSE;
         
         ListenForAndAcceptConnection;
         
         ! Receive a new request from the client.
-        SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;
+        SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;    
         
         WHILE TRUE DO     ! Keep server alive until close command recieved
             ClearRawBytes raw_data;
