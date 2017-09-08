@@ -21,6 +21,7 @@ classdef interface < handle
         % handles
         h_camConveyor
         h_camTable
+        %add handles for having box here
         
         %rgb data conveyor
         conveyorObj
