@@ -51,22 +51,22 @@ classdef abb_tcp < handle
         %% %%%%%%%%%%%%% METHODS FOR GETTING DATA OFF ROBOT %%%%%%%%%%%
         
         %------------ Requesting data ---------------
-        %attempts to get the pose off the robot
+        %attempts to get the pose off the robot gets joint and xyz
         function pose = requestPose(obj)
             disp('requesting Pose');
             
-            if(obj.connected)
+            if(obj.connected == true)
                 %send request for pose
                 fwrite(obj.socket, 'p', 'uchar');
 
                 %read the pose
-                tmp = fread(obj.socket, 7, 'float32');
-                pose = tmp(1:4);
+                pose = fread(obj.socket, 9, 'float32');
+
 
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
             else
-                pose = [NaN, NaN, NaN];
+                pose = [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN];
             end
            
         end
@@ -75,7 +75,7 @@ classdef abb_tcp < handle
         function ios = requestIOs(obj)
             disp('requesting IOs');
             
-            if(obj.connected)
+            if(obj.connected == true)
                 %send request to RAPID for i/o data
                 fwrite(obj.socket, 'i', 'uchar');
 
@@ -98,7 +98,7 @@ classdef abb_tcp < handle
             fwrite(obj.socket, 'P', 'uchar');
             
             tmp = zeros(1,7);
-            tmp(1:4) = poseArray;
+            tmp(1:3) = poseArray;
             
             %send RAPID the i/o array
             fwrite(obj.socket, tmp, 'float32');
@@ -148,7 +148,7 @@ classdef abb_tcp < handle
            fwrite(obj.socket, 'S', 'uchar');
            
            %write speed
-           fwrite(obj.socket, speed, 'float32');
+           fwrite(obj.socket, speed, 'uint32');
            
            %read error message
            obj.error = fread(obj.socket, 1, 'uchar');

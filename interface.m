@@ -41,6 +41,7 @@ classdef interface < handle
         %variables for sending
         setSpeed
         setPose
+        setPoseJoints
         setMotionMode
         setIOs
         setJOG
@@ -49,6 +50,7 @@ classdef interface < handle
         %variables for reading (Telem variables)
         speed
         pose
+        poseJoints
         IOs
         
 
@@ -67,14 +69,14 @@ classdef interface < handle
             obj.robotTCP = abb_tcp();
             
             obj.IOs = [0, 0, 0, 0];
-            obj.pose = [0, 0, 0]; %zeros(1,7);
+            obj.pose = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             obj.setPose = [0,0,0];
             
-            obj.motionMode = "linear";
+            obj.motionMode = string('linear');
             
             
             obj.robotTCP.openTCP('127.0.0.1', 1025);
-            
+            %obj.robotTCP.openTCP('192.168.125.1', 1025);
             
             
             %disable connect button
@@ -93,9 +95,9 @@ classdef interface < handle
             %%dummy data to fill plots
             x = linspace(1, 20, 100);
             y = sin(x);
-            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1600,1200));
+            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600));
             set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
-            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1600, 1200));
+            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
             set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
             
             %----------- OTHER HANDLES ----------------%
@@ -103,11 +105,19 @@ classdef interface < handle
         end
         
         %updates the pose displayed by the interface.
-        function obj = updatePose(obj, pos_x, pos_y, pos_z)
+        function obj = updatePose(obj, pos_x, pos_y, pos_z, jointArray)
             set(obj.clientGUIData.pose_x, 'String', pos_x);
             set(obj.clientGUIData.pose_y, 'String', pos_y);
             set(obj.clientGUIData.pose_z, 'String', pos_z);
+            set(obj.clientGUIData.pose_j1, 'String', jointArray(1))
+            set(obj.clientGUIData.pose_j2, 'String', jointArray(2))
+            set(obj.clientGUIData.pose_j3, 'String', jointArray(3))
+            set(obj.clientGUIData.pose_j4, 'String', jointArray(4))
+            set(obj.clientGUIData.pose_j5, 'String', jointArray(5))
+            set(obj.clientGUIData.pose_j6, 'String', jointArray(6))
         end
+        
+
         
         %takes in the array of i/o statuses and updates interface
         function obj = updateIOs(obj, ioArray)
@@ -160,13 +170,27 @@ classdef interface < handle
                         disp('sending IOs');
                     case 2
                         obj.robotTCP.setPose(obj.setPose);
-                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3), obj.setPose(4))
+                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3))
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending pose');
 
                     case 3
                         disp('sending JOG command');
                         obj.robotTCP.setJOG(obj.setJOG);
+                    case 4
+                        disp('sending motionMode');
+                        if(obj.setMotionMode == 1)
+                            comm = sprintf('Setting joint mode');
+                        else
+                            comm = sprintf('Setting linear mode');
+                        end
+                        obj.robotTCP.setMotionMode(obj.setMotionMode);
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                    case 5
+                        disp('setting speed');
+                        obj.robotTCP.setSpeed(obj.setSpeed);
+                        comm = sprintf("Setting speed: %0.0f", obj.setSpeed);
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
 
                     otherwise
                         disp('cannot decipher queue object');
