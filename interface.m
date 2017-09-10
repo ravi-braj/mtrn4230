@@ -21,9 +21,14 @@ classdef interface < handle
         % handles
         h_camConveyor
         h_camTable
-        h_textTable
-        h_textConveyor
+        
         %add handles for having box here
+        h_plotTable
+        h_textTable
+
+        %add handles for having box here
+        h_plotConveyor
+        h_textConveyor
         
         %rgb data conveyor
         conveyorObj
@@ -100,6 +105,9 @@ classdef interface < handle
             obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
             set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
             
+             % Plot handles
+            obj.h_plotTable = plot(obj.clientGUIData.camera_table,0,0,'b+');
+            obj.h_plotConveyor = plot(obj.clientGUIData.camera_conveyor,0,0,'b+');
             % Text handles
             obj.h_textTable = text(obj.clientGUIData.camera_table, NaN, NaN, '');
             obj.h_textConveyor = text(obj.clientGUIData.camera_conveyor, NaN, NaN, '');
@@ -136,7 +144,6 @@ classdef interface < handle
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
             obj.conveyorRGB = snapshot(obj.conveyorObj);
-            
         end
         
         % get serial data from camera on table - updates tableRGB
@@ -145,15 +152,14 @@ classdef interface < handle
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
             obj.tableRGB = snapshot(obj.tableObj);
-            
         end
         
         %tries to send the next command in the commandQueue to the robot
         function obj = nextCommand(obj)
-            disp('executing next command')
+            %disp('executing next command')
             
             if(size(obj.commandQueue)  == 0)
-                disp('no commands to execute');
+                %disp('no commands to execute');
                 return
             end
             
@@ -202,7 +208,6 @@ classdef interface < handle
             
             set(obj.clientGUIData.command_history,'String',obj.commandHistory);
        
-
             %remove item from command queue
             if(size(obj.commandQueue) == 1)
                 obj.commandQueue = [];
@@ -211,9 +216,6 @@ classdef interface < handle
             end
    
         end
-        
-        
-        
         
     end
 end
