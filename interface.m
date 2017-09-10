@@ -21,6 +21,8 @@ classdef interface < handle
         % handles
         h_camConveyor
         h_camTable
+        h_textTable
+        h_textConveyor
         %add handles for having box here
         
         %rgb data conveyor
@@ -93,13 +95,14 @@ classdef interface < handle
             %(or other) which are child classes of axes
             
             %%dummy data to fill plots
-            x = linspace(1, 20, 100);
-            y = sin(x);
             obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600));
             set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
             obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
             set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
             
+            % Text handles
+            obj.h_textTable = text(obj.clientGUIData.camera_table, NaN, NaN, '');
+            obj.h_textConveyor = text(obj.clientGUIData.camera_conveyor, NaN, NaN, '');
             %----------- OTHER HANDLES ----------------%
             
         end

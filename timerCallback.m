@@ -38,13 +38,16 @@ function timerCallback(obj, event, ui)
         ui.datafromConveyorCam();
         %[ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
+        
     catch
         set(ui.h_camConveyor, 'CData', NaN(1600, 1200));
     end
     % 2) use gui plot handle for setting the data in the camera plot
     
+    %c = detectblocks(ui.conveyorRGB);
     
     
+    set(ui.h_textConveyor, 'position', [150 150], 'String', 'here');
     
      %some dummy data
     %y = get(ui.h_camConveyor, 'YData');
@@ -67,7 +70,8 @@ function timerCallback(obj, event, ui)
     %y = get(ui.h_camTable, 'YData');
     %y = [y(2:end), y(1)];
     %set(ui.h_camTable, 'CData', NaN(1600, 1200));
-
+    
+    set(ui.h_textTable, 'position', [150 150], 'String', 'here');
     
     %%----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
