@@ -12,18 +12,18 @@ MODULE MTRN4230_Server_Sample
     PERS tooldata tmp_tSCup:=[TRUE,[[0,0,65],[1,0,0,0]],[0.5,[0,0,20],[1,0,0,0],0,0,0]];
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS byte jog_input := 0;
+    PERS byte jog_input := 1;
 
-    PERS byte write_io{4} := [1,0,1,1];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte write_io{4} := [0,1,0,1];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
     
-    PERS pos write_position := [150,40,70];
+    PERS pos write_position := [226.73,188.232,10];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     
-    PERS pos read_position := [325,40,217];
-    PERS jointtarget read_joints := [[7.0165,18.221,33.2059,4.41676E-19,38.5731,7.0165],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [401.73,188.232,157];
+    PERS jointtarget read_joints := [[25.1057,45.9305,3.48044,1.12232E-17,40.5891,25.1057],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    PERS speeddata speed := [100,500,2.86566E-42,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS speeddata speed := [100,500,1.45875E-42,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     

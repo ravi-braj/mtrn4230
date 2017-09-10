@@ -27,7 +27,7 @@ MODULE MTRN4230_Move_Sample
         VAR num jogT_rate := 10; ! mm/s
         VAR num jogJ_rate := 2; ! deg/s
         
-        MoveL Offs(pTableHome, 100, 100, 100), speed, fine, tSCup;
+        MoveL Offs(pTableHome, 0, 0, 0), speed, fine, tSCup;
         
         WHILE quit = FALSE DO
             
