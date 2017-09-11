@@ -4,7 +4,7 @@
 function timerCallback(obj, event, ui) 
 
     %av_period = get(obj, 'AveragePeriod')
-    %fprintf('Timer callback executed. %f seconds since last call\n', get(obj, 'InstantPeriod'));
+    fprintf('Timer callback executed. %f seconds since last call\n', get(obj, 'InstantPeriod'));
     
     %% %%%%%%%%%%%% CONDITIONAL EXECUTIONS %%%%%%%%%%%%%%
     
@@ -60,22 +60,30 @@ function timerCallback(obj, event, ui)
         %set(ui.h_camTable, 'CData', ui.tableRGB);
         set(ui.h_camTable,'CData', I);
     catch
-        set(ui.h_camTable, 'CData', NaN(1200, 1600));
+        set(ui.h_camTable, 'CData', I);
     end
     
-    blocks = detect_blocks(I);
-    string_out = Update_TableHdl(blocks);
+    
+    %only redetect the blocks every 6 periods to increase speed of program
+    %execution
+    if(mod(ui.count,6) == 0)
+        blocks = detect_blocks(I);
+        string_out = Update_TableHdl(blocks);
     
     
-    set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
+    %set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
     
-    delete(ui.h_textTable);
-    ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), blocks(:,2), string_out, 'Color', 'red', 'FontSize',6);
+        delete(ui.h_textTable);
+        ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), 1200.-blocks(:,2), string_out, 'Color', 'red', 'FontSize',6);
+    end
 
     
         
     %%----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
+    
+    %------------- Increment counter -------------------------
+    ui.count = ui.count+1;
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
     

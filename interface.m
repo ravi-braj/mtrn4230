@@ -64,6 +64,9 @@ classdef interface < handle
         %control variables
         motionMode
         
+        %counter
+        count
+        
     end
     methods
         
@@ -86,6 +89,8 @@ classdef interface < handle
             %obj.robotTCP.openTCP('192.168.125.1', 1025);
             
             
+            obj.count = 0;
+            
             %disable connect button
             if(obj.robotTCP.connected)
                 set(obj.clientGUIData.connect_tcp,'Enable','off');
@@ -101,17 +106,17 @@ classdef interface < handle
             
             %%dummy data to fill plots
             %hold on
-            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600));
+            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600,3));
             hold(obj.clientGUIData.camera_conveyor,'on');
-            set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
+            %set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
             obj.h_plotConveyor = plot(50,50,'r+','Parent', obj.clientGUIData.camera_conveyor);
             %obj.h_textConveyor = text(NaN, NaN, '','Parent', obj.clientGUIData.camera_conveyor);
             hold(obj.clientGUIData.camera_conveyor,'off');
             
          
-            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
+            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600,3));
             hold(obj.clientGUIData.camera_table,'on');
-            set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            %set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
             obj.h_plotTable = plot(0,0,'b+', 'Parent', obj.clientGUIData.camera_table);
             %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
             hold(obj.clientGUIData.camera_table,'off');
