@@ -100,17 +100,22 @@ classdef interface < handle
             %(or other) which are child classes of axes
             
             %%dummy data to fill plots
+            %hold on
             obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600));
+            hold(obj.clientGUIData.camera_conveyor,'on');
             set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
-            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
-            set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            obj.h_plotConveyor = plot(50,50,'r+','Parent', obj.clientGUIData.camera_conveyor);
+            %obj.h_textConveyor = text(NaN, NaN, '','Parent', obj.clientGUIData.camera_conveyor);
+            hold(obj.clientGUIData.camera_conveyor,'off');
             
-             % Plot handles
-            obj.h_plotTable = plot(obj.clientGUIData.camera_table,0,0,'b+');
-            obj.h_plotConveyor = plot(obj.clientGUIData.camera_conveyor,0,0,'b+');
-            % Text handles
-            obj.h_textTable = text(obj.clientGUIData.camera_table, NaN, NaN, '');
-            obj.h_textConveyor = text(obj.clientGUIData.camera_conveyor, NaN, NaN, '');
+         
+            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
+            hold(obj.clientGUIData.camera_table,'on');
+            set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            obj.h_plotTable = plot(0,0,'b+', 'Parent', obj.clientGUIData.camera_table);
+            %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
+            hold(obj.clientGUIData.camera_table,'off');
+
             %----------- OTHER HANDLES ----------------%
             
         end

@@ -5,13 +5,16 @@
 
 %% %%%%%%%%%%% 1 SETUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+close all; clc(); clear;
+global ui;
+
 try
-    delete(ui.tableObj);
-    delete(ui.conveyorObj);
+    %delete(ui.tableObj);
+    %delete(ui.conveyorObj);
 catch
 end
 
-close all; clc(); clear;
+
 
 %----- GLOBAL FLAGS ----
 
@@ -20,7 +23,7 @@ exit = false;
 
 global checklist_complete;
 
-global ui;
+
 
 checklist_complete = false;
 
@@ -42,7 +45,7 @@ ui = interface();
 %----- Set up timer
 mainTimer = timer();
 mainTimer.StartDelay = 1;
-mainTimer.Period = 1;
+mainTimer.Period = 2;
 mainTimer.ExecutionMode = 'fixedRate';
 
 

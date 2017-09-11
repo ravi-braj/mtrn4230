@@ -39,7 +39,7 @@ function timerCallback(obj, event, ui)
         ui.datafromConveyorCam();
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     catch
-        set(ui.h_camConveyor, 'CData', NaN(1600, 1200));
+        set(ui.h_camConveyor, 'CData', NaN(1200, 1600));
     end
     
     % 2) use gui plot handle for setting the data in the camera plot
@@ -60,14 +60,19 @@ function timerCallback(obj, event, ui)
         %set(ui.h_camTable, 'CData', ui.tableRGB);
         set(ui.h_camTable,'CData', I);
     catch
-        set(ui.h_camTable, 'CData', NaN(1600, 1200));
+        set(ui.h_camTable, 'CData', NaN(1200, 1600));
     end
     
     blocks = detect_blocks(I);
     string_out = Update_TableHdl(blocks);
     
-    set(ui.h_plotTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
-    set(ui.h_textTable, 'position', [blocks(:,1) blocks(:,2)], 'String', string_out);
+    
+    set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
+    
+    delete(ui.h_textTable);
+    ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), blocks(:,2), string_out, 'Color', 'red', 'FontSize',6);
+
+    
         
     %%----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
@@ -86,6 +91,8 @@ end
 
 function textoutput = Update_TableHdl(c)
     %Produce Strings for text output theta, colour, shape, upper_surface, reachable
+    %textoutput = zeros(size(c,1));
+    
     if (~isempty(c))
         for i=1:size(c,1)
             orientation = string(c(i,3));
@@ -129,7 +136,8 @@ function textoutput = Update_TableHdl(c)
             elseif c(i,7) == 0
                 reachable = '0';
             end
-            textoutput(i) = sprintf('%s,%s,%s,%s,%s',orientation,colour,shape,uppersurface,reachable);
+            %textoutput(i) = "yes";
+            textoutput(i) = {sprintf('%s,%s,%s,%c,%c',orientation,string(colour),string(shape),uppersurface,reachable)};
         end
     else
         textoutput = '';
