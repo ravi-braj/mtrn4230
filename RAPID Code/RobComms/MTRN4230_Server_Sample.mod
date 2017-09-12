@@ -27,6 +27,7 @@ MODULE MTRN4230_Server_Sample
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
+    PERS byte errorMsg{1} := [0];
     PERS byte command := 0;
     PERS bool quit := FALSE;
     
@@ -38,7 +39,7 @@ MODULE MTRN4230_Server_Sample
         
         ! Message requests and replies
         VAR byte requestMsg{1};
-        VAR byte errorMsg{1};
+        errorMsg{1} := 0;
         
         ! Initialise/reset persistent variables
         jog_input := 0;
@@ -156,6 +157,12 @@ MODULE MTRN4230_Server_Sample
                 
                 UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
                 pause := tmpb;
+                
+                IF pause = 1 THEN
+                    StopMove;
+                ELSE
+                    StartMove;
+                ENDIF
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
                 

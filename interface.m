@@ -21,7 +21,14 @@ classdef interface < handle
         % handles
         h_camConveyor
         h_camTable
+        
         %add handles for having box here
+        h_plotTable
+        h_textTable
+
+        %add handles for having box here
+        h_plotConveyor
+        h_textConveyor
         
         %rgb data conveyor
         conveyorObj
@@ -57,6 +64,9 @@ classdef interface < handle
         %control variables
         motionMode
         
+        %counter
+        count
+        
     end
     methods
         
@@ -79,6 +89,8 @@ classdef interface < handle
             %obj.robotTCP.openTCP('192.168.125.1', 1025);
             
             
+            obj.count = 0;
+            
             %disable connect button
             if(obj.robotTCP.connected)
                 set(obj.clientGUIData.connect_tcp,'Enable','off');
@@ -93,13 +105,22 @@ classdef interface < handle
             %(or other) which are child classes of axes
             
             %%dummy data to fill plots
-            x = linspace(1, 20, 100);
-            y = sin(x);
-            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600));
-            set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
-            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600));
-            set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            %hold on
+            obj.h_camConveyor = image(obj.clientGUIData.camera_conveyor, NaN(1200,1600,3));
+            hold(obj.clientGUIData.camera_conveyor,'on');
+            %set(obj.clientGUIData.camera_conveyor,'xtick',[],'ytick',[])
+            obj.h_plotConveyor = plot(50,50,'r+','Parent', obj.clientGUIData.camera_conveyor);
+            %obj.h_textConveyor = text(NaN, NaN, '','Parent', obj.clientGUIData.camera_conveyor);
+            hold(obj.clientGUIData.camera_conveyor,'off');
             
+         
+            obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600,3));
+            hold(obj.clientGUIData.camera_table,'on');
+            %set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            obj.h_plotTable = plot(0,0,'b+', 'Parent', obj.clientGUIData.camera_table);
+            %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
+            hold(obj.clientGUIData.camera_table,'off');
+
             %----------- OTHER HANDLES ----------------%
             
         end
@@ -133,7 +154,6 @@ classdef interface < handle
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
             obj.conveyorRGB = snapshot(obj.conveyorObj);
-            
         end
         
         % get serial data from camera on table - updates tableRGB
@@ -142,15 +162,14 @@ classdef interface < handle
             %obj.camRGB = blahblahgetserial
             %update rgb data in camdata
             obj.tableRGB = snapshot(obj.tableObj);
-            
         end
         
         %tries to send the next command in the commandQueue to the robot
         function obj = nextCommand(obj)
-            disp('executing next command')
+            %disp('executing next command')
             
             if(size(obj.commandQueue)  == 0)
-                disp('no commands to execute');
+                %disp('no commands to execute');
                 return
             end
             
@@ -199,7 +218,6 @@ classdef interface < handle
             
             set(obj.clientGUIData.command_history,'String',obj.commandHistory);
        
-
             %remove item from command queue
             if(size(obj.commandQueue) == 1)
                 obj.commandQueue = [];
@@ -208,9 +226,6 @@ classdef interface < handle
             end
    
         end
-        
-        
-        
         
     end
 end

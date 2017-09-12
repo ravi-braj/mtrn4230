@@ -32,52 +32,58 @@ function timerCallback(obj, event, ui)
     
     
     
-    %% ---------- receive serial from camera ---------------------
+    %% ---------- receive serial from conveyor camera ---------------------
     % 1) receive the serial data
+    % 2) use gui plot handle for setting the data in the conveyor camera plot
     try
         ui.datafromConveyorCam();
-        %[ui.boxPose.centroid,ui.boxPose.orientation] = box(ui.conveyorRGB);
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     catch
-        set(ui.h_camConveyor, 'CData', NaN(1600, 1200));
+        set(ui.h_camConveyor, 'CData', NaN(1200, 1600));
     end
+    
     % 2) use gui plot handle for setting the data in the camera plot
+    %set(ui.h_textConveyor, 'position', [150 150], 'String', 'here');
     
-    
-    
-    
-     %some dummy data
-    %y = get(ui.h_camConveyor, 'YData');
-    %y = [y(end), y(1:end-1)];
-
-    %set(ui.h_camConveyor, 'YData', y);
-    
-
-    
-    
-    %% ---------- receive tcp from conveyor camera -----------
+    %% ---------- receive tcp from table camera -----------
     % 1) receive the tcp
-    % 2) use gui plot handle for setting the data in the camera plot
+    % 2) use gui plot handle for setting the data in the table camera plot
+    s = sprintf('IMG_0%02d.jpg',round(randi([1 99],1,1)));
+    try
+       I = imread(s);
+    catch
+       I = imread('IMG_005.jpg');
+    end
+    
     try
         ui.datafromTableCam();
-        set(ui.h_camTable, 'CData', ui.tableRGB);
+        %set(ui.h_camTable, 'CData', ui.tableRGB);
+        set(ui.h_camTable,'CData', I);
     catch
-        set(ui.h_camTable, 'CData', NaN(1600, 1200));
+        set(ui.h_camTable, 'CData', I);
     end
-    %y = get(ui.h_camTable, 'YData');
-    %y = [y(2:end), y(1)];
-    %set(ui.h_camTable, 'CData', NaN(1600, 1200));
+    
+    
+    %only redetect the blocks every 6 periods to increase speed of program
+    %execution
+    if(mod(ui.count,6) == 0)
+        blocks = detect_blocks(I);
+        string_out = Update_TableHdl(blocks);
+    
+    
+    %set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
+    
+        delete(ui.h_textTable);
+        ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), 1200.-blocks(:,2), string_out, 'Color', 'red', 'FontSize',6);
+    end
 
     
+        
     %%----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
     
-
-    %% %%%%%%%%%%%% FIRST READ %%%%%%%%%%%%%%%%%%%%%
-    %disp("first read?");
-    %ui.robotTCP.firstRead();
-    
-    %
+    %------------- Increment counter -------------------------
+    ui.count = ui.count+1;
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
     
@@ -90,3 +96,58 @@ function timerCallback(obj, event, ui)
 
 end
 
+
+function textoutput = Update_TableHdl(c)
+    %Produce Strings for text output theta, colour, shape, upper_surface, reachable
+    %textoutput = zeros(size(c,1));
+    
+    if (~isempty(c))
+        for i=1:size(c,1)
+            orientation = string(c(i,3));
+            if c(i,4) == 1
+                colour = 'red';
+            elseif c(i,4) == 2
+                colour = 'orange';
+            elseif c(i,4) == 3
+                colour = 'yellow';
+            elseif c(i,4) == 4
+                colour = 'green';
+            elseif c(i,4) == 5
+                colour = 'blue';
+            elseif c(i,4) == 6
+                colour = 'purple';
+            elseif c(i,4) == 0
+                colour = 'inverted';
+            end
+            if c(i,5) == 1
+                shape = 'square';
+            elseif c(i,5) == 2
+                shape = 'orange';
+            elseif c(i,5) == 3
+                shape = 'yellow';
+            elseif c(i,5) == 4
+                shape = 'green';
+            elseif c(i,5) == 5
+                shape = 'blue';
+            elseif c(i,5) == 6
+                shape = 'purple';
+            elseif c(i,5) == 0
+                shape = 'inverted';
+            end
+            if c(i,6) == 1
+                uppersurface = '1';
+            elseif c(i,6) == 2
+                uppersurface = '2';
+            end
+            if c(i,7) == 1
+                reachable = '1';
+            elseif c(i,7) == 0
+                reachable = '0';
+            end
+            %textoutput(i) = "yes";
+            textoutput(i) = {sprintf('%s,%s,%s,%c,%c',orientation,string(colour),string(shape),uppersurface,reachable)};
+        end
+    else
+        textoutput = '';
+    end
+end

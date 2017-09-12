@@ -1,0 +1,46 @@
+#
+# Generated backup file, do not edit.
+#
+# Originally at: C:\Users\Daniel Castillo\Documents\GitHub\mtrn4230\RobStudio\Systems\TEMP\1504174430\backup.802600
+# 2017-09-10  16:06:26
+#
+>>SYSTEM_ID:
+VIRTUAL_USE
+
+>>PRODUCTS_ID:
+RobotWare Version: 6.05.01.00
+
+  RobotWare Base
+  English
+  616-1 PC Interface
+  623-1 Multitasking
+  Axis Calibration
+  Drive System IRB 120/140/260/360/910SC/1200/1400/1520/1600/1660ID
+  IRB 120-3/0.6
+
+>>HOME:
+All public files and directories
+
+>>SYSPAR:
+SYS.cfg
+PROC.cfg
+MMC.cfg
+EIO.cfg
+SIO.cfg
+MOC.cfg
+
+
+>>TASK1: (RobControl,RobControl,)
+SYSMOD\user.sys @ 
+SYSMOD\LINKEDM.sys @ HIDDEN
+PROGMOD\MTRN4230_Move_Sample.mod @ 
+PROGMOD\MTRN4230_IO_Sample.mod @ 
+SYSMOD\MTRN_Rob_Proc.sys @ 
+SYSMOD\MTRN_Rob_Data.sys @ 
+
+>>TASK2: (RobComms,RobComms,)
+SYSMOD\user.sys @ 
+PROGMOD\MTRN4230_Server_Sample.mod @ 
+
+
+>>EOF:

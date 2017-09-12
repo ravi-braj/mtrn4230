@@ -53,7 +53,7 @@ classdef abb_tcp < handle
         %------------ Requesting data ---------------
         %attempts to get the pose off the robot gets joint and xyz
         function pose = requestPose(obj)
-            disp('requesting Pose');
+            %disp('requesting Pose');
             
             if(obj.connected == true)
                 %send request for pose

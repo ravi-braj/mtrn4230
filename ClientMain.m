@@ -5,15 +5,25 @@
 
 %% %%%%%%%%%%% 1 SETUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+close all; clc(); clear;
+global ui;
+
+try
+    %delete(ui.tableObj);
+    %delete(ui.conveyorObj);
+catch
+end
+
+
+
 %----- GLOBAL FLAGS ----
 
 global exit;
 exit = false;
 
-
 global checklist_complete;
 
-global ui;
+
 
 checklist_complete = false;
 
