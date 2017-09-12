@@ -39,7 +39,9 @@ classdef abb_tcp < handle
                 obj.connected = false;
                 return;
             end
-            disp("connected");
+
+            disp('connected')
+
             obj.connected = true;
         end
         
