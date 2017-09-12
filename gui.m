@@ -276,7 +276,7 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
 
     [x, y] = ginput(1);
 
-    z = 10.00;
+    z = 0;
     y =1200 - y;
     if(x>1600) || (y>1200) || (x<0) || (y<0)
         x = NaN;
@@ -284,9 +284,16 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
         z = NaN;
     end
     
-    ui.setPose(1) = x;
-    ui.setPose(2) = y;
-    ui.setPose(3) = z;
+    pxToMM = 0.659375;
+    blockDepthPx = 30;
+    
+    tableXoffsetPx = 22; 
+    tableYoffsetPx = 800;
+    tableZoffsetPx = 147+blockDepthPx;
+    
+    ui.setPose(1) = (x - tableXoffsetPx)*pxToMM;
+    ui.setPose(2) = (y - tableYoffsetPx)*pxToMM;
+    ui.setPose(3) = (z - tableZoffsetPx)*pxToMM;
     
     
     set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
@@ -302,7 +309,7 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
     global ui;
 
     [x, y] = ginput(1);
-    z = 10.00;
+    z = 10;
     y =1200 - y;
     if(x>1600) || (y>1200) || (x<0) || (y<0)
         x = NaN;
