@@ -222,7 +222,7 @@ classdef interface < handle
                     case 5
                         disp('setting speed');
                         obj.robotTCP.setSpeed(obj.setSpeed);
-                        comm = sprintf("Setting speed: %0.0f", obj.setSpeed);
+                        comm = sprintf('Setting speed: %0.0f', obj.setSpeed);
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                     case 6
                         
