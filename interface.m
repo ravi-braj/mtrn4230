@@ -20,6 +20,7 @@ classdef interface < handle
         
         %switch on or off block detection
         detectBlocks
+        detectBox
         
         % handles
         h_camConveyor
