@@ -617,6 +617,10 @@ function detect_blocks_Callback(hObject, eventdata, handles)
 
     global ui;
     ui.detectBlocks = get(hObject,'Value');
+    disp(ui.detectBlocks);
+    if(ui.detectBlocks == 0)
+        delete(ui.h_textTable);
+    end
 % hObject    handle to detect_blocks (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

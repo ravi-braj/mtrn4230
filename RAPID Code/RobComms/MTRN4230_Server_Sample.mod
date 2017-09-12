@@ -12,19 +12,20 @@ MODULE MTRN4230_Server_Sample
     PERS tooldata tmp_tSCup:=[TRUE,[[0,0,65],[1,0,0,0]],[0.5,[0,0,20],[1,0,0,0],0,0,0]];
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS byte jog_input := 0;
+    PERS byte jog_input := 1;
 
-    PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte write_io{4} := [1,0,1,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
+    PERS byte read_switches{6} := [1,0,1,0,0,1];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [187.385,114.993,10];
+    PERS pos write_position := [75.9098,126.261,10];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     
-    PERS pos read_position := [362.385,114.993,157];
-    PERS jointtarget read_joints := [[17.6054,35.6311,21.4454,-2.09741E-15,32.9234,17.6054],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [250.91,126.261,157];
+    PERS jointtarget read_joints := [[26.712,20.7301,45.6088,2.72593E-13,23.6611,26.712],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    PERS speeddata speed := [4150.19,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
-    PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
+    PERS speeddata speed := [2951.97,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
     PERS byte errorMsg{1} := [0];
@@ -46,6 +47,7 @@ MODULE MTRN4230_Server_Sample
 
         write_io := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
         read_io := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
+        read_switches := [0,0,0,0,0,0];
         
         write_position := [0,0,0];
         write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
@@ -71,6 +73,21 @@ MODULE MTRN4230_Server_Sample
             IF requestMsg{1} = StrToByte("c" \Char) THEN   ! Client requesting to close connection
             
                 quit := TRUE;
+                
+            ELSEIF requestMsg{1} = StrToByte("x" \Char) THEN   ! Client requested e-stops and switches data
+                read_switches{1} := VES;
+                read_switches{2} := VEN;
+                read_switches{3} := VGS;
+                read_switches{4} := VMAN;
+                read_switches{5} := VMB;
+                read_switches{6} := VML;
+            
+                FOR i FROM 1 TO Dim(read_switches,1) DO
+                    PackRawBytes read_switches{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
+                ENDFOR
+                
+                SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
 
             ELSEIF requestMsg{1} = StrToByte("p" \Char) THEN   ! Client requested pose_state data
                 read_position := CPos (\Tool:=tmp_tSCup);
