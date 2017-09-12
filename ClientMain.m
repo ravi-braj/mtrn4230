@@ -76,6 +76,8 @@ while(1)
 end
 
 disp('closing');
+delete(ui.tableObj)
+delete(ui.conveyorObj)
 delete(ui.clientGUI);
 delete(mainTimer);
 

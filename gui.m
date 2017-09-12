@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 12-Sep-2017 15:10:23
+    % Last Modified by GUIDE v2.5 12-Sep-2017 17:28:29
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -643,4 +643,19 @@ function detect_blocks_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of detect_blocks
+end
+
+
+% --- Executes on button press in detect_box.
+function detect_box_Callback(hObject, eventdata, handles)
+% hObject    handle to detect_box (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global ui;
+    ui.detectBox = get(hObject,'Value');
+    disp(ui.detectBlocks);
+    if(ui.detectBox == 0)
+        delete(ui.h_textConveyor);
+    end
+% Hint: get(hObject,'Value') returns toggle state of detect_box
 end
