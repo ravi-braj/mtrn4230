@@ -47,11 +47,9 @@ function timerCallback(obj, event, ui)
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     end
     
-    [centroid, orientation] = box(ui.conveyorRGB);
-    boxtext = sprintf('%.2f %.2f %.2f', round(centroid(:,1),2), round(centroid(:,2),2), round(orientation));
     
-    delete(ui.h_textConveyor);
-    ui.h_textConveyor = text(ui.clientGUIData.camera_conveyor, centroid(:,1), centroid(:,2), boxtext, 'Color', 'red', 'FontSize',6);
+    
+
     
     
     % 2) use gui plot handle for setting the data in the camera plot
@@ -87,6 +85,12 @@ function timerCallback(obj, event, ui)
     
         delete(ui.h_textTable);
         ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), 1200.-blocks(:,2), blockstext, 'Color', 'red', 'FontSize',6);
+        
+        [centroid, orientation] = box(ui.conveyorRGB);
+        boxtext = sprintf('%.2f %.2f %.2f', round(centroid(:,1),2), round(centroid(:,2),2), round(orientation));
+    
+        delete(ui.h_textConveyor);
+        ui.h_textConveyor = text(ui.clientGUIData.camera_conveyor, centroid(:,1), centroid(:,2), boxtext, 'Color', 'red', 'FontSize',6);
     end
 
     
