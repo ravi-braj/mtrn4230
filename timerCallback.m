@@ -30,7 +30,9 @@ function timerCallback(obj, event, ui)
     ui.pose = ui.robotTCP.requestPose();
     ui.updatePose(ui.pose(1), ui.pose(2), ui.pose(3), ui.pose(4:9));
     
-    
+    %% ---------- poll error status ----------------
+    ui.error = ui.robotTCP.requestErrors();
+    ui.updateErrors(ui.error);
     
     %% ---------- receive serial from conveyor camera ---------------------
     % 1) receive the serial data
@@ -66,7 +68,7 @@ function timerCallback(obj, event, ui)
     
     %only redetect the blocks every 6 periods to increase speed of program
     %execution
-    if(mod(ui.count,6) == 0)
+    if(mod(ui.count,1) == 0 & ui.detectBlocks == 1)
         blocks = detect_blocks(I);
         string_out = Update_TableHdl(blocks);
     
@@ -138,6 +140,8 @@ function textoutput = Update_TableHdl(c)
                 uppersurface = '1';
             elseif c(i,6) == 2
                 uppersurface = '2';
+            else
+                uppersurface = '';
             end
             if c(i,7) == 1
                 reachable = '1';

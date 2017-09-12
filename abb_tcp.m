@@ -89,6 +89,22 @@ classdef abb_tcp < handle
             end
         end
         
+        function errors = requestErrors(obj)
+            if(obj.connected == true)
+                %send request for pose
+                fwrite(obj.socket, 'x', 'uchar');
+
+                %read the pose
+                errors = fread(obj.socket, 6, 'uchars');
+
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            else
+                errors = [NaN, NaN, NaN, NaN, NaN, NaN];
+            end
+        end
+        
         %------------ Sending data ------------------
         %attempts to set the pose of the robot
         function setPose(obj, poseArray)
@@ -164,6 +180,7 @@ classdef abb_tcp < handle
            %read error message
            obj.error = fread(obj.socket, 1, 'uchar');
         end
+        
     end
 end
     
