@@ -62,7 +62,6 @@ classdef abb_tcp < handle
                 %read the pose
                 pose = fread(obj.socket, 9, 'float32');
 
-
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
             else
@@ -95,8 +94,7 @@ classdef abb_tcp < handle
                 fwrite(obj.socket, 'x', 'uchar');
 
                 %read the pose
-                errors = fread(obj.socket, 6, 'uchars');
-
+                errors = fread(obj.socket, 6, 'uint8');
 
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
@@ -171,8 +169,8 @@ classdef abb_tcp < handle
         end
         
         function setJOG(obj, jog)
-                       %send request ot set speed
-           fwrite(obj.socket, 'J', 'char');
+           %send request ot set speed
+           fwrite(obj.socket, 'J', 'uchar');
            
            %write speed
            fwrite(obj.socket, jog, 'uint8');
