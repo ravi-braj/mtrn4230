@@ -45,7 +45,7 @@ ui = interface();
 %----- Set up timer
 mainTimer = timer();
 mainTimer.StartDelay = 1;
-mainTimer.Period = 0.1;
+mainTimer.Period = 0.5;
 mainTimer.ExecutionMode = 'fixedDelay';
 
 
