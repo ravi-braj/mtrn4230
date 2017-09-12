@@ -8,8 +8,8 @@ function timerSetup(obj, event, interface)
     try
         ui.tableObj = webcam(1); % table
         ui.conveyorObj = webcam(2); %conveyor
-        %interface.tableObj.Resolution = '1600x1200';
-        %interface.conveyorObj.Resolution = '1600x1200';
+        interface.tableObj.Resolution = '1600x1200';
+        interface.conveyorObj.Resolution = '1600x1200';
         disp('yes');
     catch
         

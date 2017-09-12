@@ -12,6 +12,6 @@ function [centroid, orientation] = box(scan)
     centroid = cat(1,info.Centroid);
     orientation = cat(1,info.Orientation);
     %imshow(bw);
-    hold on;
-    plot(centroid(:,1),centroid(:,2),'g+')
+    %hold on;
+    %plot(centroid(:,1),centroid(:,2),'g+')
 end
