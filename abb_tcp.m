@@ -164,7 +164,7 @@ classdef abb_tcp < handle
            fwrite(obj.socket, 'S', 'uchar');
            
            %write speed
-           fwrite(obj.socket, speed, 'uint32');
+           fwrite(obj.socket, speed, 'float32');
            
            %read error message
            obj.error = fread(obj.socket, 1, 'uchar');
