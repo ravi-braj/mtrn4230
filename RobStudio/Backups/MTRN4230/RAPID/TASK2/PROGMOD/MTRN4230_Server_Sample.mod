@@ -16,6 +16,7 @@ MODULE MTRN4230_Server_Sample
 
     PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
+    PERS byte read_switches{6} := [0,0,0,0,0,0];    !E-STOP STATES AND SWITCHES
     
     PERS pos write_position := [0,0,0];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
@@ -46,6 +47,7 @@ MODULE MTRN4230_Server_Sample
 
         write_io := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
         read_io := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
+        read_switches := [0,0,0,0,0,0];
         
         write_position := [0,0,0];
         write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
@@ -71,6 +73,21 @@ MODULE MTRN4230_Server_Sample
             IF requestMsg{1} = StrToByte("c" \Char) THEN   ! Client requesting to close connection
             
                 quit := TRUE;
+                
+            ELSEIF requestMsg{1} = StrToByte("x" \Char) THEN   ! Client requested e-stops and switches data
+                read_switches{1} := VES;
+                read_switches{2} := VEN;
+                read_switches{3} := VGS;
+                read_switches{4} := VMAN;
+                read_switches{5} := VMB;
+                read_switches{6} := VML;
+            
+                FOR i FROM 1 TO Dim(read_switches,1) DO
+                    PackRawBytes read_switches{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
+                ENDFOR
+                
+                SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
 
             ELSEIF requestMsg{1} = StrToByte("p" \Char) THEN   ! Client requested pose_state data
                 read_position := CPos (\Tool:=tmp_tSCup);
