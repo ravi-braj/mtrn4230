@@ -202,14 +202,14 @@ classdef abb_tcp < handle
         
         function setJOG(obj, jog)
            try
-           %send request ot set speed
-           fwrite(obj.socket, 'J', 'char');
-           
-           %write speed
-           fwrite(obj.socket, jog, 'uint8');
-           
-           %read error message
-           obj.error = fread(obj.socket, 1, 'uchar');
+               %send request ot set speed
+               fwrite(obj.socket, 'J', 'char');
+
+               %write speed
+               fwrite(obj.socket, jog, 'uint8');
+
+               %read error message
+               obj.error = fread(obj.socket, 1, 'uchar');
            catch
                disp('Socket error');
                obj.connected = false;                
