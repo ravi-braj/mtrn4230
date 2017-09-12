@@ -41,13 +41,23 @@ function timerCallback(obj, event, ui)
         ui.datafromConveyorCam();
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     catch
-        set(ui.h_camConveyor, 'CData', NaN(1200, 1600));
+        
+        sb = sprintf('img%01d.jpg',round(randi([1 23],1,1)));
+        ui.conveyorRGB = imread(sb);
+        set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     end
+    
+    [centroid, orientation] = box(ui.conveyorRGB);
+    boxtext = sprintf('%.2f %.2f %.2f', round(centroid(:,1),2), round(centroid(:,2),2), round(orientation));
+    
+    delete(ui.h_textConveyor);
+    ui.h_textConveyor = text(ui.clientGUIData.camera_conveyor, centroid(:,1), centroid(:,2), boxtext, 'Color', 'red', 'FontSize',6);
+    
     
     % 2) use gui plot handle for setting the data in the camera plot
     %set(ui.h_textConveyor, 'position', [150 150], 'String', 'here');
     
-    %% ---------- receive tcp from table camera -----------
+    %% ---------- receive serial from table camera ------------------------
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the table camera plot
     s = sprintf('IMG_0%02d.jpg',round(randi([1 99],1,1)));
@@ -70,13 +80,13 @@ function timerCallback(obj, event, ui)
     %execution
     if(mod(ui.count,15) == 0 && ui.detectBlocks == 1)
         blocks = detect_blocks(I);
-        string_out = Update_TableHdl(blocks);
+        blockstext = Update_TableHdl(blocks);
     
     
-    %set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
+        %set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
     
         delete(ui.h_textTable);
-        ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), 1200.-blocks(:,2), string_out, 'Color', 'red', 'FontSize',6);
+        ui.h_textTable = text(ui.clientGUIData.camera_table, blocks(:,1), 1200.-blocks(:,2), blockstext, 'Color', 'red', 'FontSize',6);
     end
 
     
