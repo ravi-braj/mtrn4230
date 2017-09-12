@@ -117,7 +117,9 @@ classdef interface < handle
             obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600,3));
             hold(obj.clientGUIData.camera_table,'on');
             %set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            
             obj.h_plotTable = plot(0,0,'b+', 'Parent', obj.clientGUIData.camera_table);
+            %axis([0 1600 0 1200], 'parent', obj.clientGUIData.camera_table);
             %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
             hold(obj.clientGUIData.camera_table,'off');
 
