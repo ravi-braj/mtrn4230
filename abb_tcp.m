@@ -39,6 +39,9 @@ classdef abb_tcp < handle
                 obj.connected = false;
                 return;
             end
+
+            disp('connected')
+
             obj.connected = true;
         end
         
@@ -53,20 +56,20 @@ classdef abb_tcp < handle
         %------------ Requesting data ---------------
         %attempts to get the pose off the robot gets joint and xyz
         function pose = requestPose(obj)
-            %disp('requesting Pose');
-            
-            if(obj.connected == true)
+            try
                 %send request for pose
                 fwrite(obj.socket, 'p', 'uchar');
 
                 %read the pose
                 pose = fread(obj.socket, 9, 'float32');
 
-
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
-            else
+
+            catch
+                disp('Socket error');
                 pose = [NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN];
+                obj.connected = false;
             end
            
         end
@@ -74,8 +77,8 @@ classdef abb_tcp < handle
         %attempts to get the ios off the robot
         function ios = requestIOs(obj)
             disp('requesting IOs');
-            
-            if(obj.connected == true)
+            try
+
                 %send request to RAPID for i/o data
                 fwrite(obj.socket, 'i', 'uchar');
 
@@ -84,24 +87,27 @@ classdef abb_tcp < handle
 
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
-            else
+            catch
                 ios = [NaN, NaN, NaN, NaN];
+                disp('Socket error');
+                obj.connected = false;
             end
         end
         
         function errors = requestErrors(obj)
-            if(obj.connected == true)
+            try
                 %send request for pose
                 fwrite(obj.socket, 'x', 'uchar');
 
                 %read the pose
-                errors = fread(obj.socket, 6, 'uchars');
-
+                errors = fread(obj.socket, 6, 'uint8');
 
                 %read error message
                 obj.error = fread(obj.socket, 1, 'uchar');
-            else
+            catch
                 errors = [NaN, NaN, NaN, NaN, NaN, NaN];
+                disp('Socket error');
+                obj.connected = false;
             end
         end
         
@@ -109,76 +115,107 @@ classdef abb_tcp < handle
         %attempts to set the pose of the robot
         function setPose(obj, poseArray)
             disp('Sending poseArray')
-            
-            %send request to send RAPID the i/o array
-            fwrite(obj.socket, 'P', 'uchar');
-            
-            tmp = zeros(1,7);
-            tmp(1:3) = poseArray;
-            
-            %send RAPID the i/o array
-            fwrite(obj.socket, tmp, 'float32');
-            
-            %read error message
-            obj.error = fread(obj.socket, 1, 'uchar');
+            try
+                %send request to send RAPID the i/o array
+                fwrite(obj.socket, 'P', 'uchar');
+
+                tmp = zeros(1,7);
+                tmp(1:3) = poseArray;
+
+                %send RAPID the i/o array
+                fwrite(obj.socket, tmp, 'float32');
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            catch
+                disp('Socket error');
+                obj.connected = false;
+            end
         end
         
         %attempts to set the ios of the robot
         function setIOs(obj, ioArray)
+            
             disp('Sending ioArray')
-            
-            %send request to send RAPID the i/o array
-            fwrite(obj.socket, 'I', 'uchar');
-            
-            %send RAPID the i/o array
-            fwrite(obj.socket, ioArray, 'uint8');
-            
-            %read error message
-            obj.error = fread(obj.socket, 1, 'uchar');
+            try
+                %send request to send RAPID the i/o array
+                fwrite(obj.socket, 'I', 'uchar');
+
+                %send RAPID the i/o array
+                fwrite(obj.socket, ioArray, 'uint8');
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            catch
+                disp('Socket error');
+                obj.connected = false;
+            end
         end
        
         function pauseRobot(obj, pauseFlag)
-            %send pause request message to robot
-            fwrite(obj.socket, 'G', 'uchar');
-            
-            %send RAPID the pauseFlag
-            fwrite(obj.socket, pauseFlag, 'uint8');
-            
-            %read error message
-            obj.error = fread(obj.socket, 1, 'uchar'); 
+            try
+                %send pause request message to robot
+                fwrite(obj.socket, 'G', 'uchar');
+
+                %send RAPID the pauseFlag
+                fwrite(obj.socket, pauseFlag, 'uint8');
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            catch
+                disp('Socket error');
+                obj.connected = false;                
+            end
         end
         
         function setMotionMode(obj, mode)
-           %send request to set motion mode
-           fwrite(obj.socket, 'M', 'uchar');
-           
-           %write motion mode
-           fwrite(obj.socket, mode', 'uint8');
-           
-           %read error message
-           obj.error = fread(obj.socket, 1, 'uchar');
+            try
+               %send request to set motion mode
+               fwrite(obj.socket, 'M', 'uchar');
+
+               %write motion mode
+               fwrite(obj.socket, mode', 'uint8');
+
+               %read error message
+               obj.error = fread(obj.socket, 1, 'uchar');
+            catch
+                disp('Socket error');
+                obj.connected = false;                
+            end
         end
         
         function setSpeed(obj, speed)
-           %send request ot set speed
-           fwrite(obj.socket, 'S', 'uchar');
-           
-           %write speed
-           fwrite(obj.socket, speed, 'float32');
-           
-           %read error message
-           obj.error = fread(obj.socket, 1, 'uchar');
+           try
+               %send request ot set speed
+               fwrite(obj.socket, 'S', 'uchar');
+
+               %write speed
+               fwrite(obj.socket, speed, 'float32');
+
+               %read error message
+               obj.error = fread(obj.socket, 1, 'uchar');
+           catch
+                disp('Socket error');
+                obj.connected = false;                
+           end
+            
         end
         
         function setJOG(obj, jog)
-                       %send request ot set speed
-           fwrite(obj.socket, 'J', 'char');
-           
-           %write speed
-           fwrite(obj.socket, jog, 'uint8');
-           
-           %read error message
-           obj.error = fread(obj.socket, 1, 'uchar');
+
+           try
+               %send request ot set speed
+               fwrite(obj.socket, 'J', 'char');
+
+               %write speed
+               fwrite(obj.socket, jog, 'uint8');
+
+               %read error message
+               obj.error = fread(obj.socket, 1, 'uchar');
+           catch
+               disp('Socket error');
+               obj.connected = false;                
+           end
         end
         
     end

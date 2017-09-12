@@ -93,6 +93,7 @@ classdef interface < handle
             obj.robotTCP.openTCP('127.0.0.1', 1025);
             %obj.robotTCP.openTCP('192.168.125.1', 1025);
             
+            obj.detectBlocks = 0;
             
             obj.count = 0;
             
@@ -122,7 +123,9 @@ classdef interface < handle
             obj.h_camTable = image(obj.clientGUIData.camera_table, NaN(1200, 1600,3));
             hold(obj.clientGUIData.camera_table,'on');
             %set(obj.clientGUIData.camera_table,'xtick',[],'ytick',[])
+            
             obj.h_plotTable = plot(0,0,'b+', 'Parent', obj.clientGUIData.camera_table);
+            %axis([0 1600 0 1200], 'parent', obj.clientGUIData.camera_table);
             %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
             hold(obj.clientGUIData.camera_table,'off');
 
