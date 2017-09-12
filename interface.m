@@ -206,12 +206,12 @@ classdef interface < handle
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending IOs');
                     case 2
-                        if ()
-                            comm = string('Pose out of reach');
-                        else
-                            obj.robotTCP.setPose(obj.setPose);
-                            comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3))
-                        end 
+                        
+                        %comm = string('Pose out of reach');
+                        
+                        obj.robotTCP.setPose(obj.setPose);
+                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3))
+                
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending pose');
 
