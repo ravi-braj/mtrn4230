@@ -214,9 +214,9 @@ classdef interface < handle
                             comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3));
                             disp('sending pose');
                         end 
+
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                        
-
                     case 3
                         disp('sending JOG command');
                         obj.robotTCP.setJOG(obj.setJOG);
