@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 07-Sep-2017 15:27:29
+    % Last Modified by GUIDE v2.5 12-Sep-2017 15:10:23
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -596,4 +596,30 @@ function speed_CreateFcn(hObject, eventdata, handles)
     if isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
         set(hObject,'BackgroundColor',[.9 .9 .9]);
     end
+end
+
+
+% --- Executes on button press in start_stop.
+function start_stop_Callback(hObject, eventdata, handles)
+    global ui;
+    ui.setStop = get(hObject,'Value');
+    ui.commandQueue = [ui.commandQueue, 6];
+% hObject    handle to start_stop (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of start_stop
+end
+
+
+% --- Executes on button press in detect_blocks.
+function detect_blocks_Callback(hObject, eventdata, handles)
+
+    global ui;
+    ui.detectBlocks = get(hObject,'Value');
+% hObject    handle to detect_blocks (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of detect_blocks
 end

@@ -18,6 +18,9 @@ classdef interface < handle
         %tcp object
         robotTCP
         
+        %switch on or off block detection
+        detectBlocks
+        
         % handles
         h_camConveyor
         h_camTable
@@ -52,6 +55,7 @@ classdef interface < handle
         setMotionMode
         setIOs
         setJOG
+        setStop
         
         
         %variables for reading (Telem variables)
@@ -59,6 +63,7 @@ classdef interface < handle
         pose
         poseJoints
         IOs
+        error
         
 
         %control variables
@@ -81,7 +86,7 @@ classdef interface < handle
             obj.IOs = [0, 0, 0, 0];
             obj.pose = [0, 0, 0, 0, 0, 0, 0, 0, 0];
             obj.setPose = [0,0,0];
-            
+            obj.error = [0,0,0,0,0,0];
             obj.motionMode = string('linear');
             
             
@@ -148,6 +153,15 @@ classdef interface < handle
             set(obj.clientGUIData.io_conveyor_direction, 'String', ioArray(4));
         end
         
+        function obj = updateErrors(obj, errors)
+            set(obj.clientGUIData.error_ven, 'String', errors(1));
+            set(obj.clientGUIData.error_ves, 'String', errors(2));
+            set(obj.clientGUIData.error_vgs, 'String', errors(3));
+            set(obj.clientGUIData.error_vman, 'String', errors(4));
+            set(obj.clientGUIData.error_vmb, 'String', errors(5));
+            set(obj.clientGUIData.error_vml, 'String', errors(6));
+        end
+        
         % get serial data from camera on conveyor - updates conveyorRGB
         % property (rgb)
         function obj = datafromConveyorCam(obj)
@@ -209,6 +223,17 @@ classdef interface < handle
                         disp('setting speed');
                         obj.robotTCP.setSpeed(obj.setSpeed);
                         comm = sprintf("Setting speed: %0.0f", obj.setSpeed);
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                    case 6
+                        
+                        obj.robotTCP.pauseRobot(obj.setStop);
+                        if(obj.setStop == 1)
+                            disp('pausing robot');
+                            comm = string('pausing robot');
+                        elseif obj.setStop == 0
+                            disp('unpausing robot');
+                            comm = string('unpausing robot');
+                        end
                         obj.commandHistory = [obj.commandHistory; string(comm)];
 
                     otherwise
