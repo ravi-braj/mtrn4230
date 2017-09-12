@@ -620,6 +620,7 @@ function detect_blocks_Callback(hObject, eventdata, handles)
     disp(ui.detectBlocks);
     if(ui.detectBlocks == 0)
         delete(ui.h_textTable);
+        delete(ui.h_textConveyor);
     end
 % hObject    handle to detect_blocks (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
