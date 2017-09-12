@@ -285,20 +285,21 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
     end
     
     pxToMM = 0.659375;
-    blockDepthPx = 30;
     
-    tableXoffsetPx = 22; 
-    tableYoffsetPx = 800;
-    tableZoffsetPx = 147+blockDepthPx;
+    tableXoffsetPx = 800; 
+    tableYoffsetPx = 1178;
     
-    ui.setPose(1) = (x - tableXoffsetPx)*pxToMM;
-    ui.setPose(2) = (y - tableYoffsetPx)*pxToMM;
-    ui.setPose(3) = (z - tableZoffsetPx)*pxToMM;
+    RobFramey = (x - tableXoffsetPx)*pxToMM;
+    RobFramex = (-y + tableYoffsetPx)*pxToMM;    
+    
+    ui.setPose(1) = RobFramex;
+    ui.setPose(2) = RobFramey;
+    ui.setPose(3) = 147+40;
     
     
-    set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
-    set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
-    set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
+    set(ui.clientGUIData.set_pose_x, 'String', num2str(RobFramex));
+    set(ui.clientGUIData.set_pose_y, 'String', num2str(RobFramey));
+    set(ui.clientGUIData.set_pose_z, 'String', num2str(187));
 end
 
 % --- Executes on button press in choosePoint_conveyor.
@@ -317,14 +318,22 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
         z = NaN;
     end
     
-    ui.setPose(1) = x;
-    ui.setPose(2) = y;
-    ui.setPose(3) = z;
+    conveyorOffsetXPx = 215;
+    conveyorOffsetYPx = 683;
+    
+    pxToMM = 0.659375;
+    
+    RobFramey = (x - conveyorOffsetXPx)*pxToMM;
+    RobFramex = (-y + conveyorOffsetYPx)*pxToMM;
+    RobFramez = 52;
+    ui.setPose(1) = RobFramex;
+    ui.setPose(2) = RobFramey;
+    ui.setPose(3) = RobFramez;
     
 
-    set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
-    set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
-    set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
+    set(ui.clientGUIData.set_pose_x, 'String', num2str(RobFramex));
+    set(ui.clientGUIData.set_pose_y, 'String', num2str(RobFramey));
+    set(ui.clientGUIData.set_pose_z, 'String', num2str(RobFramez));
 end
 
 
