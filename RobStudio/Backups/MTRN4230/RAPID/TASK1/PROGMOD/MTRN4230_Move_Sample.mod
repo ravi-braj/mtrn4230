@@ -27,7 +27,12 @@ MODULE MTRN4230_Move_Sample
         VAR num jogT_rate := 10; ! mm/s
         VAR num jogJ_rate := 2; ! deg/s
         
-        MoveL Offs(pTableHome, 0, 0, 0), speed, fine, tSCup;
+        WaitTime 1;
+    
+        MoveAbsJ jtCalibPos, speed, fine, tSCup;
+        jTarget := CJointT(\TaskRef:=RobControlId);
+        jTarget.robax.rax_5 := jTarget.robax.rax_5 + jogJ_rate;
+        MoveAbsJ jTarget, speed, fine, tSCup;
         
         WHILE quit = FALSE DO
             

@@ -14,19 +14,21 @@ MODULE MTRN4230_Server_Sample
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
     PERS byte jog_input := 1;
 
-    PERS byte write_io{4} := [0,1,0,1];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte write_io{4} := [1,0,1,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
+    PERS byte read_switches{6} := [1,0,1,0,0,1];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [226.73,188.232,10];
+    PERS pos write_position := [75.9098,126.261,10];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     
-    PERS pos read_position := [401.73,188.232,157];
-    PERS jointtarget read_joints := [[25.1057,45.9305,3.48044,1.12232E-17,40.5891,25.1057],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [250.91,126.261,157];
+    PERS jointtarget read_joints := [[26.712,20.7301,45.6088,2.72593E-13,23.6611,26.712],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    PERS speeddata speed := [100,500,1.45875E-42,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS speeddata speed := [2951.97,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
+    PERS byte errorMsg{1} := [0];
     PERS byte command := 0;
     PERS bool quit := FALSE;
     
@@ -38,13 +40,14 @@ MODULE MTRN4230_Server_Sample
         
         ! Message requests and replies
         VAR byte requestMsg{1};
-        VAR byte errorMsg{1};
+        errorMsg{1} := 0;
         
         ! Initialise/reset persistent variables
         jog_input := 0;
 
         write_io := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
         read_io := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
+        read_switches := [0,0,0,0,0,0];
         
         write_position := [0,0,0];
         write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
@@ -70,6 +73,21 @@ MODULE MTRN4230_Server_Sample
             IF requestMsg{1} = StrToByte("c" \Char) THEN   ! Client requesting to close connection
             
                 quit := TRUE;
+                
+            ELSEIF requestMsg{1} = StrToByte("x" \Char) THEN   ! Client requested e-stops and switches data
+                read_switches{1} := VES;
+                read_switches{2} := VEN;
+                read_switches{3} := VGS;
+                read_switches{4} := VMAN;
+                read_switches{5} := VMB;
+                read_switches{6} := VML;
+            
+                FOR i FROM 1 TO Dim(read_switches,1) DO
+                    PackRawBytes read_switches{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
+                ENDFOR
+                
+                SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
 
             ELSEIF requestMsg{1} = StrToByte("p" \Char) THEN   ! Client requested pose_state data
                 read_position := CPos (\Tool:=tmp_tSCup);
@@ -137,7 +155,7 @@ MODULE MTRN4230_Server_Sample
                 SocketReceive client_socket \RawData:=raw_data;   
                 
                 UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
-                speed.v_leax := tmpf;
+                speed.v_tcp := tmpf;
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
                 
@@ -156,6 +174,12 @@ MODULE MTRN4230_Server_Sample
                 
                 UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
                 pause := tmpb;
+                
+                IF pause = 1 THEN
+                    StopMove;
+                ELSE
+                    StartMove;
+                ENDIF
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
                 
