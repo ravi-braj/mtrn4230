@@ -12,19 +12,19 @@ MODULE MTRN4230_Server_Sample
     PERS tooldata tmp_tSCup:=[TRUE,[[0,0,65],[1,0,0,0]],[0.5,[0,0,20],[1,0,0,0],0,0,0]];
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS byte jog_input := 1;
+    PERS byte jog_input := 0;
 
-    PERS byte write_io{4} := [0,1,0,1];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
     
-    PERS pos write_position := [226.73,188.232,10];
+    PERS pos write_position := [187.385,114.993,10];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     
-    PERS pos read_position := [401.73,188.232,157];
-    PERS jointtarget read_joints := [[25.1057,45.9305,3.48044,1.12232E-17,40.5891,25.1057],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [362.385,114.993,157];
+    PERS jointtarget read_joints := [[17.6054,35.6311,21.4454,-2.09741E-15,32.9234,17.6054],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    PERS speeddata speed := [100,500,1.45875E-42,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
-    PERS byte mode := 0;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
+    PERS speeddata speed := [4150.19,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
     PERS byte errorMsg{1} := [0];
@@ -138,7 +138,7 @@ MODULE MTRN4230_Server_Sample
                 SocketReceive client_socket \RawData:=raw_data;   
                 
                 UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
-                speed.v_leax := tmpf;
+                speed.v_tcp := tmpf;
                 
                 SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
                 
