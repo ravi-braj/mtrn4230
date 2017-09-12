@@ -68,7 +68,7 @@ function timerCallback(obj, event, ui)
     
     %only redetect the blocks every 6 periods to increase speed of program
     %execution
-    if(mod(ui.count,1) == 0 && ui.detectBlocks == 1)
+    if(mod(ui.count,15) == 0 && ui.detectBlocks == 1)
         blocks = detect_blocks(I);
         string_out = Update_TableHdl(blocks);
     
