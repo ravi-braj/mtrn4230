@@ -29,17 +29,17 @@ checklist_complete = false;
 
 %----- START CHECKLIST GUI 
 startCheckUI = StartUpCheckList();
+%End of checklist gui sets flag checklist_complete
 
-%end of checklist gui sets flag checklist_complete
 %----- START GUI -------
-% gui is constructed in interface constructor function
 
-%program hangs while checklist is not declared complete
+%Program waits for checklist to be declared complete
 while(checklist_complete == false)
     pause(1);
 end
 delete(startCheckUI);
 
+%Gui is constructed in interface constructor function
 ui = interface();
 
 %----- Set up timer
@@ -51,7 +51,7 @@ mainTimer.ExecutionMode = 'fixedDelay';
 
 %% %%%%%%%%%%% 2 INITIALISATIONS %%%%%%%%%%%%%%%%%%%%%%%
 
-%set start up function of the timer
+%Set start up function of the timer
 mainTimer.StartFcn = {@timerSetup, ui};
 
 
@@ -76,8 +76,15 @@ while(1)
 end
 
 disp('closing');
+
+%Delete webcam objects when exiting function
 delete(ui.tableObj)
 delete(ui.conveyorObj)
+
+%Deleter the User Interface
 delete(ui.clientGUI);
+
+%Delete Timer Object
 delete(mainTimer);
 
+%Program End
