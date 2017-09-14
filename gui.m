@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 12-Sep-2017 15:10:23
+    % Last Modified by GUIDE v2.5 12-Sep-2017 17:28:29
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -276,7 +276,7 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
 
     [x, y] = ginput(1);
 
-    z = 10.00;
+    z = 0;
     y =1200 - y;
     if(x>1600) || (y>1200) || (x<0) || (y<0)
         x = NaN;
@@ -284,14 +284,22 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
         z = NaN;
     end
     
-    ui.setPose(1) = x;
-    ui.setPose(2) = y;
-    ui.setPose(3) = z;
+    pxToMM = 0.659375;
+    
+    tableXoffsetPx = 800; 
+    tableYoffsetPx = 1178;
+    
+    RobFramey = (x - tableXoffsetPx)*pxToMM;
+    RobFramex = (-y + tableYoffsetPx)*pxToMM;    
+    
+    ui.setPose(1) = RobFramex;
+    ui.setPose(2) = RobFramey;
+    ui.setPose(3) = 147+40;
     
     
-    set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
-    set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
-    set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
+    set(ui.clientGUIData.set_pose_x, 'String', num2str(RobFramex));
+    set(ui.clientGUIData.set_pose_y, 'String', num2str(RobFramey));
+    set(ui.clientGUIData.set_pose_z, 'String', num2str(187));
 end
 
 % --- Executes on button press in choosePoint_conveyor.
@@ -302,7 +310,7 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
     global ui;
 
     [x, y] = ginput(1);
-    z = 10.00;
+    z = 10;
     y =1200 - y;
     if(x>1600) || (y>1200) || (x<0) || (y<0)
         x = NaN;
@@ -310,14 +318,22 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
         z = NaN;
     end
     
-    ui.setPose(1) = x;
-    ui.setPose(2) = y;
-    ui.setPose(3) = z;
+    conveyorOffsetXPx = 215;
+    conveyorOffsetYPx = 683;
+    
+    pxToMM = 0.659375;
+    
+    RobFramey = (x - conveyorOffsetXPx)*pxToMM;
+    RobFramex = (-y + conveyorOffsetYPx)*pxToMM;
+    RobFramez = 52;
+    ui.setPose(1) = RobFramex;
+    ui.setPose(2) = RobFramey;
+    ui.setPose(3) = RobFramez;
     
 
-    set(ui.clientGUIData.set_pose_x, 'String', num2str(x));
-    set(ui.clientGUIData.set_pose_y, 'String', num2str(y));
-    set(ui.clientGUIData.set_pose_z, 'String', num2str(z));
+    set(ui.clientGUIData.set_pose_x, 'String', num2str(RobFramex));
+    set(ui.clientGUIData.set_pose_y, 'String', num2str(RobFramey));
+    set(ui.clientGUIData.set_pose_z, 'String', num2str(RobFramez));
 end
 
 
@@ -620,10 +636,26 @@ function detect_blocks_Callback(hObject, eventdata, handles)
     disp(ui.detectBlocks);
     if(ui.detectBlocks == 0)
         delete(ui.h_textTable);
+        delete(ui.h_textConveyor);
     end
 % hObject    handle to detect_blocks (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of detect_blocks
+end
+
+
+% --- Executes on button press in detect_box.
+function detect_box_Callback(hObject, eventdata, handles)
+% hObject    handle to detect_box (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global ui;
+    ui.detectBox = get(hObject,'Value');
+    disp(ui.detectBlocks);
+    if(ui.detectBox == 0)
+        delete(ui.h_textConveyor);
+    end
+% Hint: get(hObject,'Value') returns toggle state of detect_box
 end

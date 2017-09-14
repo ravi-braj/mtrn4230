@@ -20,6 +20,7 @@ classdef interface < handle
         
         %switch on or off block detection
         detectBlocks
+        detectBox
         
         % handles
         h_camConveyor
@@ -205,11 +206,17 @@ classdef interface < handle
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending IOs');
                     case 2
-                        obj.robotTCP.setPose(obj.setPose);
-                        comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3))
-                        obj.commandHistory = [obj.commandHistory; string(comm)];
-                        disp('sending pose');
+                        distance = sqrt((obj.setPose(1))^2 + (obj.setPose(2))^2);
+                        if (distance > 500)
+                            comm = sprintf('Pose out of reach');
+                        else
+                            obj.robotTCP.setPose(obj.setPose);
+                            comm = sprintf('Setting pose: [%0.3f, %0.3f, %0.3f]', obj.setPose(1), obj.setPose(2), obj.setPose(3));
+                            disp('sending pose');
+                        end 
 
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                       
                     case 3
                         disp('sending JOG command');
                         obj.robotTCP.setJOG(obj.setJOG);
