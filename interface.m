@@ -11,7 +11,7 @@
 
 classdef interface < handle
     properties (Access = public)
-        %Iser interface variables
+        %User interface variables
         clientGUI
         clientGUIData
         
