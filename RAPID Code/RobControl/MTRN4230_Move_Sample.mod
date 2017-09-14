@@ -42,9 +42,9 @@ MODULE MTRN4230_Move_Sample
                 
                 ! Motion commands
                 IF mode = 0 THEN    ! Execute linear move
-                    MoveL Offs(pTableHome, write_position.x, write_position.y, write_position.z), speed, fine, tSCup;
+                    MoveL Offs(pBase, write_position.x, write_position.y, write_position.z), speed, fine, tSCup;
                 ELSEIF mode = 1 THEN    ! Execute joint move
-                    MoveJ Offs(pTableHome, write_position.x, write_position.y, write_position.z), speed, fine, tSCup;
+                    MoveJ Offs(pBase, write_position.x, write_position.y, write_position.z), speed, fine, tSCup;
                 ENDIF
                 
                 command := 0;
