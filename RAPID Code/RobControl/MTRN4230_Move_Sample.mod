@@ -9,6 +9,7 @@ MODULE MTRN4230_Move_Sample
 !      motion errors from communication errors. IE TCP connection and error status may be maintained separate from control.
 !
 !      Last Modified: 14/09/2017
+!      Author: Daniel Castillo
 !      Status: Working
     
     ! Data stores (persistent across tasks) (not directly compatible with UnpackRawBytes so use tmpf, tmpb to update variables)
@@ -37,11 +38,20 @@ MODULE MTRN4230_Move_Sample
     
     ! Communication variables
     PERS byte errorMsg{1};   ! Error flag sent to MATLAB when a command is successfully executed (TCP acknowledgement)
-    PERS byte command; ! MATLAB output command ID (move to position, write to IOs, 
+    PERS byte command; ! MATLAB output command ID (Move to position = 0, Write to IOs = 1, Jog a given axis = 2) 
     PERS bool quit; ! Main loop exit flag
     
     ! The Main prodedure. When you select 'PP to Main' on the FlexPendant, it will go to this procedure.
     PROC main()
+        ! Function: This is the main control loop for the robot and IO control. It begins by homing the robot to a safe position that is not a 
+        ! singularity. It then waits for a controlID (PERS byte command) to be set by the RobotComms. Once the controlID is not 0, it will run
+        ! the respective routine to the controlID. Once the operation has been executed ControlID is reset to 0 until another command is received.
+        !
+        ! Inputs: None  Outputs: None
+        ! Note: Set Program Pointer to this routine
+        ! Last Modified: 14/09/2017
+        ! Author: Daniel Castillo
+        ! Status: Working
         
         VAR robtarget pTarget; ! temporary variable for translational jogging
         VAR jointtarget jTarget;    ! temporary variable for joint jogging

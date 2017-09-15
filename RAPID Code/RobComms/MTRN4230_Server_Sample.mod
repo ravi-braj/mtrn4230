@@ -1,7 +1,8 @@
 MODULE MTRN4230_Server_Sample   
 !      Module Function: This is the primary communications module for the RobComms Task. It establishes and maintains a TCP connection with the
-!      MATLAB client running a Stop and Wait protocol. The module will run a main loop (main) which receives a command character
-!      and then process the request. The command characters are as follows:
+!      MATLAB client running a Stop and Wait protocol. RobComms waits to receive a command ID packet which is a 1 byte char. All lower case 
+!      command IDs are requests for information about the robot, whilst all upper case command IDs are attempts to output to the robot.
+!      The commandIDs are below:
 !
 !      MATLAB Requests: 'c' = Request Close Connection, 'x' = Request Safety IO States, 
 !                       'p' = Request Pose (position and joints), 'i' Request IO states
@@ -11,9 +12,24 @@ MODULE MTRN4230_Server_Sample
 !
 !      MATLAB requests are processed locally in this module and are always given by a lower case character. MATLAB commands require
 !      an output to be executed in robot studio and are given by an upper case character. For motion or IO commands, a persistent
-!      command variable will be set in the RobComms task, then read and executed in the RobControl task.                    
+!      command variable will be set in the RobComms task, then read and executed in the RobControl task.
+!
+!      Output commands are dealt with using the following process: 
+!      (1) RobComms receives command and proceeds to read appropriate amount of bytes
+!      (2) MATLAB sends expected amount of bytes
+!      (3) RobotComms unpacks the data and sets a control_ID. This informs the RobControl task what routine it needs to execute
+!      
+!      Input commands are dealt with by RobComms using the following process:
+!      (1) RobComms receives command and packs appropriate amount of bytes
+!      (2) MATLAB waits to receive expected amount of bytes 
+!      (3) MATLAB unpacks data and updates the GUI
+!
+!      To conclude any command ID process, MATLAB will expect a 1 byte error state response. This informs the program of whether 
+!      anything is wrong with the data or state and also acknowledges that the command has been executed on the Robot Studio side. 
+!      RobComms will proceed to wait until another command ID is sent from MATAB and the process repeats until the connection is closed.
 !
 !      Last Modified: 15/09/2017
+!      Author: Daniel Castillo
 !      Status: Working
 	
     ! The socket connected to the client.
@@ -50,7 +66,7 @@ MODULE MTRN4230_Server_Sample
     
     ! Communication variables
     PERS byte errorMsg{1} := [0];   ! Error flag sent to MATLAB when a command is successfully executed (TCP acknowledgement)
-    PERS byte command := 1; ! MATLAB output command ID
+    PERS byte command := 1; ! MATLAB output command ID (Move to position = 0, Write to IOs = 1, Jog a given axis = 2) 
     PERS bool quit := FALSE; ! Main loop exit flag
     
     PROC main()
@@ -61,6 +77,7 @@ MODULE MTRN4230_Server_Sample
         ! Inputs: None  Outputs: None
         ! Note: Set Program Pointer to this routine
         ! Last Modified: 14/09/2017
+        ! Author: Daniel Castillo
         ! Status: Working
         
         ! RawBytes buffer for data manipulation and placeholder variables
@@ -279,6 +296,7 @@ MODULE MTRN4230_Server_Sample
         ! Function: Establish a connection to an IP Address and port. This is blocking and will timeout after a period of time
         ! Inputs: None  Outputs: None
         ! Last Modified: 18/08/2017
+        ! Author: Sample Code
         ! Status: Working
         
         ! Create the socket to listen for a connection on.
@@ -304,6 +322,7 @@ MODULE MTRN4230_Server_Sample
         ! Function: Terminate TCP connection to the current socket
         ! Inputs: None  Outputs: None
         ! Last Modified: 18/08/2017
+        ! Author: Sample Code
         ! Status: Working
         
         SocketClose client_socket;
