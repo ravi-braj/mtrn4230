@@ -1,4 +1,20 @@
-MODULE MTRN4230_Server_Sample    
+MODULE MTRN4230_Server_Sample   
+!      Module Function: This is the primary communications module for the RobComms Task. It establishes and maintains a TCP connection with the
+!      MATLAB client running a Stop and Wait protocol. The module will run a main loop (main) which receives a command character
+!      and then process the request. The command characters are as follows:
+!
+!      MATLAB Requests: 'c' = Request Close Connection, 'x' = Request Safety IO States, 
+!                       'p' = Request Pose (position and joints), 'i' Request IO states
+!
+!      MATLAB Commands: 'P' = Move robot to position, 'I' = Write to IO states, 'S' = Write to motion speed, 
+!                       'M' = Write to motion mode, 'G' = Write to pause state, 'J' = Jog a given axis!  
+!
+!      MATLAB requests are processed locally in this module and are always given by a lower case character. MATLAB commands require
+!      an output to be executed in robot studio and are given by an upper case character. For motion or IO commands, a persistent
+!      command variable will be set in the RobComms task, then read and executed in the RobControl task.                    
+!
+!      Last Modified: 15/09/2017
+!      Status: Working
 	
     ! The socket connected to the client.
     VAR socketdev client_socket;
@@ -34,21 +50,25 @@ MODULE MTRN4230_Server_Sample
     
     ! Communication variables
     PERS byte errorMsg{1} := [0];   ! Error flag sent to MATLAB when a command is successfully executed (TCP acknowledgement)
-    PERS byte command := 1; ! MATLAB output command ID (move to position, write to IOs, 
+    PERS byte command := 1; ! MATLAB output command ID
     PERS bool quit := FALSE; ! Main loop exit flag
     
-    ! Main Communication loop (Program Pointer)
     PROC main()
+        ! Function: This is the main communication loop which manages the TCP link between Robot Studio and MATLAB. It will connect once 
+        ! after initialising the persistant variables and then will begin the Stop and Wait communication stragedy. It will continue
+        ! to read and execute commands from MATLAB until a close connection signal is received upon which it closes the TCP link.
+        !
+        ! Inputs: None  Outputs: None
+        ! Note: Set Program Pointer to this routine
+        ! Last Modified: 14/09/2017
+        ! Status: Working
+        
         ! RawBytes buffer for data manipulation and placeholder variables
         VAR rawbytes raw_data; ! For capturing data stream
         VAR num tmpf := 0;  ! For updating floats
         VAR byte tmpb := 0; ! For updating bytes
         
         ! Message requests and replies
-        ! MATLAB Requests: 'c' = Request Close Connection, 'x' = Request Safety IO States, 
-        !                  'p' = Request Pose (position and joints), 'i' Request IO states
-        ! MATLAB Commands: 'P' = Move robot to position, 'I' = Write to IO states, 'S' = Write to motion speed, 
-        !                  'M' = Write to motion mode, 'G' = Write to pause state, 'J' = Jog a given axis
         VAR byte requestMsg{1}; 
         
         ! Initialise/reset persistent variables (which save from last session)
@@ -256,6 +276,10 @@ MODULE MTRN4230_Server_Sample
     ENDPROC
     
     PROC ListenForAndAcceptConnection()
+        ! Function: Establish a connection to an IP Address and port. This is blocking and will timeout after a period of time
+        ! Inputs: None  Outputs: None
+        ! Last Modified: 18/08/2017
+        ! Status: Working
         
         ! Create the socket to listen for a connection on.
         VAR socketdev welcome_socket;
@@ -277,6 +301,11 @@ MODULE MTRN4230_Server_Sample
     
     ! Close the connection to the client.
     PROC CloseConnection()
+        ! Function: Terminate TCP connection to the current socket
+        ! Inputs: None  Outputs: None
+        ! Last Modified: 18/08/2017
+        ! Status: Working
+        
         SocketClose client_socket;
     ENDPROC
 		

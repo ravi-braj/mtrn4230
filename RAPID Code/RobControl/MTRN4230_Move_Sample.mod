@@ -1,4 +1,15 @@
 MODULE MTRN4230_Move_Sample
+!      Module Function: This is the primary command execution module for the RobControl Task. It waits to receive a command from the RobComms task
+!      and then proceeds to execute that command. The following commands may be set with the respective IDs:
+!      
+!      Commands: 1 = Move robot to position, 2 = Write to robot IOs, 3 = Jog a given robot axis
+!      Once a command has been begun, it is reset to 0 to mark its execution. The program then waits for any other command than 0.
+!
+!      The motion and io control processes are separated from the communications task to allow parallel processing to occur, and to separate
+!      motion errors from communication errors. IE TCP connection and error status may be maintained separate from control.
+!
+!      Last Modified: 14/09/2017
+!      Status: Working
     
     ! Data stores (persistent across tasks) (not directly compatible with UnpackRawBytes so use tmpf, tmpb to update variables)
     !jog command ID 
