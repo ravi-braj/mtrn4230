@@ -8,17 +8,17 @@ function timerCallback(obj, event, ui)
     
     %% %%%%%%%%%%%% CONDITIONAL EXECUTIONS %%%%%%%%%%%%%%
     
-    %%------------- send commands to robot --------------------
-    % 1) check the command queue to see if there is a command waiting
-    % 2) send command via tcp and remove it from the command queue
+    %%------------- Send commands to robot --------------------
+    % 1) Check the command queue to see if there is a command waiting
+    % 2) Send command via tcp and remove it from the command queue
     
     
-    %% ---------- request status of i/o via tcp from robot -----
-    % 1) send a request packet to the robot
-    % 2) receive the i/o packet from the robot
-    % 3) update status of i/o s
+    %% ---------- Request status of I/O via tcp from robot -----
+    % 1) Send a request packet to the robot
+    % 2) Receive the i/o packet from the robot
+    % 3) Update status of i/o s
     
-    %currently fills io status on gui to junk data
+    % Fills I/O status on gui to junk data here
     
     ui.updateIOs(ui.IOs);
     
@@ -46,15 +46,7 @@ function timerCallback(obj, event, ui)
         ui.conveyorRGB = imread(sb);
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     end
-    
-    
-    
 
-    
-    
-    % 2) use gui plot handle for setting the data in the camera plot
-    %set(ui.h_textConveyor, 'position', [150 150], 'String', 'here');
-    
     %% ---------- receive serial from table camera ------------------------
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the table camera plot
@@ -74,11 +66,13 @@ function timerCallback(obj, event, ui)
     end
     
     
-    %only redetect the blocks every 6 periods to increase speed of program
-    %execution
+    %Only redetect the blocks and Box pose and properties every 6 periods 
+    %to increase speed of program execution
+    
     if mod(ui.count,15) == 0
         
         if(ui.detectBlocks == 1)
+            % Call function detect_blocks
             blocks = detect_blocks(I);
             blockstext = Update_TableHdl(blocks);
             %set(ui.h_camTable,'xdata',blocks(:,1),'ydata',blocks(:,2));
@@ -116,11 +110,13 @@ end
 
 function textoutput = Update_TableHdl(c)
     %Produce Strings for text output theta, colour, shape, upper_surface, reachable
-    %textoutput = zeros(size(c,1));
-    
+       
     if (~isempty(c))
         for i=1:size(c,1)
+            % Get orientation as a text
             orientation = string(c(i,3));
+            % Check what colour the top surface of the box is
+            
             if c(i,4) == 1
                 colour = 'red';
             elseif c(i,4) == 2
@@ -136,21 +132,27 @@ function textoutput = Update_TableHdl(c)
             elseif c(i,4) == 0
                 colour = 'inverted';
             end
+            % Check what shape the top surface of the box is
+            
             if c(i,5) == 1
                 shape = 'square';
             elseif c(i,5) == 2
-                shape = 'orange';
+                shape = 'diamond';
             elseif c(i,5) == 3
-                shape = 'yellow';
+                shape = 'circle';
             elseif c(i,5) == 4
-                shape = 'green';
+                shape = 'club';
             elseif c(i,5) == 5
-                shape = 'blue';
+                shape = 'cross';
             elseif c(i,5) == 6
-                shape = 'purple';
+                shape = 'star';
             elseif c(i,5) == 0
                 shape = 'inverted';
             end
+            
+            % Check if the upper surface is inverted
+            % Coloured side = 1
+            % Inverted side = 2
             if c(i,6) == 1
                 uppersurface = '1';
             elseif c(i,6) == 2
@@ -158,6 +160,10 @@ function textoutput = Update_TableHdl(c)
             else
                 uppersurface = '';
             end
+            
+            % Check to if the block is reachable by robot
+            % Reachable = 1
+            % Not Reachable = 0
             if c(i,7) == 1
                 reachable = '1';
             elseif c(i,7) == 0
