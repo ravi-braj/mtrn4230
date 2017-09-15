@@ -1,4 +1,11 @@
 function [centroid, orientation] = box(scan)
+    %BOX
+    %Takes in a scan as an RGB image
+    %Returns information about any box detected in the image in terms of
+    %centroid and orientation
+    %Written by Jay Motwani
+    %Last updated 15 september 2017
+    
     %scan = imread('img1.jpg');
     [bw, rgb] = BoxConveyorMask(scan);
     %deleting values that are not around the conveyor
