@@ -1,5 +1,15 @@
-%%% class for tcp communication with abb robot
-%%% protocols inbuilt
+% class for handling all tcp communication with abb robot
+% The standard protocol for all communication is
+% 1) Client sends a 1 byte request packet. 
+% 2) ABB side reads the request packet:
+%     a) Reutrns an error status flag if no data is required (0 means no error)
+%     b) A packet containing data of a specified size (depending on the
+%     request)
+%     c) Reads the tcp socket if the reqest is to send the ABB something
+% 3) If b and c apply above, the robot concludes with an error status flag.
+% Written by Aravind Baratha Raj
+% Last modified 15 September 2017
+
 
 classdef abb_tcp < handle
     properties

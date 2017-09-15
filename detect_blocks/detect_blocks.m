@@ -1,4 +1,9 @@
-% Your block detection.
+%Function for detecting coloured blocks in an image
+% Returns an array containing information about each
+% Takes in an rgb image frame
+% Written by Daniel Castillo
+% Last modified 10 September 2017
+
 function C = detect_blocks(I)
     % You may store your results in matrix as shown below.
     %    X    Y    Theta Colour Shape Upper_surface     1 = Reachable

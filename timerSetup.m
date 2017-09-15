@@ -1,4 +1,7 @@
-
+% Set up function for client side timer. 
+% Takes in a user interface, does initalisations
+% Written by Aravind Baratha Raj
+% Last modified 15 September 2017
 
 function timerSetup(obj, event, interface)
     global ui

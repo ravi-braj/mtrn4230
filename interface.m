@@ -1,13 +1,10 @@
 % wrapper class for the GUI data
 % designed to stop globals being passed around everywhere. Instead just
 % pass an 'interface' object to access all your handles.
+% written by Aravind Baratha Raj
+% last edited 15 September 2017
 
-% command queue protocol
-% 1 = 
-% 2 = 
-% 3 = 
-% 4 = 
-% 5 = 
+%purpose, description, inputs, outputs, auther, date modified
 
 classdef interface < handle
     properties (Access = public)
@@ -78,6 +75,9 @@ classdef interface < handle
         
         %% Constructor
         function obj = interface()
+            %INTERFACE constructs an interface 
+            %sets default values for the gui. Starts gui and attempts to
+            %connect client.
             obj.clientGUI = gui();
             obj.clientGUIData = guidata(obj.clientGUI);
             
@@ -136,6 +136,10 @@ classdef interface < handle
         
         %Updates the pose displayed by the interface.
         function obj = updatePose(obj, pos_x, pos_y, pos_z, jointArray)
+            % Takes in the xyz positions and an array of joint positions
+            % and sets the gui.
+            % written by Aravind Baratha Raj
+            % last modified 15 September 2017
             set(obj.clientGUIData.pose_x, 'String', pos_x);
             set(obj.clientGUIData.pose_y, 'String', pos_y);
             set(obj.clientGUIData.pose_z, 'String', pos_z);
@@ -149,8 +153,11 @@ classdef interface < handle
         
 
         
-        %Takes in the array of I/O statuses from robot studio and updates interface
         function obj = updateIOs(obj, ioArray)
+            %takes in an array of I/O statuses from robot studio and
+            %updates interface
+            %Written by Aravind Baratha Raj
+            %last updated 15 September 2017
             set(obj.clientGUIData.io_vacuum_on, 'String', ioArray(1));
             set(obj.clientGUIData.io_solenoid_on, 'String', ioArray(2));
             set(obj.clientGUIData.io_conveyor_enable, 'String', ioArray(3));
@@ -158,6 +165,9 @@ classdef interface < handle
         end
         
         function obj = updateErrors(obj, errors)
+            %takes in an array of error statuses and writes it to the gui
+            %written by Aravind Baratha Raj
+            %last updated 15 September 2017
             set(obj.clientGUIData.error_ven, 'String', errors(1));
             set(obj.clientGUIData.error_ves, 'String', errors(2));
             set(obj.clientGUIData.error_vgs, 'String', errors(3));
@@ -166,21 +176,26 @@ classdef interface < handle
             set(obj.clientGUIData.error_vml, 'String', errors(6));
         end
         
-        %Get RGB image from conveyor camera object - updates conveyorRGB
         function obj = datafromConveyorCam(obj)
+            %Get RGB image from conveyor camera object - updates conveyorRGB
+            %Last updated 15 September 2017
+            
             %update rgb image data in conveyoRGB
             obj.conveyorRGB = snapshot(obj.conveyorObj);
         end
         
-        % get RGB image from table camera object - updates tableRGB
         function obj = datafromTableCam(obj)
+            % get RGB image from table camera object - updates tableRGB
+            
+            
             %update rgb image data in tableRGB
             obj.tableRGB = snapshot(obj.tableObj);
         end
         
-        %Tries to send the next command in the commandQueue to the robot
         function obj = nextCommand(obj)
-            %disp('executing next command')
+            %Tries to send the next command in the commandQueue to the robot
+            %Written by Aravind Baratha Raj
+            %Last updated 15 September 2017
             
             if(size(obj.commandQueue)  == 0)
                 %disp('no commands to execute');

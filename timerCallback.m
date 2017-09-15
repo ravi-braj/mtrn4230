@@ -1,4 +1,8 @@
 %%%% CALLBACK FUNCTION FOR CLIENTMAIN TIMER
+%Takes in the user interface object
+%Executes the main tick of the client side
+%Written by Aravind Baratha Raj
+%Last modified 15 September 2017
 
 
 function timerCallback(obj, event, ui) 
