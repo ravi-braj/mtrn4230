@@ -25,9 +25,15 @@ classdef abb_tcp < handle
             fclose('all');
         end
         
-        %opens connection and returns true if successful or false if
-        %invalid
+
         function obj = openTCP(obj, ip_address, port)
+             %opens connection and returns true if successful or false if
+             %invalid
+             % takes in an IP address and port. Stores TCP object.
+             % Written by Jay Motwani
+             % Last updated 15 September 2017
+             
+             
             obj.connected = false;
             % Open a TCP connection to the robot.
             obj.socket = tcpip(ip_address, port);
@@ -57,6 +63,9 @@ classdef abb_tcp < handle
         
         %closes the socket.
         function closeSocket(obj)
+            %closes a tcp socket
+            %written by Jay Motwani
+            %Last updated 5 Spetember 2017
             close(obj.socket);
         end
         
@@ -64,8 +73,12 @@ classdef abb_tcp < handle
         %% %%%%%%%%%%%%% METHODS FOR GETTING DATA OFF ROBOT %%%%%%%%%%%
         
         %------------ Requesting data ---------------
-        %attempts to get the pose off the robot gets joint and xyz
+        
         function pose = requestPose(obj)
+            %attempts to get the pose off the robot gets joint and xyz
+            %Returns the pose as an array
+            %Written by Jay Motwani
+            % Last updated 1 September 2017
             try
                 %send request for pose
                 fwrite(obj.socket, 'p', 'uchar');
@@ -105,6 +118,11 @@ classdef abb_tcp < handle
         end
         
         function errors = requestErrors(obj)
+            %Requests the errors off the robot
+            %Returns an array of error status flags
+            % Written by Aravind Baratha Raj
+            % Last updated 15 September 2017
+            
             try
                 %send request for pose
                 fwrite(obj.socket, 'x', 'uchar');
@@ -122,8 +140,12 @@ classdef abb_tcp < handle
         end
         
         %------------ Sending data ------------------
-        %attempts to set the pose of the robot
         function setPose(obj, poseArray)
+            %attempts to set the pose of the robot
+            %Takes in a desired pose position
+            %Written by Aravind Baratha Raj
+            %Last updated 15 September 2017
+
             disp('Sending poseArray')
             try
                 %send request to send RAPID the i/o array
@@ -145,6 +167,10 @@ classdef abb_tcp < handle
         
         %attempts to set the ios of the robot
         function setIOs(obj, ioArray)
+            %Attempts to se the IOs of the ABB over tcp
+            %Takes in an array of IO status flag
+            %Written by Aravind Baratha Raj
+            %Last updated 10 September 2017
             
             disp('Sending ioArray')
             try
@@ -179,6 +205,10 @@ classdef abb_tcp < handle
         end
         
         function setMotionMode(obj, mode)
+            %Attempts to set the motion mode to 'Joint' or 'Linear'
+            %Takes in the motion mode as a 1 or a 0.
+            %Written by Aravind Baratha Raj
+            %Last updated 10 September 2017
             try
                %send request to set motion mode
                fwrite(obj.socket, 'M', 'uchar');
@@ -195,6 +225,11 @@ classdef abb_tcp < handle
         end
         
         function setSpeed(obj, speed)
+           % Attempts ot set the speed of the ABB robot arm
+           % Takes in a speed value as an integer
+           % Written by Jay Motwani
+           % Last modified 15 September 2017
+            
            try
                %send request ot set speed
                fwrite(obj.socket, 'S', 'uchar');
@@ -212,7 +247,11 @@ classdef abb_tcp < handle
         end
         
         function setJOG(obj, jog)
-
+           %Sends a jog command to the ABB
+           %Takes in a number between 0 and 18
+           %Written by Aravind Baratha Raj
+           %Last modified 15 September 2017
+           
            try
                %send request ot set speed
                fwrite(obj.socket, 'J', 'char');

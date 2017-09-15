@@ -178,7 +178,8 @@ classdef interface < handle
         
         function obj = datafromConveyorCam(obj)
             %Get RGB image from conveyor camera object - updates conveyorRGB
-            %Last updated 15 September 2017
+            % written by Jay Motwani
+            % Last updated 15 September 2017
             
             %update rgb image data in conveyoRGB
             obj.conveyorRGB = snapshot(obj.conveyorObj);
@@ -186,6 +187,8 @@ classdef interface < handle
         
         function obj = datafromTableCam(obj)
             % get RGB image from table camera object - updates tableRGB
+            % written by Jay Motwani
+            % Last updated 15 September 2017
             
             
             %update rgb image data in tableRGB
