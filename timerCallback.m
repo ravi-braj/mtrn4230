@@ -56,7 +56,9 @@ function timerCallback(obj, event, ui)
     % 2) use gui plot handle for setting the data in the table camera plot
     s = sprintf('IMG_0%02d.jpg',round(randi([1 99],1,1)));
     try
-       I = imread(s);
+       %I = imread(s);
+       %I = imread('IMG_005.jpg');
+       I = ui.tableRGB;
     catch
        I = imread('IMG_005.jpg');
     end

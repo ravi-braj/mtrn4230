@@ -11,6 +11,12 @@ function C = detect_blocks(I)
     % c = [685, 690, 0.1,  1,  1,    1,          1                ;  % First block.
     %      200, 200, 0.2,  1,  2,    1,          0                ]; % Second block.
 
+    % Block out crap
+    I(1:330,:,:) = 0;
+    I(1350:end,:,:) = 0;
+    I(:,1:330,:) = 0;
+    I(:,1350:end,:) = 0;
+    
     % Extract faceup block masks + faceup block parameters (x,y,color,inverted=0) 
     [C,BW] = ExtractShapes(I);
     
@@ -43,5 +49,6 @@ function C = detect_blocks(I)
     
     % Change coordinate frame. Specification requires origin at bottom left
     % hand corner. Currently it is at top left hand corner.
+
     C(:,2) = size(I,1) - C(:,2);
 end
