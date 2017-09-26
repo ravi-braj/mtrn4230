@@ -53,7 +53,7 @@ function [c_i,n] = ProcessMask(mask, colorID)
 
     mask(1:250,:) = 0; % Crop top of image
     stats = regionprops('table',mask,'Centroid','Area');
-    IdxList = find(stats.Area > 400 && stats.Area < );    % Must be big enough to be a shape
+    IdxList = find(stats.Area > 400);    % Must be big enough to be a shape
     n = numel(IdxList);
     
     if (n > 0)
