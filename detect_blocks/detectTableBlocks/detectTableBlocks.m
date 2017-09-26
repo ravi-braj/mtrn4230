@@ -3,19 +3,32 @@ function blocks = detectTableBlocks(I)
     % the game (blocks in play: 6 player blocks + field blocks). The
     % function returns blocks = [x,y,colour,shape].
     
-    I = imread('IMG_table_1600x1200.jpg');
+    I = imread('img4.jpg');
     
+%==============New Image Set================    
     % Erase anything outside region of interest (Player Inventory + Board) 
-    I(1:380,:,:) = 0;
-     I(910:end,:,:) = 0;
-    I(:,1:412,:) = 0;
-   I(:,1195:end,:) = 0;
-   I(:,1060:1110,:) = 0;
-   I(:,493:544,:) = 0;
-    I(735:end,1110:1195,:) = 0;
-    I(740:end,412:493,:) = 0;
-    figure(1); imshow(I);
+     I(1:275,:,:) = 0; % Crop the top
+       I(793:end,:,:) = 0; %Crop the bottom
+     I(:,1:410,:) = 0; %Crop left side
+    I(:,1190:end,:) = 0; %Crop Right side
+    I(:,1060:1110,:) = 0; %Crop inventory right side
+    I(:,490:538,:) = 0; %Crop inventory right side
+     I(632:end,1110:1195,:) = 0;
+     I(630:end,412:493,:) = 0;
     
+
+%=========== Old Image set ========================
+%     % Erase anything outside region of interest (Player Inventory + Board) 
+%     I(1:380,:,:) = 0;
+%      I(910:end,:,:) = 0;
+%     I(:,1:412,:) = 0;
+%    I(:,1195:end,:) = 0;
+%    I(:,1060:1110,:) = 0;
+%    I(:,493:544,:) = 0;
+%     I(735:end,1110:1195,:) = 0;
+%     I(740:end,412:493,:) = 0;
+
+    figure(1); imshow(I);    
     % Create empty blocks matrix
     blocks = [];
 
