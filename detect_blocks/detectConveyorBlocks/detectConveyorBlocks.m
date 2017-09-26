@@ -3,12 +3,13 @@ function [blocks, box] = detectConveyorBlocks()%I)
     % blocks which reside within a carry box. It returns blocks which is 
     % structured [x, y]. This allows the robot arm to swap blocks.
     
-    I = imread('IMG_conveyor_LowRes.jpg');
+    I = imread('img1.jpg');
     
     % Erase anything outside conveyor region of interest (Conveyor belt)
-    I(:,1:230,:) = 0;
-    I(:,465:end,:) = 0;
-    I(285:end,:,:) = 0;
+    I(:,1:556,:) = 0;
+    I(:,1137:end,:) = 0;
+    I(705:end,:,:) = 0;
+    figure(1); imshow(I);
     
     % Generate conveyor mask (inverse should leave the box)
     Conveyor_BW = conveyorMask(I);
