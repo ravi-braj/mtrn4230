@@ -102,6 +102,9 @@ function timerCallback(obj, event, ui)
     %------------- Increment counter -------------------------
     ui.count = ui.count+1;
     
+    %% Check Box position
+    
+    
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
     
     %exit button pressed, stop the timer
