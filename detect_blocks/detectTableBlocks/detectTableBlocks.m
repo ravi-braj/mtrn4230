@@ -3,16 +3,18 @@ function blocks = detectTableBlocks(I)
     % the game (blocks in play: 6 player blocks + field blocks). The
     % function returns blocks = [x,y,colour,shape].
     
-    %I = imread('IMG_table_1600x1200.jpg');
+    I = imread('IMG_table_1600x1200.jpg');
     
     % Erase anything outside region of interest (Player Inventory + Board) 
     I(1:380,:,:) = 0;
-    I(910:end,:,:) = 0;
-    I(:,1:540,:) = 0;
-    I(:,1195:end,:) = 0;
-    I(:,1060:1110,:) = 0;
+     I(910:end,:,:) = 0;
+    I(:,1:412,:) = 0;
+   I(:,1195:end,:) = 0;
+   I(:,1060:1110,:) = 0;
+   I(:,493:544,:) = 0;
     I(735:end,1110:1195,:) = 0;
-%     figure(1); imshow(I);
+    I(740:end,412:493,:) = 0;
+    figure(1); imshow(I);
     
     % Create empty blocks matrix
     blocks = [];
