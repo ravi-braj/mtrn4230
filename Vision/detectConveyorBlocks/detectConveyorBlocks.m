@@ -11,25 +11,9 @@ function [blocks, box] = detectConveyorBlocks(im)
     
     % Generate conveyor mask (inverse should leave the box)
     Conveyor_BW = conveyorMask(im);
-    conv_stats = regionprops('table',~Conveyor_BW,'Area','FilledImage','BoundingBox');
-    
-    % Cleanup Conveyor_BW using filled image and produce BoxMask
-    NoiseIdx = find(conv_stats.Area < 40000);
-    s = conv_stats(NoiseIdx,:);
-    sz = size(s.FilledImage,1);
-    
-    BoxMask = false(size(im,1),size(im,2));
-    for n = 1:sz
-        x0 = floor(s.BoundingBox(n,2));
-        y0 = floor(s.BoundingBox(n,1));
-        ix = 0:size(s.FilledImage{n},1)-1;
-        iy = 0:size(s.FilledImage{n},2)-1;
-        BoxMask(x0:(x0+ix),y0:(y0+iy)) = s.FilledImage{n}; 
-    end
-    
-    % Final set of erodes for good measure (noise removal)
-    se = strel('cube',2);
-    BoxMask = imerode(BoxMask,se);
+    Conveyor_BW = imclose(Conveyor_BW,strel('square',12));
+    BoxMask = imclose(~Conveyor_BW,strel('square',12));
+    figure(2); imshow(BoxMask);
     
     if (any(BoxMask(:)))
         % Extract box regionprops
@@ -66,11 +50,11 @@ function [blocks, box] = detectConveyorBlocks(im)
         im(~ColourMask(:,:,[1, 1, 1])) = 0;
 
         % Plot image with box mask 
-        figure(2); imshow(im);
+        figure(3); imshow(im);
 
         % Extract shape centers
         shape_stats = regionprops('table',ColourMask,'Area','Centroid');
-        ShapesIdx = find(shape_stats.Area >50 & shape_stats.Area < 300);
+        ShapesIdx = find(shape_stats.Area > 50 & shape_stats.Area < 300);
         blocks(:,1:2) = shape_stats.Centroid(ShapesIdx,:);
 
         % Plot Centers
