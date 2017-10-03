@@ -8,6 +8,11 @@
 
 classdef qwirkle < handle
     properties (Access = public)
+                    %handles
+            h_plotBoard;
+            h_plotBox;
+            
+            loadBox;
         
     end
     methods
@@ -17,6 +22,12 @@ classdef qwirkle < handle
             %sets default values for the gui. Starts gui and attempts to
             %connect client.
             
+            
+            %handles
+            h_plotBoard
+            h_plotBox
+            
+            loadBox = 0;
         end
         
     end

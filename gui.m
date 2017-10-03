@@ -275,7 +275,9 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
 
 
     [x, y] = ginput(1);
-
+    M = undistortPoints([x,y], ui.tableParams)
+    x = M(1,1);
+    y = M(1,2);
     z = 0;
     y =1200 - y;
     if(x>1600) || (y>1200) || (x<0) || (y<0)
@@ -310,6 +312,9 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
     global ui;
 
     [x, y] = ginput(1);
+    M = undistortPoints([x,y], ui.conveyorParams);
+    x = M(1,1);
+    y = M(1,2);
     z = 10;
     y =1200 - y;
     if(x>1600) || (y>1200) || (x<0) || (y<0)

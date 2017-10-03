@@ -54,7 +54,7 @@ function timerCallback(obj, event, ui)
     %% ---------- receive serial from table camera ------------------------
     % 1) receive the tcp
     % 2) use gui plot handle for setting the data in the table camera plot
-    s = sprintf('IMG_0%02d.jpg',round(randi([1 99],1,1)));
+    %s = sprintf('IMG_0%02d.jpg',round(randi([1 99],1,1)));
     try
        %I = imread(s);
        %I = imread('IMG_005.jpg');
@@ -103,6 +103,9 @@ function timerCallback(obj, event, ui)
     ui.count = ui.count+1;
     
     %% Check Box position
+    %%if qwirkle.loadBox == 1
+        
+    %%end
     
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%

@@ -10,14 +10,14 @@ if  strcmp('table',positionID)
     tempParam = load('cameraParamsTable.mat');
     params = tempParam.cameraParamsTable;
 elseif strcmp('conveyor',positionID)
-    tempParam = load('cameraParams.mat');
-    params = tempParam.cameraParams;
+    tempParam = load('conveyorParams.mat');
+    params = tempParam.conveyorParams;
 else
     disp('positionID outside of range.');
 end
-
+tic;
 output = undistortImage(inputImage,params, 'Outputview', 'same');
-
+toc;
 figure(1);
 subplot(1,2,1);
 imshow(inputImage);
