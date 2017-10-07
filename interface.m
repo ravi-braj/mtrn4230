@@ -40,6 +40,10 @@ classdef interface < handle
         tableObj
         tableRGB
         
+        % Camera Parameters
+        conveyorParams
+        tableParams
+        
         %Queue vairable
         commandQueue
         
@@ -91,8 +95,8 @@ classdef interface < handle
             obj.motionMode = string('linear');
             
             
-            obj.robotTCP.openTCP('127.0.0.1', 1025);
-            %obj.robotTCP.openTCP('192.168.125.1', 1025);
+            %obj.robotTCP.openTCP('127.0.0.1', 1025);
+            obj.robotTCP.openTCP('192.168.125.1', 1025);
             
             obj.detectBlocks = 0;
             

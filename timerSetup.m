@@ -22,6 +22,11 @@ function timerSetup(obj, event, interface)
     catch
         
     end
+    ui.conveyorParams = load('conveyorParams.mat');
+    ui.conveyorParams = ui.conveyorParams.conveyorParams;
+    ui.tableParams = load('cameraParamsTable.mat');
+    ui.tableParams = ui.tableParams.cameraParamsTable;
+
         
     pause(1);
 
