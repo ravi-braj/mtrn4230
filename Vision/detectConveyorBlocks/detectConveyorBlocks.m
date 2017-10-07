@@ -3,16 +3,27 @@ function [blocks, box] = detectConveyorBlocks(im)
     % blocks which reside within a carry box. It returns blocks which is 
     % structured [x, y]. This allows the robot arm to swap blocks.
     
-    % Erase anything outside conveyor region of interest (Conveyor belt)
-    im(:,1:556,:) = 0;
-    im(:,1137:end,:) = 0;
-    im(705:end,:,:) = 0;
-    figure(1); imshow(im);
+    % Generate conveyor mask
+    Conveyor_BW = ~createConMask(im);
+    Conveyor_BW(:,1:556) = 0;
+    Conveyor_BW(:,1137:end) = 0;
+    Conveyor_BW(705:end,:) = 0;
+    figure(1); imshow(Conveyor_BW);
     
-    % Generate conveyor mask (inverse should leave the box)
-    Conveyor_BW = conveyorMask(im);
-    Conveyor_BW = imclose(Conveyor_BW,strel('square',12));
-    BoxMask = imclose(~Conveyor_BW,strel('square',12));
+    %Insert Filled Image and create BoxMask
+    con_stats = regionprops('table',Conveyor_BW,'Area','BoundingBox','FilledImage');
+    [~, idx] = max(con_stats.Area);
+    
+    BoxMask = false(size(Conveyor_BW));
+    
+    if con_stats.Area(idx) > 40000
+        x0 = floor(con_stats.BoundingBox(idx,2));
+        y0 = floor(con_stats.BoundingBox(idx,1));
+        ix = 0:size(con_stats.FilledImage{idx},1)-1;
+        iy = 0:size(con_stats.FilledImage{idx},2)-1;
+        BoxMask(x0+ix,y0+iy) = con_stats.FilledImage{idx}; 
+    end
+    
     figure(2); imshow(BoxMask);
     
     if (any(BoxMask(:)))
@@ -33,18 +44,12 @@ function [blocks, box] = detectConveyorBlocks(im)
 
         % Apply BoxMask to Image (leaves only the box)
         im(~BoxMask(:,:,[1, 1, 1])) = 0;
-
+        
         % Plot BoxMask
         figure(1); imshow(im); hold on; plot(box.x,box.y,'*');
 
         % Generate colour/shape mask
-        BW_Red = ConvRedMask(im);
-        BW_Orange = ConvRedMask(im);
-        BW_Yellow = ConvYellowMask(im);
-        BW_Green = ConvGreenMask(im);
-        BW_Blue = ConvBlueMask(im);
-        BW_Purple = ConvPurpleMask(im);
-        ColourMask = BW_Red | BW_Orange | BW_Yellow | BW_Green | BW_Blue | BW_Purple;
+        ColourMask = createBlocksMask(im);
 
         % Apply colour/shape mask
         im(~ColourMask(:,:,[1, 1, 1])) = 0;
@@ -54,7 +59,7 @@ function [blocks, box] = detectConveyorBlocks(im)
 
         % Extract shape centers
         shape_stats = regionprops('table',ColourMask,'Area','Centroid');
-        ShapesIdx = find(shape_stats.Area > 50 & shape_stats.Area < 300);
+        ShapesIdx = find(shape_stats.Area > 200 & shape_stats.Area < 1500);
         blocks(:,1:2) = shape_stats.Centroid(ShapesIdx,:);
 
         % Plot Centers
