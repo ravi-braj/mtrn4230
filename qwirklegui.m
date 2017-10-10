@@ -78,6 +78,6 @@ function Load_Conveyor_Callback(hObject, eventdata, handles)
 % hObject    handle to Load_Conveyor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global qwirkle;
-qwirkle.loadBox = 1;
+global ui;
+ui.loadBox = 1;
 

@@ -93,19 +93,51 @@ function timerCallback(obj, event, ui)
             ui.h_textConveyor = text(ui.clientGUIData.camera_conveyor, centroid(:,1), centroid(:,2), boxtext, 'Color', 'red', 'FontSize',6);
         end
     end
+    
+    %% Check Box position
+    if ui.loadBox == 1
+        % If Box is not in position. Turn on conveyor. If on leave it on
+        % If Box is in position, Turn conveyor off, set loadBox to 0
+        [~, boxpos] = detectConveyorBlocks(ui.conveyorRGB);
+        if boxpos.y <= 100 || isempty(boxpos)
+           % If conveyor is off. Turn Conveyor on
+           if ui.IOs(3) ~= 1
+                    ui.setIOs = ui.IOs;
+                    ui.setIOs(3) = ~ui.IOs(3);
+                    ui.setIOs(4) = 1;
+                    ui.IOs = ui.setIOs;
+                    ui.commandQueue = [ui.commandQueue, 1];
+           end
+           % If direction is incorrect. Correct Conveyor direction
+%            if ui.IO(4) ~= 1
+%                     ui.setIOs = ui.IOs;
+%                     ui.setIOs(4) = ~ui.IOs(4);
+%                     ui.IOs = ui.setIOs;
+%                     ui.commandQueue = [ui.commandQueue, 1];
+%                
+%            end
+        else
+            % As Load Box is complete. Turn conveyor off
+            ui.setIOs = ui.IOs;
+            ui.setIOs(3) = ~ui.IOs(3);
+            ui.IOs = ui.setIOs;
+            ui.commandQueue = [ui.commandQueue, 1];
+            
+            % As Load Box complete. Set flag to 0 again
+            ui.loadBox = 0;
+        end
+        
+    end
+    
 
     
         
-    %%----------- execute queued commands (added by GUI) ------
+    %% ----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
     
     %------------- Increment counter -------------------------
     ui.count = ui.count+1;
     
-    %% Check Box position
-    %%if qwirkle.loadBox == 1
-        
-    %%end
     
     
     %% %%%%%%%%%%%% EXIT PROGRAM CONDITION %%%%%%%%%%%%%%%%%%%
