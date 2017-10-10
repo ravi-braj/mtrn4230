@@ -1,47 +1,60 @@
+%%Initialize Board
 StartBoard = zeros(9,9,2);
-for y  = 1:9
-    for x = 1:9
-        StartBoard(x,y,1) = 0; %%Color
-        StartBoard(x,y,2) = 0; %%Shape
-    end
-end
-
 Board = StartBoard;
+%%Insert first piece in the middile
 Board(5,5,:) = [randi([1 6]),randi([1 6])];
-%%Making Fake Pieces
+
+%%Initialize Pieces
 GamePieces = zeros(6,2);
-for y = 1:6
-    GamePieces(y,1) = randi([1 6]); %%Color
-    GamePieces(y,2) = randi([1 6]); %%Shape
-end
-move = 0;
-while(1)
+P1GamePieces = GamePieces;
+P2GamePieces = GamePieces;
+%%Making Fake Pieces
+% for y = 1:6
+%     GamePieces(y,1) = randi([1 6]); %%Color
+%     GamePieces(y,2) = randi([1 6]); %%Shape
+% end
+QUIT = false;
+button = 0;
+Player = 1;
+P1Action = 'Waiting';
+P2Action = 'Waiting';
+P1TotalScore = 0;
+P2TotalScore = 0;
+while(QUIT==false)
+    %%Show the Game
     Game_Interface;
-    pause();
-    %%Fill missing pieces
+%     disp('Click to Fill Hands');
+%     [x, y,button] = ginput(1);
+%     if button == 113
+%         disp('QUIT');
+%         break;
+%     end
+    %%Fill Missing Pieces for both players
     for y = 1:6
-        if GamePieces(y,1) == 0
-            GamePieces(y,1) = randi([1 6]); %%Color
-            GamePieces(y,2) = randi([1 6]); %%Shape
+        if P1GamePieces(y,1) == 0
+            P1GamePieces(y,1) = randi([1 6]); %%Color
+            P1GamePieces(y,2) = randi([1 6]); %%Shape
+        end
+         if P2GamePieces(y,1) == 0
+            P2GamePieces(y,1) = randi([1 6]); %%Color
+            P2GamePieces(y,2) = randi([1 6]); %%Shape
         end
     end
-    Game_Interface
-    disp('Replace Pieces');
-    pause();
-    %%AI TIME!!
-    [PieceNum,X,Y] = QwirkleAI(Board,GamePieces);
-    if PieceNum ~= 0
-        MovingPiece = GamePieces(PieceNum,:);
-        GamePieces(PieceNum,:) = [0 0];
-        %%Place Piece
-        Board(X,Y,:) = MovingPiece;
-        move = move +1;
-        text = sprintf('Move Number %d',move);
-        fprintf(text);
-    else
-        disp('NO MOVES AVAILABLE');
-        disp('Please SWAP');
-        pause();
-        GamePieces(end,:) = [0 0];
+    %%Show the Game Again
+    Game_Interface;
+   % disp('Player');
+   % disp(Player);
+    if Player == 1
+        HumanPlayer
+        Player = 2;
+    elseif Player == 2
+        HumanPlayer
+        Player = 1;
+    end;
+    
+    if button == 113
+        QUIT = true;
+        disp('QUIT');
     end
 end
+close Figure 1;

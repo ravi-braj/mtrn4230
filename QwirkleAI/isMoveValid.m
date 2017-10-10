@@ -10,7 +10,13 @@ if isEmptyBoundary(x,y,Board) == true
     if (isEmptyBoundary(x-1,y,Board) == false) && (Move_Found ~= 2)
         Match = PieceMatch(CheckingPiece,x-1,y,Board);
         if Match ~= 0
-            Move_Found = CheckDirection(CheckingPiece,Match,'left',x-1,y,Board,0);
+            Move_FoundLeft = CheckDirection(CheckingPiece,Match,'left',x-1,y,Board,0);
+            Move_FoundRight = CheckDirection(CheckingPiece,Match,'right',x+1,y,Board,0);
+            if (Move_FoundLeft == 1) && (Move_FoundRight == 1) 
+                Move_Found =1;
+            else
+                Move_Found =2;
+            end
             if Move_Found ~= 2
             Match = Match*-1 + 3;
             Move_Found = CheckDirection(CheckingPiece,Match,'left',x-1,y,Board,1);
@@ -23,7 +29,13 @@ if isEmptyBoundary(x,y,Board) == true
     if (isEmptyBoundary(x+1,y,Board) == false) && (Move_Found ~= 2)
         Match = PieceMatch(CheckingPiece,x+1,y,Board);
         if Match ~= 0
-            Move_Found = CheckDirection(CheckingPiece,Match,'right',x+1,y,Board,0);
+            Move_FoundLeft = CheckDirection(CheckingPiece,Match,'left',x-1,y,Board,0);
+            Move_FoundRight = CheckDirection(CheckingPiece,Match,'right',x+1,y,Board,0);
+            if (Move_FoundLeft == 1) && (Move_FoundRight == 1) 
+                Move_Found =1;
+            else
+                Move_Found =2;
+            end         
             if Move_Found ~= 2
             Match = Match*-1 + 3;
             Move_Found = CheckDirection(CheckingPiece,Match,'right',x+1,y,Board,1);
@@ -36,7 +48,13 @@ if isEmptyBoundary(x,y,Board) == true
     if (isEmptyBoundary(x,y-1,Board) == false) && (Move_Found ~= 2)
         Match = PieceMatch(CheckingPiece,x,y-1,Board);
         if Match ~= 0
-            Move_Found = CheckDirection(CheckingPiece,Match,'up',x,y-1,Board,0);
+            Move_FoundUp = CheckDirection(CheckingPiece,Match,'up',x,y-1,Board,0);
+            Move_FoundDown = CheckDirection(CheckingPiece,Match,'down',x,y+1,Board,0);
+            if (Move_FoundUp == 1) && (Move_FoundDown == 1) 
+                Move_Found =1;
+            else
+                Move_Found =2;
+            end
             if Move_Found ~= 2
             Match = Match*-1 + 3;
             Move_Found = CheckDirection(CheckingPiece,Match,'up',x,y-1,Board,1);
@@ -49,7 +67,14 @@ if isEmptyBoundary(x,y,Board) == true
     if (isEmptyBoundary(x,y+1,Board) == false) && (Move_Found ~= 2)
         Match = PieceMatch(CheckingPiece,x,y+1,Board);
         if Match ~= 0
-            Move_Found = CheckDirection(CheckingPiece,Match,'down',x,y+1,Board,0);
+            Move_FoundUp = CheckDirection(CheckingPiece,Match,'up',x,y-1,Board,0);
+            Move_FoundDown = CheckDirection(CheckingPiece,Match,'down',x,y+1,Board,0);
+            if (Move_FoundUp == 1) && (Move_FoundDown == 1) 
+                Move_Found =1;
+            else
+                Move_Found =2;
+            end
+
             if Move_Found ~= 2
             Match = Match*-1 + 3;
             Move_Found = CheckDirection(CheckingPiece,Match,'down',x,y+1,Board,1);
