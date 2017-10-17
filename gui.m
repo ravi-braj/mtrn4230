@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 12-Sep-2017 17:28:29
+    % Last Modified by GUIDE v2.5 17-Oct-2017 17:23:01
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -296,7 +296,7 @@ function choosePoint_table_Callback(hObject, eventdata, handles)
     
     ui.setPose(1) = RobFramex;
     ui.setPose(2) = RobFramey;
-    ui.setPose(3) = 147+40;
+    ui.setPose(3) = 147+12;
     
     
     set(ui.clientGUIData.set_pose_x, 'String', num2str(RobFramex));
@@ -329,8 +329,8 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
     pxToMM = 0.659375;
     
     RobFramey = (x - conveyorOffsetXPx)*pxToMM;
-    RobFramex = (-y + conveyorOffsetYPx)*pxToMM;
-    RobFramez = 52;
+    RobFramex = (-y + conveyorOffsetYPx)*pxToMM-16;
+    RobFramez = 40;
     ui.setPose(1) = RobFramex;
     ui.setPose(2) = RobFramey;
     ui.setPose(3) = RobFramez;

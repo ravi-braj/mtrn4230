@@ -12,6 +12,10 @@ classdef interface < handle
         clientGUI
         clientGUIData
         
+        %User interface variables
+        qwirkleGUI
+        qwirkleGUIData
+        
         %TCP object
         robotTCP
         
@@ -74,6 +78,9 @@ classdef interface < handle
         %Counter
         count
         
+        %Qwirkle
+        loadBox
+        
     end
     methods
         
@@ -84,6 +91,9 @@ classdef interface < handle
             %connect client.
             obj.clientGUI = gui();
             obj.clientGUIData = guidata(obj.clientGUI);
+                      
+            obj.qwirkleGUI = qwirklegui();
+            obj.qwirkleGUIData = guidata(obj.qwirkleGUI);
             
             %----------- robot tcp -------------------%
             obj.robotTCP = abb_tcp();
