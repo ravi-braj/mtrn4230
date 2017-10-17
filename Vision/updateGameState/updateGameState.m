@@ -1,4 +1,5 @@
-function [Player1,Player2] = UpdateGameState(im)
+function [Player1,Player2] = updateGameState(im)
+    
     figure(1);
     imshow(im);
 
@@ -32,8 +33,8 @@ function [Player1,Player2] = UpdateGameState(im)
             convnetColour, convnetShape);
 
         % Update Board
-        Player1(i,1) = shape;
-        Player1(i,2) = colour;
+        Player1(i,1) = colour;
+        Player1(i,2) = shape;
         
         % Extract a player2 grid slot
         rgbBlock2 = imcrop(im,[Origin2(1),Origin2(2)+(i-1)*55,49,49]);        
@@ -45,11 +46,11 @@ function [Player1,Player2] = UpdateGameState(im)
             convnetColour, convnetShape);
 
         % Update Board
-        Player2(i,1) = shape;
-        Player2(i,2) = colour;
+        Player2(i,1) = colour;
+        Player2(i,2) = shape;
         
-        disp("Slot " + i + " | S1: " + Player1(i,1) + " C1: " + ...
-            Player1(i,2) + " | S1: " + Player2(i,1) + " C2: " + ...
-            Player2(i,2) );
+%         disp('Slot ' + i + ' | S1: ' + Player1(i,1) + ' C1: ' + ...
+%             Player1(i,2) + ' | S1: ' + Player2(i,1) + ' C2: ' + ...
+%             Player2(i,2) );
     end
 end
