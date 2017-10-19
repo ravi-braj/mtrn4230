@@ -48,7 +48,7 @@ while(QUIT==false)
         HumanPlayer
         Player = 2;
     elseif Player == 2
-        HumanPlayer
+        ComputerPlayer
         Player = 1;
     end;
     
