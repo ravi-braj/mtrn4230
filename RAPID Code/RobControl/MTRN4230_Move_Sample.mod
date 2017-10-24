@@ -19,24 +19,33 @@ MODULE MTRN4230_Move_Sample
     PERS byte command;
     PERS bool quit;
     
+    VAR robtarget pTarget; ! temporary variable for translational jogging
+    VAR jointtarget jTarget;    ! temporary variable for joint jogging
+    VAR num jogT_rate := 10; ! mm/s
+    VAR num jogJ_rate := 2; ! deg/s
+    
     ! The Main prodedure. When you select 'PP to Main' on the FlexPendant, it will go to this procedure.
     PROC main()
         
-        VAR robtarget pTarget; ! temporary variable for translational jogging
-        VAR jointtarget jTarget;    ! temporary variable for joint jogging
-        VAR num jogT_rate := 10; ! mm/s
-        VAR num jogJ_rate := 2; ! deg/s
-        
         WaitTime 1;
+        StartMove;
     
         MoveAbsJ jtCalibPos, speed, fine, tSCup;
-        jTarget := CJointT(\TaskRef:=RobControlId);
+        jTarget := CJointT(\TaskRef:=T_ROB1Id);
         jTarget.robax.rax_5 := jTarget.robax.rax_5 + jogJ_rate;
         MoveAbsJ jTarget, speed, fine, tSCup;
         
+        
         WHILE quit = FALSE DO
+            ProcessCommands;
             
-            waituntil command <> 0;
+            WaitTime 0.02;
+        ENDWHILE
+        
+    ENDPROC
+    
+    PROC ProcessCommands()
+        waituntil command <> 0;
             
             IF command = 1 THEN     ! Move to new position
                 
@@ -82,7 +91,7 @@ MODULE MTRN4230_Move_Sample
                 command := 0;
                 
             ELSEIF command = 3 THEN     ! Jog
-                pTarget := CRobT(\TaskRef:=RobControlId, \Tool:=tSCup);            
+                pTarget := CRobT(\TaskRef:=T_ROB1Id, \Tool:=tSCup);            
                 IF jog_input < 7 THEN   ! Jog position
     
                     IF jog_input = 1 THEN   ! x+
@@ -105,7 +114,7 @@ MODULE MTRN4230_Move_Sample
                         MoveL pTarget, speed, fine, tSCup;
                     ENDIF
                 ELSE       ! Jog joints
-                    jTarget := CJointT(\TaskRef:=RobControlId);
+                    jTarget := CJointT(\TaskRef:=T_ROB1Id);
                     
                     IF jog_input = 7 THEN   ! j1+
                         jTarget.robax.rax_1 := jTarget.robax.rax_1 + jogJ_rate;
@@ -148,11 +157,20 @@ MODULE MTRN4230_Move_Sample
                 
                 command := 0;
                 
+            ELSEIF command = 4 THEN     ! Move to new position
+                read_position := CPos (\Tool:=tSCup);
+                
+                ! Motion commands
+                MoveL Offs(pBase, read_position.x, read_position.y, 200), speed, fine, tSCup;
+                MoveL Offs(pBase, write_position.x, write_position.y, 200), speed, fine, tSCup;
+                MoveL Offs(pBase, read_position.x, read_position.y, write_position.z), speed, fine, tSCup;
+                
+                command := 0;
             ENDIF
             
-            WaitTime 0.02;
-        ENDWHILE
-        
+            ERROR
+                StartMove;
+            TRYNEXT;
     ENDPROC
     
 ENDMODULE

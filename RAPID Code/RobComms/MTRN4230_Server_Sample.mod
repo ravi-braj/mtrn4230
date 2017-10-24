@@ -12,17 +12,17 @@ MODULE MTRN4230_Server_Sample
     PERS tooldata tmp_tSCup:=[TRUE,[[0,0,65],[1,0,0,0]],[0.5,[0,0,20],[1,0,0,0],0,0,0]];
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS byte jog_input := 2;
+    PERS byte jog_input := 15;
 
     PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
-    PERS byte read_switches{6} := [1,1,1,1,0,1];    !E-STOP STATES AND SWITCHES
+    PERS byte read_switches{6} := [1,0,1,1,0,0];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [-229.756,440.266,-113];
+    PERS pos write_position := [-189.024,430.487,40];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     
-    PERS pos read_position := [-269.769,440.245,34.0025];
-    PERS jointtarget read_joints := [[121.499,77.1595,-28.841,0.000290891,41.6935,121.503],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [-188.936,430.464,39.9907];
+    PERS jointtarget read_joints := [[113.697,67.2717,-9.71124,-3.86987E-05,32.441,113.697],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
     PERS speeddata speed := [100,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
@@ -32,16 +32,19 @@ MODULE MTRN4230_Server_Sample
     PERS byte command := 0;
     PERS bool quit := FALSE;
     
+    ! RawBytes buffer for data manipulation
+    VAR rawbytes raw_data;
+    VAR num tmpf := 0;
+    VAR byte tmpb := 0;
+    
+    ! Message requests and replies
+    VAR byte requestMsg{1};
+    VAR bool connected;
+        
     PROC main()
-        ! RawBytes buffer for data manipulation
-        VAR rawbytes raw_data;
-        VAR num tmpf := 0;
-        VAR byte tmpb := 0;
         
-        ! Message requests and replies
-        VAR byte requestMsg{1};
         errorMsg{1} := 0;
-        
+    
         ! Initialise/reset persistent variables
         jog_input := 0;
 
@@ -61,143 +64,18 @@ MODULE MTRN4230_Server_Sample
         
         command := 0;
         quit := FALSE;
-        
-        ListenForAndAcceptConnection;
-        
-        ! Receive a new request from the client.
-        SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;    
-        
+        connected := FALSE;
+               
         WHILE TRUE DO     ! Keep server alive until close command recieved
-            ClearRawBytes raw_data;
-            
-            IF requestMsg{1} = StrToByte("c" \Char) THEN   ! Client requesting to close connection
-            
-                quit := TRUE;
-                
-            ELSEIF requestMsg{1} = StrToByte("x" \Char) THEN   ! Client requested e-stops and switches data
-                read_switches{1} := VES;
-                read_switches{2} := VEN;
-                read_switches{3} := VGS;
-                read_switches{4} := VMAN;
-                read_switches{5} := VMB;
-                read_switches{6} := VML;
-            
-                FOR i FROM 1 TO Dim(read_switches,1) DO
-                    PackRawBytes read_switches{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
-                ENDFOR
-                
-                SocketSend client_socket \RawData:=raw_data;    ! Send io_state
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
-
-            ELSEIF requestMsg{1} = StrToByte("p" \Char) THEN   ! Client requested pose_state data
-                read_position := CPos (\Tool:=tmp_tSCup);
-                read_joints := CJointT (\TaskRef:=RobControlId);
-
-                PackRawBytes read_position.x, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_position.y, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_position.z, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                
-                PackRawBytes read_joints.robax.rax_1, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_joints.robax.rax_2, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_joints.robax.rax_3, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_joints.robax.rax_4, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_joints.robax.rax_5, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                PackRawBytes read_joints.robax.rax_6, raw_data, (RawBytesLen(raw_data)+1) \Float4;
-                
-                SocketSend client_socket \RawData:=raw_data;    ! Send pose
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
-                
-            ELSEIF requestMsg{1} = StrToByte("i" \Char) THEN   ! Client requested io_state data
-                    read_io{1} := DOutput (DO10_1);
-                    read_io{2} := DOutput (DO10_2);
-                    read_io{3} := DOutput (DO10_3);
-                    read_io{4} := DOutput (DO10_4);
-                    read_io{5} := DInput (DI10_1);
-            
-                FOR i FROM 1 TO Dim(read_io,1) DO
-                    PackRawBytes read_io{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
-                ENDFOR
-                
-                SocketSend client_socket \RawData:=raw_data;    ! Send io_state
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
-            
-            ELSEIF requestMsg{1} = StrToByte("P" \Char) THEN   ! Client wants to set pose
-                
-                SocketReceive client_socket \RawData:=raw_data;
-                
-                UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
-                write_position.x := tmpf;
-                UnpackRawBytes raw_data, 5, tmpf \Float4;  ! 4 bytes per value
-                write_position.y := tmpf;
-                UnpackRawBytes raw_data, 9, tmpf \Float4;  ! 4 bytes per value
-                write_position.z := tmpf;
-                UnpackRawBytes raw_data, 13, tmpf \Float4;  ! 4 bytes per value
-                
-                command := 1;   ! Execute move to pose
-                
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
-                
-            ELSEIF requestMsg{1} = StrToByte("I" \Char) THEN   ! Client wants to set io_state
-
-                SocketReceive client_socket \RawData:=raw_data;
-                
-                FOR i FROM 1 TO Dim(write_io,1) DO
-                    UnpackRawBytes raw_data, i, tmpb \Hex1;   ! 1 byte per value
-                    write_io{i} := tmpb;
-                ENDFOR
-                
-                command := 2;   ! Execute io updates
-                
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
-            
-            ELSEIF requestMsg{1} = StrToByte("S" \Char) THEN   ! Client wants to set speed
-
-                SocketReceive client_socket \RawData:=raw_data;   
-                
-                UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
-                speed.v_tcp := tmpf;
-                
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
-                
-            ELSEIF requestMsg{1} = StrToByte("M" \Char) THEN   ! Client wants to set motion mode
-
-                SocketReceive client_socket \RawData:=raw_data;
-                
-                UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per values
-                mode := tmpb;
-                
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
-                
-            ELSEIF requestMsg{1} = StrToByte("G" \Char) THEN   ! Client wants to set pause state
-
-                SocketReceive client_socket \RawData:=raw_data;
-                
-                UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
-                pause := tmpb;
-                
-                IF pause = 1 THEN
-                    StopMove;
-                ELSE
-                    StartMove;
-                ENDIF
-                
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
-                
-            ELSEIF requestMsg{1} = StrToByte("J" \Char) THEN   ! Client wants to jog robot
-
-                SocketReceive client_socket \RawData:=raw_data;
-                
-                UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
-                jog_input := tmpb;
-                
-                command := 3;   ! Execute move to pose
-                
-                SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
-            
-            ENDIF
-            
+            ListenForAndAcceptConnection;
+            connected := TRUE;
+        
             ! Receive a new request from the client.
-            SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;
+            SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;    
+            
+            WHILE connected DO
+                ProcessConnection;
+            ENDWHILE
             
         ENDWHILE
 
@@ -229,5 +107,154 @@ MODULE MTRN4230_Server_Sample
     PROC CloseConnection()
         SocketClose client_socket;
     ENDPROC
-		
+    
+    PROC ProcessConnection()
+        ClearRawBytes raw_data;
+        
+        IF requestMsg{1} = StrToByte("c" \Char) THEN   ! Client requesting to close connection
+        
+            quit := TRUE;
+            
+        ELSEIF requestMsg{1} = StrToByte("x" \Char) THEN   ! Client requested e-stops and switches data
+            read_switches{1} := VES;
+            read_switches{2} := VEN;
+            read_switches{3} := VGS;
+            read_switches{4} := VMAN;
+            read_switches{5} := VMB;
+            read_switches{6} := VML;
+        
+            FOR i FROM 1 TO Dim(read_switches,1) DO
+                PackRawBytes read_switches{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
+            ENDFOR
+            
+            SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+
+        ELSEIF requestMsg{1} = StrToByte("p" \Char) THEN   ! Client requested pose_state data
+            read_position := CPos (\Tool:=tmp_tSCup);
+            read_joints := CJointT (\TaskRef:=T_ROB1Id);
+
+            PackRawBytes read_position.x, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_position.y, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_position.z, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            
+            PackRawBytes read_joints.robax.rax_1, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_joints.robax.rax_2, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_joints.robax.rax_3, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_joints.robax.rax_4, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_joints.robax.rax_5, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            PackRawBytes read_joints.robax.rax_6, raw_data, (RawBytesLen(raw_data)+1) \Float4;
+            
+            SocketSend client_socket \RawData:=raw_data;    ! Send pose
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+            
+        ELSEIF requestMsg{1} = StrToByte("i" \Char) THEN   ! Client requested io_state data
+                read_io{1} := DOutput (DO10_1);
+                read_io{2} := DOutput (DO10_2);
+                read_io{3} := DOutput (DO10_3);
+                read_io{4} := DOutput (DO10_4);
+                read_io{5} := DInput (DI10_1);
+        
+            FOR i FROM 1 TO Dim(read_io,1) DO
+                PackRawBytes read_io{i}, raw_data, (RawBytesLen(raw_data)+1) \hex1;
+            ENDFOR
+            
+            SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+        
+        ELSEIF requestMsg{1} = StrToByte("P" \Char) THEN   ! Client wants to set pose
+            
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
+            write_position.x := tmpf;
+            UnpackRawBytes raw_data, 5, tmpf \Float4;  ! 4 bytes per value
+            write_position.y := tmpf;
+            UnpackRawBytes raw_data, 9, tmpf \Float4;  ! 4 bytes per value
+            write_position.z := tmpf;
+            UnpackRawBytes raw_data, 13, tmpf \Float4;  ! 4 bytes per value
+            
+            command := 1;   ! Execute move to pose
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+            
+        ELSEIF requestMsg{1} = StrToByte("I" \Char) THEN   ! Client wants to set io_state
+
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            FOR i FROM 1 TO Dim(write_io,1) DO
+                UnpackRawBytes raw_data, i, tmpb \Hex1;   ! 1 byte per value
+                write_io{i} := tmpb;
+            ENDFOR
+            
+            command := 2;   ! Execute io updates
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+        
+        ELSEIF requestMsg{1} = StrToByte("S" \Char) THEN   ! Client wants to set speed
+
+            SocketReceive client_socket \RawData:=raw_data;   
+            
+            UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
+            speed.v_tcp := tmpf;
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+            
+        ELSEIF requestMsg{1} = StrToByte("M" \Char) THEN   ! Client wants to set motion mode
+
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per values
+            mode := tmpb;
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
+            
+        ELSEIF requestMsg{1} = StrToByte("G" \Char) THEN   ! Client wants to set pause state
+
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
+            pause := tmpb;
+            
+            !IF pause = 1 THEN
+            !    StopMove;
+            !ELSE
+            !    StartMove;
+            !ENDIF
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
+            
+        ELSEIF requestMsg{1} = StrToByte("J" \Char) THEN   ! Client wants to jog robot
+
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpb \Hex1;   ! 1 byte per value
+            jog_input := tmpb;
+            
+            command := 3;   ! Execute move to pose
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
+        ELSEIF requestMsg{1} = StrToByte("Z" \Char) THEN   ! Client wants to safe move robot
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
+            write_position.x := tmpf;
+            UnpackRawBytes raw_data, 5, tmpf \Float4;  ! 4 bytes per value
+            write_position.y := tmpf;
+            UnpackRawBytes raw_data, 9, tmpf \Float4;  ! 4 bytes per value
+            write_position.z := tmpf;
+            UnpackRawBytes raw_data, 13, tmpf \Float4;  ! 4 bytes per value
+            
+            command := 4;   ! Execute move to pose
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+        ENDIF
+        
+        ! Receive a new request from the client.
+        SocketReceive client_socket \Data:=requestMsg \ReadNoOfBytes:=1;
+            
+        ERROR
+            connected := FALSE;
+            TRYNEXT;
+    ENDPROC
 ENDMODULE
