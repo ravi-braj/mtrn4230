@@ -165,6 +165,31 @@ classdef abb_tcp < handle
             end
         end
         
+        function setPoseSafe(obj, poseArray)
+             %attempts to set the pose of the robot
+            %Takes in a desired pose position
+            %Written by Aravind Baratha Raj
+            %Last updated 15 September 2017
+
+            disp('Sending poseArray safely')
+            try
+                %send request to send RAPID the i/o array
+                fwrite(obj.socket, 'Z', 'uchar');
+
+                tmp = zeros(1,7);
+                tmp(1:3) = poseArray;
+
+                %send RAPID the i/o array
+                fwrite(obj.socket, tmp, 'float32');
+
+                %read error message
+                obj.error = fread(obj.socket, 1, 'uchar');
+            catch
+                disp('Socket error');
+                obj.connected = false;
+            end
+        end
+        
         %attempts to set the ios of the robot
         function setIOs(obj, ioArray)
             %Attempts to se the IOs of the ABB over tcp
@@ -266,6 +291,8 @@ classdef abb_tcp < handle
                obj.connected = false;                
            end
         end
+        
+        
         
     end
 end

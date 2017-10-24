@@ -10,6 +10,9 @@ function timerCallback(obj, event, ui)
     %av_period = get(obj, 'AveragePeriod')
     fprintf('Timer callback executed. %f seconds since last call\n', get(obj, 'InstantPeriod'));
     
+    
+
+    
     %% %%%%%%%%%%%% CONDITIONAL EXECUTIONS %%%%%%%%%%%%%%
     
     %%------------- Send commands to robot --------------------

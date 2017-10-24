@@ -19,6 +19,9 @@ classdef interface < handle
         %TCP object
         robotTCP
         
+        %motion object
+        motionMaker
+        
         %Switch on or off block detection for performance and speed of program
         detectBlocks
         detectBox
@@ -50,6 +53,7 @@ classdef interface < handle
         
         %Queue vairable
         commandQueue
+        poseQueue %used by safeSetPose only
         
         %Array of strings to display history of commands sent to robot
         commandHistory
@@ -117,6 +121,12 @@ classdef interface < handle
                 set(obj.clientGUIData.connect_tcp,'Enable','off');
                 set(obj.clientGUIData.connect_tcp,'String','Connected'); 
             end
+            
+            %----------- MOTION MAKER ----------------%
+            obj.motionMaker = motion();
+
+            
+            
             
             %----------- PLOT HANDLES ----------------%
             % Set up plots for the handles - use the 'tag' in the GUI as
@@ -273,6 +283,24 @@ classdef interface < handle
                             disp('unpausing robot');
                             comm = string('unpausing robot');
                         end
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                        
+                    case 7 %safe set pose
+                        newPose = obj.poseQueue(1,:);
+                        if(size(obj.poseQueue) == 1)
+                            obj.poseQueue = [];
+                        else
+                            obj.poseQueue = obj.poseQueue(2:end,:);
+                        end
+                        distance = sqrt((newPose(1))^2 + (newPose(2))^2);
+                        if (distance > 500)
+                            comm = sprintf('Pose out of reach');
+                        else
+                            obj.robotTCP.setPoseSafe(newPose);
+                            comm = sprintf('Setting pose safely: [%0.3f, %0.3f, %0.3f]', newPose(1), newPose(2), newPose(3));
+                            disp('sending pose');
+                        end 
+
                         obj.commandHistory = [obj.commandHistory; string(comm)];
 
                     otherwise
