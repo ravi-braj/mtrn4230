@@ -39,6 +39,8 @@ classdef motion < handle
             ui.commandQueue = [ui.commandQueue, 7];
         end
         
+        
+        %assumes that gripper is holding piece
         function obj = placeToPoint(obj, x, y, table)
             global ui;
             %point on table

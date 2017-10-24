@@ -94,6 +94,16 @@ function vacuum_toggle_Callback(hObject, eventdata, handles)
 % hObject    handle to vacuum_toggle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+        %% %%%TESTING PICK AND PLACE %%%%
+        
+        
+    %%%%%% DELETE THIS --- ITS JUST FOR TESTING PICK AND PLACE %%% 
+    ui.motionMaker.pickUpFromPoint(600, 600, 1);
+    ui.motionMaker.placeToPoint(400, 400, 1);
+    ui.motionMaker.pickUpFromPoint(400, 400, 1);
+    ui.motionMaker.placeToPoint(600, 600, 1);
+    
+
 end
 
 

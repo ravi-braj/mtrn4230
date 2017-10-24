@@ -124,6 +124,8 @@ classdef interface < handle
             
             %----------- MOTION MAKER ----------------%
             obj.motionMaker = motion();
+
+            
             
             
             %----------- PLOT HANDLES ----------------%
