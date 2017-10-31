@@ -35,8 +35,8 @@ classdef motion < handle
             obj.board_topLeft = [551, 286];
             obj.board_bottomRight = [1042, 785];
             
-            obj.p1_topLeft = [420, 286];
-            obj.p2_topLeft = [1125, 286];
+            obj.p1_topLeft = [418, 286];
+            obj.p2_topLeft = [1130, 286];
             
             obj.squareSize = 56;
             
@@ -62,14 +62,23 @@ classdef motion < handle
             %go to the point
             ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
             ui.commandQueue = [ui.commandQueue, 7];
+            %go down to point
             ui.poseQueue = cat(1, ui.poseQueue, [x, y, z]);
             ui.commandQueue = [ui.commandQueue, 7];
+
             
             %turn on vacuum
-            ui.setIOs = ui.IOs;
-            ui.setIOs(1) = 1;
-            ui.IOs = ui.setIOs;
-            ui.commandQueue = [ui.commandQueue, 1];
+            if(length(ui.ioQueue>0))
+                newIOs = ui.ioQueue(length(ui.ioQueue));
+            else
+                newIOs = ui.IOs;
+            end
+            newIOs(1) = 1;
+            newIOs(2) = 1;
+            ui.ioQueue = cat(1, ui.ioQueue, newIOs);
+            ui.commandQueue = [ui.commandQueue, 9]; 
+            
+
             
             %go to a point just above the table
             ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
@@ -93,14 +102,19 @@ classdef motion < handle
             ui.commandQueue = [ui.commandQueue, 7];
             
             %turn off vacuum
-            ui.setIOs = ui.IOs;
-            ui.setIOs(1) = 0;
-            ui.IOs = ui.setIOs;
-            ui.commandQueue = [ui.commandQueue, 1];
+            newIOs = ui.IOs;
+
+            newIOs(1) = 0;
+            newIOs(2) = 0;
+            ui.ioQueue = cat(1, ui.ioQueue, newIOs);
+            ui.commandQueue = [ui.commandQueue, 9];            
+
+
             
             %go to a point just above the table
             ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
             ui.commandQueue = [ui.commandQueue, 7];
+            disp('added to queue');
         end
         
         
@@ -188,10 +202,10 @@ classdef motion < handle
             %alternatively, could use topcorner, bottomcorner and board
             %size to determine position of grid squares.
             if(playerID == 0)
-                y_p = obj.p1_topLeft(2) + n*obj.squareSize+0.5*obj.squareSize;
+                y_p = obj.p1_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
                 x_p = obj.p1_topLeft(1) + 0.5*obj.squareSize;
             else
-                y_p = obj.p2_topLeft(2) + n*obj.squareSize+0.5*obj.squareSize;
+                y_p = obj.p2_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
                 x_p = obj.p2_topLeft(1) + 0.5*obj.squareSize;
             end
         end
@@ -228,7 +242,7 @@ function [rs_x, rs_y, rs_z] = convertCoordsConveyor(x, y)
     
     rs_y = (x - conveyorOffsetXPx)*pxToMM;
     rs_x = (-y + conveyorOffsetYPx)*pxToMM-16;
-    rs_z = 40;
+    rs_z = 33;
 end
 
 function [rs_x, rs_y, rs_z] = convertCoordsTable(x, y)
@@ -250,5 +264,5 @@ function [rs_x, rs_y, rs_z] = convertCoordsTable(x, y)
     
     rs_y = (x - tableXoffsetPx)*pxToMM;
     rs_x = (-y + tableYoffsetPx)*pxToMM;    
-    rs_z = 147+12;
+    rs_z = 147+7;
 end

@@ -21,7 +21,7 @@ classdef gameplay < handle
         function replacePiece(obj, player, n)
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromBox();
-            obj.motionMaker.orientPiece();
+            %obj.motionMaker.orientPiece();
             obj.motionMaker.placeToPoint(pieceX, pieceY, 1);
         end
         

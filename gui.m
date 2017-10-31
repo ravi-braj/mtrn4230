@@ -97,8 +97,9 @@ function vacuum_toggle_Callback(hObject, eventdata, handles)
         %% %%%TESTING PICK AND PLACE %%%%
         
         
-    %%%%%% DELETE THIS --- ITS JUST FOR TESTING PICK AND PLACE %%% 
-    ui.playGame(1, 1);
+    %%%%%% DELETE THIS --- ITS JUST FOR TESTING PICK AND PLACE %%%
+    disp('replace');
+    ui.playGame.replacePiece(1, 1);
 
     
 

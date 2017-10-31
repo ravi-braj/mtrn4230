@@ -12,23 +12,25 @@ MODULE MTRN4230_Server_Sample
     PERS tooldata tmp_tSCup:=[TRUE,[[0,0,65],[1,0,0,0]],[0.5,[0,0,20],[1,0,0,0],0,0,0]];
     
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
-    PERS byte jog_input := 15;
+    PERS byte jog_input := 0;
 
-    PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte write_io{4} := [0,0,0,1];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
-    PERS byte read_switches{6} := [1,0,1,1,0,0];    !E-STOP STATES AND SWITCHES
+    PERS byte read_switches{6} := [1,0,1,1,0,1];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [-189.024,430.487,40];
+    PERS pos write_position := [0,0,0];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
+    PERS num write_orientation := 0;
     
-    PERS pos read_position := [-188.936,430.464,39.9907];
-    PERS jointtarget read_joints := [[113.697,67.2717,-9.71124,-3.86987E-05,32.441,113.697],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [0.295529,-438.955,625.077];
+    PERS jointtarget read_joints := [[-89.9614,0.0041762,0.0129134,-3.86987E-05,2.00447,0.00636272],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
     PERS speeddata speed := [100,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
     PERS byte errorMsg{1} := [0];
+    PERS byte ready :=1;
     PERS byte command := 0;
     PERS bool quit := FALSE;
     
@@ -44,6 +46,7 @@ MODULE MTRN4230_Server_Sample
     PROC main()
         
         errorMsg{1} := 0;
+        ready := 1;
     
         ! Initialise/reset persistent variables
         jog_input := 0;
@@ -115,6 +118,13 @@ MODULE MTRN4230_Server_Sample
         
             quit := TRUE;
             
+        ELSEIF requestMsg{1} = StrToByte("X" \Char) THEN   ! Client checking readiness for new active command
+            
+            PackRawBytes ready, raw_data, (RawBytesLen(raw_data)+1) \hex1;
+            
+            SocketSend client_socket \RawData:=raw_data;    ! Send io_state
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+
         ELSEIF requestMsg{1} = StrToByte("x" \Char) THEN   ! Client requested e-stops and switches data
             read_switches{1} := VES;
             read_switches{2} := VEN;
@@ -233,7 +243,8 @@ MODULE MTRN4230_Server_Sample
             
             command := 3;   ! Execute move to pose
             
-            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status    
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status   
+            
         ELSEIF requestMsg{1} = StrToByte("Z" \Char) THEN   ! Client wants to safe move robot
             SocketReceive client_socket \RawData:=raw_data;
             
@@ -248,6 +259,18 @@ MODULE MTRN4230_Server_Sample
             command := 4;   ! Execute move to pose
             
             SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+            
+        ELSEIF requestMsg{1} = StrToByte("N" \Char) THEN   ! Client wants to jog robot
+
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
+            write_orientation := tmpf;
+            
+            command := 5;   ! Execute move to pose
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+            
         ENDIF
         
         ! Receive a new request from the client.

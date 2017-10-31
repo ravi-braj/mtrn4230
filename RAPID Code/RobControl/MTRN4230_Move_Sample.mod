@@ -8,6 +8,7 @@ MODULE MTRN4230_Move_Sample
     
     PERS pos write_position;
     PERS jointtarget write_joints;
+    PERS num write_orientation;
     
     PERS pos read_position;
     PERS jointtarget read_joints;
@@ -17,6 +18,7 @@ MODULE MTRN4230_Move_Sample
     PERS byte pause;         ! pause = 0 (moving), pause = 1 (paused)
     
     PERS byte command;
+    PERS byte ready;
     PERS bool quit;
     
     VAR robtarget pTarget; ! temporary variable for translational jogging
@@ -45,7 +47,8 @@ MODULE MTRN4230_Move_Sample
     ENDPROC
     
     PROC ProcessCommands()
-        waituntil command <> 0;
+        waituntil ready <> 0;
+            ready := 0;
             
             IF command = 1 THEN     ! Move to new position
                 
@@ -55,8 +58,6 @@ MODULE MTRN4230_Move_Sample
                 ELSEIF mode = 1 THEN    ! Execute joint move
                     MoveJ Offs(pBase, write_position.x, write_position.y, write_position.z), speed, fine, tSCup;
                 ENDIF
-                
-                command := 0;
                 
             ELSEIF command = 2 THEN     ! Update states
                     
@@ -87,8 +88,6 @@ MODULE MTRN4230_Move_Sample
                 ELSEIF write_io{4} = 0 THEN
                     ConDirAway;
                 ENDIF
-                
-                command := 0;
                 
             ELSEIF command = 3 THEN     ! Jog
                 pTarget := CRobT(\TaskRef:=T_ROB1Id, \Tool:=tSCup);            
@@ -155,20 +154,26 @@ MODULE MTRN4230_Move_Sample
                     ENDIF
                 ENDIF
                 
-                command := 0;
-                
-            ELSEIF command = 4 THEN     ! Move to new position
+            ELSEIF command = 4 THEN     ! Safe move to new position
                 read_position := CPos (\Tool:=tSCup);
                 
                 ! Motion commands
-                MoveL Offs(pBase, read_position.x, read_position.y, 200), speed, fine, tSCup;
-                MoveL Offs(pBase, write_position.x, write_position.y, 200), speed, fine, tSCup;
-                MoveL Offs(pBase, read_position.x, read_position.y, write_position.z), speed, fine, tSCup;
+                MoveJ Offs(pBase, read_position.x, read_position.y, 200), speed, fine, tSCup;
+                MoveJ Offs(pBase, write_position.x, write_position.y, 200), speed, fine, tSCup;
+                MoveJ Offs(pBase, write_position.x, write_position.y, write_position.z), speed, fine, tSCup;
                 
-                command := 0;
+            ELSEIF command = 5 THEN     ! Orient end effector
+                jTarget := CJointT(\TaskRef:=T_ROB1Id);
+                jTarget.robax.rax_6 := write_orientation;
+                MoveAbsJ jTarget, speed, fine, tSCup;
+                
             ENDIF
             
+            ready := 1;
+            command := 0;
+            
             ERROR
+                ready := 1;
                 StartMove;
             TRYNEXT;
     ENDPROC

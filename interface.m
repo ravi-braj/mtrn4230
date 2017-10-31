@@ -55,6 +55,7 @@ classdef interface < handle
         commandQueue
         poseQueue %used by safeSetPose only
         jointQueue %used for setting joints
+        ioQueue
         
         %Array of strings to display history of commands sent to robot
         commandHistory
@@ -242,6 +243,7 @@ classdef interface < handle
             %Add command to command queue
             if(obj.robotTCP.connected == true)
                 %execute command
+                disp(length(obj.commandQueue));
                 switch nextCommand
                     %Send pose
                     case 1
@@ -324,6 +326,22 @@ classdef interface < handle
                 
 
                         obj.commandHistory = [obj.commandHistory; string(comm)];
+                    
+                    %IO with queuing
+                    case 9
+                        newIO = obj.ioQueue(1,:);
+                        if(size(obj.ioQueue) == 1)
+                            obj.ioQueue = [];
+                        else
+                            obj.ioQueue = obj.ioQueue(2:end,:);
+                        end
+                        obj.IOs = newIO;
+                        obj.robotTCP.setIOs(newIO)
+                        comm = sprintf('Setting I/Os (Q): [%d, %d, %d, %d]', newIO(1), newIO(2), newIO(3), newIO(4));
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                        disp('sending IOs');
+                        
+                        
                     otherwise
                         disp('cannot decipher queue object');
                 end
