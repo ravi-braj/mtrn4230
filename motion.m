@@ -136,7 +136,7 @@ classdef motion < handle
             %read orientation of piece
             
             %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
-            orientation = 20;
+            orientation = 0;
             
             %rotate the end effector by some amount
             global ui;
