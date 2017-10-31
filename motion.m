@@ -43,12 +43,7 @@ classdef motion < handle
             %set orientation point
             obj.orientationPoint = [1140, 709];
             
-            %set the position of the box.
-            global ui;
-            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
-            if(foundBox)
-                obj.boxLocation = [box.x, box.y];
-            end
+
         end
         
         
@@ -63,6 +58,8 @@ classdef motion < handle
                 [x, y, z] = convertCoordsConveyor(x,y);
             end
             %go to the point
+            ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
+            ui.commandQueue = [ui.commandQueue, 7];
             ui.poseQueue = cat(1, ui.poseQueue, [x, y, z]);
             ui.commandQueue = [ui.commandQueue, 7];
             
@@ -73,7 +70,7 @@ classdef motion < handle
             ui.commandQueue = [ui.commandQueue, 1];
             
             %go to a point just above the table
-            ui.poseQueue =cat(1, ui.poseQueue, [x, y, z+10]);
+            ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
             ui.commandQueue = [ui.commandQueue, 7];
         end
         
@@ -88,6 +85,8 @@ classdef motion < handle
                 [x, y, z] = convertCoordsConveyor(x,y);
             end
             %go to the point
+            ui.poseQueue = cat(1, ui.poseQueue, [x, y, 200]);
+            ui.commandQueue = [ui.commandQueue, 7];            
             ui.poseQueue = cat(1, ui.poseQueue, [x, y, z]);
             ui.commandQueue = [ui.commandQueue, 7];
             
@@ -98,7 +97,7 @@ classdef motion < handle
             ui.commandQueue = [ui.commandQueue, 1];
             
             %go to a point just above the table
-            ui.poseQueue =cat(1, ui.poseQueue, [x, y, z+10]);
+            ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
             ui.commandQueue = [ui.commandQueue, 7];
         end
         
@@ -106,8 +105,14 @@ classdef motion < handle
         %picks up a piece from the box. Stores its coordinates in the box
         %array. Takes in the xy coordinates of the piece
         function obj = pickUpFromBox(obj)
+            %set the position of the box.
+            global ui;
+            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+            if(foundBox)
+                obj.boxLocation = [box.x, box.y];
+            end
             %need a function to return the xy coords of a piece in the box
-            [x, y] = findFromBox();
+            [x, y] = obj.findFromBox();
             
             
             obj.pickUpFromPoint(x, y, 0);
@@ -116,14 +121,28 @@ classdef motion < handle
         function [x, y] = findFromBox(obj)
            global ui;
            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
-           index = randi([1, length(obj.blocks)]);
-           x = obj.blocks(index, 1);
-           y = obj.blocks(index, 2);
+           if(length(obj.blocks))
+               index = randi([1, length(obj.blocks)]);
+               x = obj.blocks(index, 1);
+               y = obj.blocks(index, 2);
+           else
+              x = 0;
+              y = 0;
+           end
+           
         end
         
         %places piece into the box at some random location from the center.
         %Assumes the robot is holding a piece.
         function obj = placeInBox(obj)
+            %set the position of the box.
+            global ui;
+            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+            if(foundBox)
+                obj.boxLocation = [box.x, box.y];
+            end
+            
+            
             %random distance from box center so that not all pieces are
             %placed in the centre of the box.
             randX = randi([-20,20]);

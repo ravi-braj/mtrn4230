@@ -10,7 +10,7 @@ classdef gameplay < handle
         end
         
         %places the players nth piece on board location
-        function placePiece(player, n, board)
+        function placePiece(obj, player, n, board)
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
             [boardX, boardY] = obj.motionMaker.boardToPixel(board(1),board(2));
@@ -18,7 +18,7 @@ classdef gameplay < handle
         end
         
         %places a new piece from the box in players nth space
-        function replacePiece(player, n)
+        function replacePiece(obj, player, n)
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromBox();
             obj.motionMaker.orientPiece();
@@ -26,7 +26,7 @@ classdef gameplay < handle
         end
         
         %swaps all pieces of player with pieces from the box
-        function swapPieces(player)
+        function swapPieces(obj, player)
             for p=1:6
                 obj.motionMaker.discardPiece(player, p);
             end
@@ -36,12 +36,12 @@ classdef gameplay < handle
         end
         
         %gets the current hand of the player
-        function pieces = getPieces(player)
+        function pieces = getPieces(obj, player)
             pieces = rand(6);
         end
         
         %returns the nth piece from players hand to box
-        function discardPiece(player, n)
+        function discardPiece(obj, player, n)
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
             obj.motionMaker.placeInBox();
