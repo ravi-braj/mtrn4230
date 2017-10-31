@@ -2,7 +2,7 @@
 StartBoard = zeros(9,9,2);
 Board = StartBoard;
 %%Insert first piece in the middile
-Board(5,5,:) = [randi([1 6]),randi([1 6])];
+%Board(5,5,:) = [randi([1 6]),randi([1 6])];
 
 %%Initialize Pieces
 GamePieces = zeros(6,2);
