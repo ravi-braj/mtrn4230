@@ -230,6 +230,11 @@ classdef interface < handle
                 return
             end
             
+            %robot studio is not ready for the next command
+            if(obj.robotTCP.readyForNextCommand() == 0)
+                return
+            end
+            
             nextCommand = obj.commandQueue(1)
         
             %Only execute command queue if the robot is connected

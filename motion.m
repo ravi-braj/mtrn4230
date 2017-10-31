@@ -43,6 +43,8 @@ classdef motion < handle
             %set orientation point
             obj.orientationPoint = [1140, 709];
             
+            obj.boxLocation = [0, 0];
+            
 
         end
         
@@ -105,12 +107,7 @@ classdef motion < handle
         %picks up a piece from the box. Stores its coordinates in the box
         %array. Takes in the xy coordinates of the piece
         function obj = pickUpFromBox(obj)
-            %set the position of the box.
-            global ui;
-            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
-            if(foundBox)
-                obj.boxLocation = [box.x, box.y];
-            end
+
             %need a function to return the xy coords of a piece in the box
             [x, y] = obj.findFromBox();
             
@@ -121,8 +118,8 @@ classdef motion < handle
         function [x, y] = findFromBox(obj)
            global ui;
            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
-           if(length(obj.blocks))
-               index = randi([1, length(obj.blocks)]);
+           if(length(obj.blocks) > 0 && foundBox == 1)
+               index = 1;
                x = obj.blocks(index, 1);
                y = obj.blocks(index, 2);
            else
@@ -137,9 +134,11 @@ classdef motion < handle
         function obj = placeInBox(obj)
             %set the position of the box.
             global ui;
-            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
-            if(foundBox)
-                obj.boxLocation = [box.x, box.y];
+            if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
+                [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+                if(foundBox)
+                    obj.boxLocation = [box.x, box.y];
+                end
             end
             
             

@@ -310,6 +310,25 @@ classdef abb_tcp < handle
             
         end
         
+        function ready = readyForNextCommand(obj)
+           ready = 0;
+           try
+               %send request ot set speed
+               fwrite(obj.socket, 'X', 'char');
+
+               
+               ready = fread(obj.socket, 1, 'uchar');
+
+               %read error message
+               obj.error = fread(obj.socket, 1, 'uchar');
+           catch
+               disp('Socket error');
+               obj.connected = false;                
+           end
+            
+        end
+        
+        
         
         
     end
