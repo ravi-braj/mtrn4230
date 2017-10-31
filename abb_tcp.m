@@ -149,7 +149,7 @@ classdef abb_tcp < handle
             disp('Sending poseArray')
             try
                 %send request to send RAPID the i/o array
-                fwrite(obj.socket, 'Z', 'uchar');
+                fwrite(obj.socket, 'P', 'uchar');
 
                 tmp = zeros(1,7);
                 tmp(1:3) = poseArray;
