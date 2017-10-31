@@ -313,9 +313,8 @@ classdef interface < handle
                             obj.jointQueue = obj.jointQueue(2:end,:);
                         end
 
-                        obj.robotTCP.setJoints(newJoint);
-                        comm = sprintf('Setting joints: [%0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f]',... 
-                            newJoint(1), newJoint(2), newJoint(3), newJoint(4), newJoint(5), newJoint(6));
+                        obj.robotTCP.setEndEffector(newJoint);
+                        comm = sprintf('Setting end effector: %0.3f', newJoint);
                         disp('sending joints');
                 
 

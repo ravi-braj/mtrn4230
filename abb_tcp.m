@@ -292,14 +292,14 @@ classdef abb_tcp < handle
            end
         end
         
-        function setJoints(obj, jointArray)
+        function setEndEffector(obj, effectorAngle)
 
            try
                %send request ot set speed
                fwrite(obj.socket, 'N', 'char');
 
                %write speed
-               fwrite(obj.socket, jointArray, 'uint8');
+               fwrite(obj.socket, effectorAngle, 'uint8');
 
                %read error message
                obj.error = fread(obj.socket, 1, 'uchar');

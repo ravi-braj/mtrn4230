@@ -123,10 +123,10 @@ classdef motion < handle
             
             %rotate the end effector by some amount
             global ui;
-            currJoints = ui.pose(4:9);
+            %current end effector angle
+            currJoints = ui.pose(9);
             %add 20 degrees (may need to convert to radians)
-            adjJoints = currJoints;
-            adjJoints(6) = currJoints(6)+orientation;
+            adjJoints = currJoints + orientation;
             ui.jointQueue = cat(1, ui.jointQueue, adjJoints);
             ui.commandQueue = [ui.commandQueue, 8];
             
@@ -153,11 +153,11 @@ classdef motion < handle
             %alternatively, could use topcorner, bottomcorner and board
             %size to determine position of grid squares.
             if(playerID == 0)
-                x_p = obj.p1_topLeft(1) + n*obj.squareSize+0.5*obj.squareSize;
-                y_p = obj.p1_topLeft(2) + 0.5*obj.squareSize;
+                y_p = obj.p1_topLeft(2) + n*obj.squareSize+0.5*obj.squareSize;
+                x_p = obj.p1_topLeft(1) + 0.5*obj.squareSize;
             else
-                x_p = obj.p2_topLeft(1) + n*obj.squareSize+0.5*obj.squareSize;
-                y_p = obj.p2_topLeft(2) + 0.5*obj.squareSize;
+                y_p = obj.p2_topLeft(2) + n*obj.squareSize+0.5*obj.squareSize;
+                x_p = obj.p2_topLeft(1) + 0.5*obj.squareSize;
             end
         end
     end
