@@ -20,7 +20,7 @@ classdef interface < handle
         robotTCP
         
         %motion object
-        motionMaker
+        playGame
         
         %Switch on or off block detection for performance and speed of program
         detectBlocks
@@ -54,6 +54,7 @@ classdef interface < handle
         %Queue vairable
         commandQueue
         poseQueue %used by safeSetPose only
+        jointQueue %used for setting joints
         
         %Array of strings to display history of commands sent to robot
         commandHistory
@@ -123,7 +124,7 @@ classdef interface < handle
             end
             
             %----------- MOTION MAKER ----------------%
-            obj.motionMaker = motion();
+            obj.playGame = gameplay();
 
             
             
@@ -302,7 +303,23 @@ classdef interface < handle
                         end 
 
                         obj.commandHistory = [obj.commandHistory; string(comm)];
+                    
+                    %set joints
+                    case 8
+                        newJoint = obj.jointQueue(1,:);
+                        if(size(obj.jointQueue) == 1)
+                            obj.jointQueue = [];
+                        else
+                            obj.jointQueue = obj.jointQueue(2:end,:);
+                        end
 
+                        obj.robotTCP.setJoints(newJoint);
+                        comm = sprintf('Setting joints: [%0.3f, %0.3f, %0.3f, %0.3f, %0.3f, %0.3f]',... 
+                            newJoint(1), newJoint(2), newJoint(3), newJoint(4), newJoint(5), newJoint(6));
+                        disp('sending joints');
+                
+
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
                     otherwise
                         disp('cannot decipher queue object');
                 end
