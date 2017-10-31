@@ -26,21 +26,29 @@ classdef motion < handle
         
         squareSize;
         
+        blocks;
         
     end
     methods
         function obj = motion()
             %define board positions
-            obj.board_topLeft = [0, 0];
-            obj.board_bottomRight = [100, 100];
+            obj.board_topLeft = [551, 286];
+            obj.board_bottomRight = [1042, 785];
             
-            obj.p1_topLeft = [0, 0];
-            obj.p2_topLeft = [0, 0];
+            obj.p1_topLeft = [420, 286];
+            obj.p2_topLeft = [1125, 286];
             
-            obj.squareSize = 20;
+            obj.squareSize = 56;
             
             %set orientation point
-            obj.orientationPoint =[50, 50];
+            obj.orientationPoint = [1140, 709];
+            
+            %set the position of the box.
+            global ui;
+            [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+            if(foundBox)
+                obj.boxLocation = [box.x, box.y];
+            end
         end
         
         
@@ -99,10 +107,18 @@ classdef motion < handle
         %array. Takes in the xy coordinates of the piece
         function obj = pickUpFromBox(obj)
             %need a function to return the xy coords of a piece in the box
-            %[x, y] = findFromBox()
-            x = 0;
-            y = 0;
+            [x, y] = findFromBox();
+            
+            
             obj.pickUpFromPoint(x, y, 0);
+        end
+        
+        function [x, y] = findFromBox(obj)
+           global ui;
+           [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+           index = randi([1, length(obj.blocks)]);
+           x = obj.blocks(index, 1);
+           y = obj.blocks(index, 2);
         end
         
         %places piece into the box at some random location from the center.
@@ -118,6 +134,7 @@ classdef motion < handle
         function obj = orientPiece(obj)
             obj.placeToPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
             %read orientation of piece
+            
             %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
             orientation = 20;
             
