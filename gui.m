@@ -98,10 +98,8 @@ function vacuum_toggle_Callback(hObject, eventdata, handles)
         
         
     %%%%%% DELETE THIS --- ITS JUST FOR TESTING PICK AND PLACE %%% 
-    ui.motionMaker.pickUpFromPoint(600, 600, 1);
-    ui.motionMaker.placeToPoint(400, 400, 1);
-    ui.motionMaker.pickUpFromPoint(400, 400, 1);
-    ui.motionMaker.placeToPoint(600, 600, 1);
+    ui.playGame(1, 1);
+
     
 
 end

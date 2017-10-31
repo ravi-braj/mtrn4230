@@ -293,14 +293,14 @@ classdef interface < handle
                         else
                             obj.poseQueue = obj.poseQueue(2:end,:);
                         end
-                        distance = sqrt((newPose(1))^2 + (newPose(2))^2);
-                        if (distance > 500)
-                            comm = sprintf('Pose out of reach');
-                        else
-                            obj.robotTCP.setPoseSafe(newPose);
+                        %distance = sqrt((newPose(1))^2 + (newPose(2))^2);
+                        %if (distance > 500)
+                        %    comm = sprintf('Pose out of reach');
+                        %else
+                            obj.robotTCP.setPose(newPose);
                             comm = sprintf('Setting pose safely: [%0.3f, %0.3f, %0.3f]', newPose(1), newPose(2), newPose(3));
                             disp('sending pose');
-                        end 
+                        %end 
 
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                     
