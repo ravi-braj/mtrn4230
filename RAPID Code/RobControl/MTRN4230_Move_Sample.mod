@@ -32,6 +32,10 @@ MODULE MTRN4230_Move_Sample
         WaitTime 1;
         StartMove;
     
+        !pTarget := CRobT(\TaskRef:=T_ROB1Id, \Tool:=tSCup);  
+        !pTarget.trans.z := 200;
+        !MoveJ pTarget, speed, fine, tSCup;
+        
         MoveAbsJ jtCalibPos, speed, fine, tSCup;
         jTarget := CJointT(\TaskRef:=T_ROB1Id);
         jTarget.robax.rax_5 := jTarget.robax.rax_5 + jogJ_rate;
