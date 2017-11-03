@@ -97,6 +97,19 @@ function timerCallback(obj, event, ui)
         end
     end
     
+        %% ---------- Display Game Board ---------------------
+    % 1) receive the serial data
+    % 2) use gui plot handle for setting the data in the conveyor camera plot
+%     try
+%         ui.datafromConveyorCam();
+%         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
+%     catch
+%         
+%         sb = sprintf('img%01d.jpg',round(randi([1 23],1,1)));
+%         ui.conveyorRGB = imread(sb);
+%         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
+%     end
+
     %% Check Box position
     if ui.loadBox == 1
         % If Box is not in position. Turn on conveyor. If on leave it on

@@ -38,6 +38,12 @@ classdef interface < handle
         h_plotConveyor
         h_textConveyor
         
+        % Handle for qwirkle data
+        h_P1Hand
+        h_P2Hand
+        h_QBoard
+        
+        
         %RGB data for conveyor
         conveyorObj
         conveyorRGB

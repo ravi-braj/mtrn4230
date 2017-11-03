@@ -2,17 +2,17 @@
 StartBoard = zeros(9,9,2);
 Board = StartBoard;
 %%Insert first piece in the middile
-%Board(5,5,:) = [randi([1 6]),randi([1 6])];
+Board(5,5,:) = [randi([1 6]),randi([1 6])];
 
 %%Initialize Pieces
 GamePieces = zeros(6,2);
 P1GamePieces = GamePieces;
 P2GamePieces = GamePieces;
-%%Making Fake Pieces
-% for y = 1:6
-%     GamePieces(y,1) = randi([1 6]); %%Color
-%     GamePieces(y,2) = randi([1 6]); %%Shape
-% end
+%Making Fake Pieces
+for y = 1:6
+    GamePieces(y,1) = randi([1 6]); %%Color
+    GamePieces(y,2) = randi([1 6]); %%Shape
+end
 QUIT = false;
 button = 0;
 Player = 1;
@@ -50,7 +50,7 @@ while(QUIT==false)
     elseif Player == 2
         ComputerPlayer
         Player = 1;
-    end;
+    end
     
     if button == 113
         QUIT = true;
