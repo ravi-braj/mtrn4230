@@ -87,6 +87,8 @@ classdef interface < handle
         %Qwirkle
         loadBox
         
+        countp
+        countb
     end
     methods
         
@@ -110,6 +112,8 @@ classdef interface < handle
             obj.error = [0,0,0,0,0,0];
             obj.motionMode = string('linear');
             
+            obj.countp = 1;
+            obj.countb = 1;
             
             %obj.robotTCP.openTCP('127.0.0.1', 1025);
             obj.robotTCP.openTCP('192.168.125.1', 1025);
