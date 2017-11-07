@@ -6,7 +6,7 @@
     P1Vector = [0.1, 0.1, 0.1, 0.6];
     P2Vector = [0.8, 0.1, 0.1, 0.6];
     
-    figure(1);hold on;
+    figure(10);hold on;
     subplot('Position',BoardVector)
     DisplayQwirkleBoard(ui.Board);
     titletext = sprintf('Qwirkle Game!!\n(Press Q to quit)\nLeftClick to Move\nRightClick to SWAP');

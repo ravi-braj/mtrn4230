@@ -39,6 +39,8 @@ function timerSetup(obj, event, interface)
     GamePieces = zeros(6,2);
     ui.P1GamePieces = GamePieces;
     ui.P2GamePieces = GamePieces;
+    %Check function name with dan
+    [ui.P1GamePieces, ui.P2GamePieces] = updateGameState(ui.tableRGB);
     
     ui.Player = 1;
     ui.P1Action = 'Waiting';
