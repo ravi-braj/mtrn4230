@@ -1,7 +1,5 @@
-function c = detectOnTable(im)
+function c = detectBlocks(im,source)
 
-%    close all; clear all;
-%   im = imread('orientation.jpg');
     
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
@@ -9,20 +7,29 @@ function c = detectOnTable(im)
     
     % Generate block mask
     Block_BW = createBlockMask(im);
-    Block_BW(1:225,:) = 0;
+    
 %     figure(1); 
 %     subplot(1,3,1);
 %     imshow(Block_BW);
-    se = strel('cube',3);
-    Block_BW = imerode(Block_BW, se);
-    se = strel('cube',6);
-    Block_BW = imdilate(Block_BW, se);
+    if (source)
+        % Table
+        se = strel('cube',4);
+        Block_BW = imerode(Block_BW, se);
+        se = strel('cube',6);
+        Block_BW = imdilate(Block_BW, se);
+    else
+        % Conveyor
+        se = strel('cube',2);
+        Block_BW = imerode(Block_BW, se);
+        se = strel('cube',4);
+        Block_BW = imdilate(Block_BW, se);
+    end
 %     subplot(1,3,2);
 %     imshow(Block_BW);
     
     %Insert Filled Image and create BlockMask
     bw_stats = regionprops('table',Block_BW,'Area','BoundingBox','FilledImage');
-    idx = find(bw_stats.Area > 1500 & bw_stats.Area < 3000);
+    idx = find(bw_stats.Area > 1000 & bw_stats.Area < 3500);
     
     BlockMask = false(size(Block_BW));
     
@@ -47,7 +54,7 @@ function c = detectOnTable(im)
     im = imadjust(im, [0, 0, 0; 0.50, 0.48, 0.47], []);
     
     stats = regionprops('table',BlockMask,'Centroid','Area','PixelList');
-    inds = find(stats.Area > 2500);
+    inds = find(stats.Area > 1000 & stats.Area < 3600);
     n = size(inds,1);
     c = zeros(n,6);
     
@@ -104,5 +111,4 @@ function imExtracted = ExtractBlockIm(im, x, y, angle, sideLength)
 
     rect2 = [xCrop, yCrop, (sideLength-1), (sideLength-1)];
     imExtracted = imcrop(imExtracted, rect2);
-
 end

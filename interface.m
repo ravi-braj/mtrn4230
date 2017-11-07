@@ -101,10 +101,12 @@ classdef interface < handle
         P1TotalScore
         P2TotalScore
         playerbutton
-        qwirkleX
-        qwirkleY
-        qwirkleButton
-        ginputFlag
+
+%         qwirkleX
+%         qwirkleY
+%         qwirkleButton
+%         ginputFlag
+
         
         countp
         countb

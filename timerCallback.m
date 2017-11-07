@@ -6,7 +6,7 @@
 
 
 function timerCallback(obj, event, ui) 
-
+    disp('Running main timer');
     %av_period = get(obj, 'AveragePeriod')
     fprintf('Timer callback executed. %f seconds since last call\n', get(obj, 'InstantPeriod'));
     
