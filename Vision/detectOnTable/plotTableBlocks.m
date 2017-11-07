@@ -9,10 +9,12 @@ function plotTableBlocks()
     
     for i = 1:n
         x = c(i,1); y = c(i,2); thi = deg2rad(c(i,3));
-        u = 15*cos(thi);
-        v = 15*sin(thi);
+        u = 20*cos(thi);
+        v = 20*sin(thi);
         
-        plot(x,y,'*k');
-        quiver(x,y,u,v,'k');
+        plot(x,y,'*w');
+        quiver(x,y,u,v,'w','linewidth',2);
+        s = sprintf('C: %d,S: %d,R: %d',c(i,4),c(i,5),c(i,6));
+        text(x + 35,y,s,'HorizontalAlignment','left')
     end
 end
