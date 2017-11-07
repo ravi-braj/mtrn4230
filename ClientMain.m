@@ -64,36 +64,8 @@ mainTimer.TimerFcn = {@timerCallback, ui};
 
 start(mainTimer);
 
-
-
-
 %% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
-
-%%RUNNING QWIRKLE SIMULATION
-%%Initialize Board
-% StartBoard = zeros(9,9,2);
-% Board = StartBoard;
-% %%Insert first piece in the middile
-% %%Board(5,5,:) = [randi([1 6]),randi([1 6])];
-% %%Initialize Pieces
-% GamePieces = zeros(6,2);
-% P1GamePieces = GamePieces;
-% P2GamePieces = GamePieces;
-% %%Making Fake Pieces
-% % for y = 1:6
-% %     GamePieces(y,1) = randi([1 6]); %%Color
-% %     GamePieces(y,2) = randi([1 6]); %%Shape
-% % end
-% button = 0;
-% Player = 1;
-% P1Action = 'Waiting';
-% P2Action = 'Waiting';
-% P1TotalScore = 0;
-% P2TotalScore = 0;
-% QUIT = false;
 while(1)
-    %QwirkleClient2 runs 1 iteration of QwirkleClient
-    %QwirkleClient2
     try 
         if(get(mainTimer, 'Running') == 'off')
             break;
