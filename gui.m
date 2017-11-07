@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 17-Oct-2017 17:23:01
+    % Last Modified by GUIDE v2.5 07-Nov-2017 19:17:36
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -677,4 +677,14 @@ global ui;
         delete(ui.h_textConveyor);
     end
 % Hint: get(hObject,'Value') returns toggle state of detect_box
+end
+
+
+% --- Executes on button press in LoadConveyorBox.
+function LoadConveyorBox_Callback(hObject, eventdata, handles)
+% hObject    handle to LoadConveyorBox (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+global ui;
+ui.loadBox = 1;
 end

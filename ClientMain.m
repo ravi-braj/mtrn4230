@@ -103,7 +103,6 @@ while(1)
 end
 disp('closing');
 %Close Qwirkle figure
-close Figure 10;
 %Delete webcam objects when exiting function
 delete(ui.tableObj)
 delete(ui.conveyorObj)

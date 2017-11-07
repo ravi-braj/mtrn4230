@@ -44,7 +44,7 @@ while(~QUIT)
         ComputerPlayer
         %HumanPlayer
         Player = 1;
-    end;
+    end
     
     if button == 113
         QUIT = true;

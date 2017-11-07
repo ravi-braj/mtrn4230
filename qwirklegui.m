@@ -22,7 +22,7 @@ function varargout = qwirklegui(varargin)
 
 % Edit the above text to modify the response to help qwirklegui
 
-% Last Modified by GUIDE v2.5 07-Nov-2017 18:40:11
+% Last Modified by GUIDE v2.5 07-Nov-2017 19:11:52
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -78,8 +78,7 @@ function Load_Conveyor_Callback(hObject, eventdata, handles)
 % hObject    handle to Load_Conveyor (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global ui;
-ui.loadBox = 1;
+
 
 
 
