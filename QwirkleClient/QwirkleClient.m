@@ -20,6 +20,7 @@ P2Action = 'Waiting';
 P1TotalScore = 0;
 P2TotalScore = 0;
 QUIT = false;
+firstmove = true;
 
 %%MAIN LOOP
 while(~QUIT)
