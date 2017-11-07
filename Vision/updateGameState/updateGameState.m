@@ -1,7 +1,7 @@
 function [Player1,Player2] = updateGameState(im)
     
-    figure(1);
-    imshow(im);
+%     figure(1);
+%     imshow(im);
 
     Origin1 = [418, 287];
     Player1 = zeros(6,2);
@@ -13,20 +13,20 @@ function [Player1,Player2] = updateGameState(im)
     %im = imadjust(im, [0, 0, 0; 0.53, 0.48, 0.47], []);
     im = imadjust(im, [0, 0, 0; 0.50, 0.48, 0.47], []);
     
-    figure(2);
-    imshow(im);
-    
+%     figure(2);
+%     imshow(im);
+%     
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
     load('convnetColour.mat'); % For colours
     
-    figure(3);
-    
+%     figure(3);
+%     
     for i = 1:6
         % Extract a player1 grid slot
         rgbBlock1 = imcrop(im,[Origin1(1),Origin1(2)+(i-1)*55,49,49]);
-        subplot(2,6,i);
-        imshow(rgbBlock1);
+%         subplot(2,6,i);
+%         imshow(rgbBlock1);
         
         % Classify each the grid slot
         [colour, shape] = ClassifyBlock(rgbBlock1, ...
@@ -38,9 +38,9 @@ function [Player1,Player2] = updateGameState(im)
         
         % Extract a player2 grid slot
         rgbBlock2 = imcrop(im,[Origin2(1),Origin2(2)+(i-1)*55,49,49]);        
-        subplot(2,6,i+6);
-        imshow(rgbBlock2);
-        
+%         subplot(2,6,i+6);
+%         imshow(rgbBlock2);
+%         
         % Classify each the grid slot 
         [colour, shape] = ClassifyBlock(rgbBlock2, ...
             convnetColour, convnetShape);

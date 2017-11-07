@@ -1,7 +1,7 @@
-function c = detectOnTable()
+function c = detectOnTable(im)
 
-    close all; clear all;
-    im = imread('orientation.jpg');
+%    close all; clear all;
+%   im = imread('orientation.jpg');
     
     % Load our neural nets
     load('convnetShape.mat'); % For shapes

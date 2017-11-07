@@ -100,6 +100,11 @@ classdef interface < handle
         P2Action
         P1TotalScore
         P2TotalScore
+        playerbutton
+        qwirkleX
+        qwirkleY
+        qwirkleButton
+        ginputFlag
         
         countp
         countb
@@ -331,6 +336,8 @@ classdef interface < handle
                     
                     %set joints
                     case 8
+                        disp('joint queue');
+                        disp(length(obj.jointQueue(1,:)));
                         newJoint = obj.jointQueue(1,:);
                         if(size(obj.jointQueue) == 1)
                             obj.jointQueue = [];

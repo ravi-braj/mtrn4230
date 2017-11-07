@@ -48,7 +48,7 @@ function timerCallback(obj, event, ui)
         ui.datafromConveyorCam();
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);
     catch
-        
+        disp('no camera data from conveyor')
         sb = sprintf('img%01d.jpg',round(randi([1 23],1,1)));
         ui.conveyorRGB = imread(sb);
         set(ui.h_camConveyor, 'CData', ui.conveyorRGB);

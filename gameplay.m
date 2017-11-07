@@ -55,7 +55,17 @@ classdef gameplay < handle
             global ui;
             pieces = detectOnTable(ui.tableRGB); %n by 6
 
-            toIterate = max(length(pieces), 12);
+            toIterate = min(length(pieces), 12);
+            
+            obj.motionMaker.boxSpace = zeros(6,2);
+            
+            if(length(pieces) == 0)
+                return;
+            end
+            
+            disp('toiterate')
+            disp(toIterate)
+            disp(length(pieces))
             
             for i = 1:toIterate
                pieceX = pieces(i, 1);

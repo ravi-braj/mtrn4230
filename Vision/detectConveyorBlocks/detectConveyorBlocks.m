@@ -52,7 +52,7 @@ function [blocks, box, FoundBox] = detectConveyorBlocks(im)
         
         % Extract box orientation
         [~, i1] = max(box_stats.PixelList{1}(:,1));
-        [~, i2] = max(box_stats.PixelList{1}(:,2));
+        [~, i2] = min(box_stats.PixelList{1}(:,2));
         x = abs(box_stats.PixelList{1}(i1,1) - box_stats.PixelList{1}(i2,1));
         y = abs(box_stats.PixelList{1}(i1,2) - box_stats.PixelList{1}(i2,2));
         box.orient = rad2deg(atan2(y,x));

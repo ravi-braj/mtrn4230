@@ -20,16 +20,23 @@ P2Action = 'Waiting';
 P1TotalScore = 0;
 P2TotalScore = 0;
 QUIT = false;
+firstmove = true;
 
 %%MAIN LOOP
 while(~QUIT)
     %%Show the Game
-    %[P1GamePieces,P2GamePieces] = updateGameState(ui.tableRGB);
+    [P1GamePieces,P2GamePieces] = updateGameState(ui.tableRGB);
     Game_Interface;
     
     %If missing pieces
     %Load board
-    
+%     isHandsEmpty = false;
+%     while(isHandsEmpty == false)
+%     
+%         for y = 1:6
+%             P1GamePieces
+%         end
+%     end
     
     %%Show the Game Again
     %[P1GamePieces,P2GamePieces] = updateGameState(im);
@@ -41,14 +48,18 @@ while(~QUIT)
         Player = 2;
     elseif Player == 2
         %PLAYER 2 (COMPUTER MOVE)
-        ComputerPlayer
-        %HumanPlayer
+        if (ui.playerbutton == 'Human')
+            HumanPlayer;
+        elseif (ui.playerbutton == 'AI')
+            ComputerPlayer;
+        end
         Player = 1;
-    end;
+    end
     
     if button == 113
         QUIT = true;
         disp('QUIT');
     end
+    pause(0.1);
 end
 close Figure 10;

@@ -83,11 +83,10 @@ classdef motion < handle
 
             
             %turn on vacuum
-            if(length(ui.ioQueue>0))
-                newIOs = ui.ioQueue(length(ui.ioQueue));
-            else
-                newIOs = ui.IOs;
-            end
+            %if(length(ui.ioQueue>0))
+            %    newIOs = ui.ioQueue(length(ui.ioQueue));
+            %else
+            newIOs = ui.IOs;
             newIOs(1) = 1;
             newIOs(2) = 1;
             ui.ioQueue = cat(1, ui.ioQueue, newIOs);
@@ -167,6 +166,7 @@ classdef motion < handle
                 [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
                 if(foundBox)
                     obj.boxLocation = [box.x, box.y];
+                    obj.boxOrientation = -box.orient;
                 end
             end
             
@@ -233,22 +233,43 @@ classdef motion < handle
         %place it.
         function obj = arrangeInBox(obj)
             global ui;
+            
             if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
                 [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
                 if(foundBox)
                     obj.boxLocation = [box.x, box.y];
-                    obj.boxOrientation = box.orient;
+                    obj.boxOrientation = -box.orient;
                 end
             end
+            disp('box orientation')
+            disp(obj.boxOrientation)
+            box_topLeft(1) = obj.boxLocation(1)-3*obj.squareSize;
+            box_topLeft(2) = obj.boxLocation(2) + obj.squareSize;
+            
+            %box_topLeft(1) = bX*cosd(obj.boxOrientation)-bY*sind(obj.boxOrientation);
+            %box_topLeft(2) = bX*sind(obj.boxOrientation)+bY*cosd(obj.boxOrientation);
+            
+
+            
             
             
             for i = 1:length(obj.boxSpace)
                 %empty space
                 if(obj.boxSpace(i) == 0)
                     [r_box, c_box] = ind2sub(size(obj.boxSpace), i);
-                    xb = box_topLeft(1) + (c_box-1)*obj.squareSize+0.5*obj.squareSize;
-                    yb = box_topLeft(2) + (r_box-1)*obj.squareSize+0.5*obj.squareSize;
-                    obj.placeToPoint(xb, yb, 0);
+                    xb = (r_box-1)*obj.squareSize+0.5*obj.squareSize;
+                    yb = (c_box-1)*obj.squareSize+0.5*obj.squareSize;
+                    
+                    xb_ = xb*cosd(obj.boxOrientation)-yb*sind(obj.boxOrientation);
+                    yb_ = xb*sind(obj.boxOrientation)+yb*cosd(obj.boxOrientation);
+                    
+                    xb_ = xb_+ box_topLeft(1);
+                    yb_ = yb_ + box_topLeft(2);
+                    
+                    disp(xb_)
+                    disp(yb_)
+                    
+                    obj.placeToPoint(xb_, yb_, 0);
                     obj.boxSpace(i) = 1;
                     return;
                 end
@@ -315,6 +336,7 @@ function [rs_x, rs_y, rs_z] = convertCoordsConveyor(x, y)
     rs_y = (x - conveyorOffsetXPx)*pxToMM-8;
     rs_x = (-y + conveyorOffsetYPx)*pxToMM-12;
     rs_z = 33;
+    %rs_z = 33+100;
 end
 
 function [rs_x, rs_y, rs_z] = convertCoordsTable(x, y)
@@ -337,4 +359,5 @@ function [rs_x, rs_y, rs_z] = convertCoordsTable(x, y)
     rs_y = (x - tableXoffsetPx)*pxToMM;
     rs_x = (-y + tableYoffsetPx)*pxToMM;    
     rs_z = 147+7;
+    
 end
