@@ -19,4 +19,4 @@
     DisplayChoices(P2GamePieces);
     titletext = sprintf('Player 2 has %d Points\n %s',P2TotalScore,P2Action);
     title(titletext);
-    pause(0.000000001);
+    pause(1);

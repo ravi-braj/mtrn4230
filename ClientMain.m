@@ -68,6 +68,7 @@ start(mainTimer);
 
 
 %% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
+
 %%RUNNING QWIRKLE SIMULATION
 %%Initialize Board
 StartBoard = zeros(9,9,2);
