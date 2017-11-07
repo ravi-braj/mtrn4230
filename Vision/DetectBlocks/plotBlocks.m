@@ -1,9 +1,11 @@
 function plotBlocks()
     close all; clear all;
-    im = imread('orientation.jpg');
     
+    im = imread('orientation.jpg');
     c = detectTable(im)
-    %[c, box, FoundBox] = detectConveyor(im)
+
+%     im = imread('conv2.jpg');
+%     [c, box, FoundBox] = detectConveyor(im)
     
     figure(1); imshow(im);  hold on;
     n = size(c,1);
@@ -16,6 +18,6 @@ function plotBlocks()
         plot(x,y,'*w');
         quiver(x,y,u,v,'w','linewidth',1,'MaxHeadSize',50);
         s = sprintf('[C: %d,S: %d,R: %d]',c(i,4),c(i,5),c(i,6));
-        text(x + 35,y,s,'HorizontalAlignment','left')
+        text(x + 35,y,s,'HorizontalAlignment','left','Color','g')
     end
 end

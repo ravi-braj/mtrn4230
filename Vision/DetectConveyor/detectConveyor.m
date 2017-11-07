@@ -63,7 +63,7 @@ function [blocks, box, FoundBox] = detectConveyor(im)
         % Plot BoxMask
         %figure(1); imshow(im); hold on; plot(box.x,box.y,'*');
         
-        blocks = detectBlocks(im);
+        blocks = detectBlocks(im,0);
     else
         blocks = [];
         box.x = []; box.y = []; box.orient = [];
