@@ -20,36 +20,29 @@ P2Action = 'Waiting';
 P1TotalScore = 0;
 P2TotalScore = 0;
 QUIT = false;
+start = true;
 %%MAIN LOOP
 while(~QUIT)
     %%Show the Game
+    [P1GamePieces,P2GamePieces] = updateGameState(ui.tableRGB);
     Game_Interface;
-%     disp('Click to Fill Hands');
-%     [x, y,button] = ginput(1);
-%     if button == 113
-%         disp('QUIT');
-%         break;
-%     end
-    %%Fill Missing Pieces for both players
-    for y = 1:6
-        if P1GamePieces(y,1) == 0
-            P1GamePieces(y,1) = randi([1 6]); %%Color
-            P1GamePieces(y,2) = randi([1 6]); %%Shape
-        end
-         if P2GamePieces(y,1) == 0
-            P2GamePieces(y,1) = randi([1 6]); %%Color
-            P2GamePieces(y,2) = randi([1 6]); %%Shape
-        end
-    end
+    
+    %If missing pieces
+    %Load board
+    
+    
     %%Show the Game Again
+    [P1GamePieces,P2GamePieces] = updateGameState(im);
     Game_Interface;
-   % disp('Player');
-   % disp(Player);
+    
     if Player == 1
+        %HUMAN MOVE
         HumanPlayer
         Player = 2;
     elseif Player == 2
+        %PLAYER 2 (COMPUTER MOVE)
         ComputerPlayer
+        %HumanPlayer
         Player = 1;
     end;
     

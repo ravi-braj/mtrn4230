@@ -18,11 +18,7 @@ while (Valid == false)
         disp(PieceNum);
         if button == 3 %%Right Click
             GamePieces = zeros(6,2);
-            
-            %ui.playGame.discardPiece(1, 1);
-            %ui.playGame.replacePiece(1,1,);
-            %ui.playGame.discardPiece(1, 2);
-            %ui.playGame.replacePiece(1, 2);
+            ui.playGame.swapPieces(Player);
             break;
         end;
     end

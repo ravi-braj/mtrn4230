@@ -2,6 +2,7 @@ string = Pattern_Generator(100,10,1);
 value = jsondecode(string);
 StartBoard = zeros(9,9,2);
 Board = StartBoard;
+
 for i = 1:length(value)
     row = 10-value(i).row;
     column = value(i).column;
