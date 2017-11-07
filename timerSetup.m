@@ -27,7 +27,28 @@ function timerSetup(obj, event, interface)
     ui.tableParams = load('cameraParamsTable.mat');
     ui.tableParams = ui.tableParams.cameraParamsTable;
 
-        
+    % Initialize Qwirkle Board
+    StartBoard = zeros(9,9,2);
+    ui.Board = StartBoard;
+    % Insert first piece in the middile
+    % Will create random piece in center to start game. Need to tell robot
+    % studio to do this. Better to do this with vision and choose a random
+    % piece from the box.
+    ui.Board(5,5,:) = [randi([1 6]),randi([1 6])]; 
+    % Initialize Pieces
+    GamePieces = zeros(6,2);
+    ui.P1GamePieces = GamePieces;
+    ui.P2GamePieces = GamePieces;
+    
+    ui.Player = 1;
+    ui.P1Action = 'Waiting';
+    ui.P2Action = 'Waiting';
+    ui.P1TotalScore = 0;
+    ui.P2TotalScore = 0;
+    
+    % Update Qwirkle Interface
+    Game_Interface;
+    
     pause(1);
 
 end

@@ -92,6 +92,14 @@ classdef interface < handle
         
         %Qwirkle
         loadBox
+        Board
+        P1GamePieces
+        P2GamePieces
+        Player
+        P1Action
+        P2Action
+        P1TotalScore
+        P2TotalScore
         
         countp
         countb
