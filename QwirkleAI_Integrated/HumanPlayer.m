@@ -1,15 +1,16 @@
-if Player == 1
-    GamePieces = P1GamePieces;
+global ui
+if ui.Player == 1
+    GamePieces = ui.P1GamePieces;
 elseif Player == 2
-    GamePieces = P2GamePieces;
+    GamePieces = ui.P2GamePieces;
 end
 Valid = false;
 while (Valid == false)
     disp('Please insert Valid Move or Right Click to SWAP');
     [x1, y1,button] = ginput(1);
-    if button == 113
-           break;
-    end
+%     if button == 113
+%            break;
+%     end
     PieceX = x1;
     PieceY = y1;
     if (PieceX>=0 && PieceX<=50) && (PieceY>=0 && PieceY<=300)
@@ -18,7 +19,7 @@ while (Valid == false)
         disp(PieceNum);
         if button == 3 %%Right Click
             GamePieces = zeros(6,2);
-            ui.playGame.swapPieces(Player);
+            ui.playGame.swapPieces(ui.Player);
             break;
         end;
     end
@@ -30,7 +31,7 @@ while (Valid == false)
         if (PlaceX>=0 && PlaceX<=450) && (PlaceY>=0 && PlaceY<=450)
             X = ceil(PlaceX/50);
             Y = ceil(PlaceY/50);
-            Valid = isMoveValid(GamePieces(PieceNum,:),X,Y,Board);
+            Valid = isMoveValid(GamePieces(PieceNum,:),X,Y,ui.Board);
         end
     end
 end

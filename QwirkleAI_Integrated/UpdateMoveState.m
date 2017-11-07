@@ -19,19 +19,16 @@ if Valid == true
     GamePieces(PieceNum,:) = [0 0];
     %%Place Piece
     Board(X,Y,:) = MovingPiece;
-    %Robot Action
-    ui.playGame.placePiece(Player, PieceNum, [X, Y]);
-    ui.playGame.replacePiece(Player,PieceNum);
-    %Calculate Score
+    %ui.playGame.placePiece(player, n, [x, y])
+    
     [TotalScore,PieceScore,Qwirkle] = CalculateMoveScore(Board,MovingPiece,X,Y);
     
-    %UPDATING TITLE
     if Player == 1
-    P1TotalScore = P1TotalScore + TotalScore;
+    P1TotalScore = P1TotalScore + TotalScore
     P1Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
     P2Action = sprintf('Your Turn');
     elseif Player == 2
-    P2TotalScore = P2TotalScore + TotalScore;
+    P2TotalScore = P2TotalScore + TotalScore
     P2Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
     P1Action = sprintf('Your Turn');
     end
