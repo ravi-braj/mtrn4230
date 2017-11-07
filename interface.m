@@ -100,6 +100,7 @@ classdef interface < handle
         P2Action
         P1TotalScore
         P2TotalScore
+        playerbutton
         
         countp
         countb

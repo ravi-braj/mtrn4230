@@ -20,6 +20,7 @@ P2Action = 'Waiting';
 P1TotalScore = 0;
 P2TotalScore = 0;
 QUIT = false;
+firstmove = true;
 
 %%MAIN LOOP
 while(~QUIT)
@@ -41,10 +42,13 @@ while(~QUIT)
         Player = 2;
     elseif Player == 2
         %PLAYER 2 (COMPUTER MOVE)
-        ComputerPlayer
-        %HumanPlayer
+        if (ui.playerbutton == 'Human')
+            HumanPlayer;
+        elseif (ui.playerbutton == 'AI')
+            ComputerPlayer;
+        end
         Player = 1;
-    end;
+    end
     
     if button == 113
         QUIT = true;

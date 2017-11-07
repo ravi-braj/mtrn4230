@@ -31,6 +31,10 @@ while (Valid == false)
             X = ceil(PlaceX/50);
             Y = ceil(PlaceY/50);
             Valid = isMoveValid(GamePieces(PieceNum,:),X,Y,Board);
+            if firstmove == true
+                Valid = true;
+                firstmove = false;
+            end
         end
     end
 end
