@@ -1,7 +1,4 @@
-function c = detectOnTable(im)
-
-    %close all; clear all;
-    %im = imread('orientation.jpg');
+function c = detectBlocks(im)
     
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
@@ -9,7 +6,7 @@ function c = detectOnTable(im)
     
     % Generate block mask
     Block_BW = createBlockMask(im);
-    Block_BW(1:225,:) = 0;
+%     Block_BW(1:225,:) = 0;
 %     figure(1); 
 %     subplot(1,3,1);
 %     imshow(Block_BW);
@@ -47,7 +44,7 @@ function c = detectOnTable(im)
     im = imadjust(im, [0, 0, 0; 0.50, 0.48, 0.47], []);
     
     stats = regionprops('table',BlockMask,'Centroid','Area','PixelList');
-    inds = find(stats.Area > 2500);
+    inds = find(stats.Area > 2500 & stats.Area < 4000);
     n = size(inds,1);
     c = zeros(n,6);
     
@@ -104,5 +101,4 @@ function imExtracted = ExtractBlockIm(im, x, y, angle, sideLength)
 
     rect2 = [xCrop, yCrop, (sideLength-1), (sideLength-1)];
     imExtracted = imcrop(imExtracted, rect2);
-
 end

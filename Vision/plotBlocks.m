@@ -1,8 +1,9 @@
-function plotTableBlocks()
+function plotBlocks()
     close all; clear all;
-    im = imread('orientation.jpg');
+    im = imread('con2.jpg');
     
-    c = detectOnTable(im);
+    %c = detectTable(im)
+    [c, box, FoundBox] = detectConveyor(im)
     
     figure(1); imshow(im);  hold on;
     n = size(c,1);
