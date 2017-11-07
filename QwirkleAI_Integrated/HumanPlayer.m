@@ -1,4 +1,4 @@
-global ui;
+global ui
 if ui.Player == 1
     GamePieces = ui.P1GamePieces;
 elseif Player == 2
@@ -19,11 +19,7 @@ while (Valid == false)
         disp(PieceNum);
         if button == 3 %%Right Click
             GamePieces = zeros(6,2);
-            
-            %ui.playGame.discardPiece(1, 1);
-            %ui.playGame.replacePiece(1,1,);
-            %ui.playGame.discardPiece(1, 2);
-            %ui.playGame.replacePiece(1, 2);
+            ui.playGame.swapPieces(ui.Player);
             break;
         end;
     end
@@ -35,7 +31,7 @@ while (Valid == false)
         if (PlaceX>=0 && PlaceX<=450) && (PlaceY>=0 && PlaceY<=450)
             X = ceil(PlaceX/50);
             Y = ceil(PlaceY/50);
-            Valid = isMoveValid(GamePieces(PieceNum,:),X,Y,Board);
+            Valid = isMoveValid(GamePieces(PieceNum,:),X,Y,ui.Board);
         end
     end
 end
@@ -43,7 +39,7 @@ end
 UpdateMoveState
 
 if Player == 1
-    ui.P1GamePieces = GamePieces;
+    P1GamePieces = GamePieces;
 elseif Player == 2
-    ui.P2GamePieces = GamePieces;
+    P2GamePieces = GamePieces;
 end

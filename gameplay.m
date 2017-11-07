@@ -61,6 +61,7 @@ classdef gameplay < handle
                pieceX = pieces(i, 1);
                pieceY = pieces(i, 2);
                obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
+               obj.motionMaker.orientForBox();
                obj.motionMaker.arrangeInBox();
             end
         end

@@ -16,6 +16,7 @@ classdef motion < handle
         orientationPoint;
         
         boardOrientation;
+
         
         %position definitions of the board
         board_topLeft;
@@ -182,10 +183,13 @@ classdef motion < handle
             %read orientation of piece
             
             %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
-            orientation = 0;
+            global ui;
+            
+            correction = correctBlock(ui.tableRGB);
+            orientation = correction(3);
             
             %rotate the end effector by some amount
-            global ui;
+            
             %current end effector angle
             currJoints = ui.pose(9);
             %add 20 degrees (may need to convert to radians)
@@ -233,6 +237,7 @@ classdef motion < handle
                 [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
                 if(foundBox)
                     obj.boxLocation = [box.x, box.y];
+                    obj.boxOrientation = box.orient;
                 end
             end
             
@@ -248,6 +253,32 @@ classdef motion < handle
                     return;
                 end
             end
+        end
+        
+        function obj = orientForBox(obj)
+            obj.placeToPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
+            %read orientation of piece
+            
+            %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
+            orientation = obj.boxOrientation;
+            
+            %rotate the end effector by some amount
+            global ui;
+            %current end effector angle
+            currJoints = ui.pose(9);
+            %add 20 degrees (may need to convert to radians)
+            adjJoints = currJoints + orientation;
+            ui.jointQueue = cat(1, ui.jointQueue, adjJoints);
+            ui.commandQueue = [ui.commandQueue, 8];
+            
+            %pick up piece
+            obj.pickUpFromPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
+            
+            
+            %rotate the end effector by some amount opposite way (orienting
+            %piece)
+            ui.jointQueue = cat(1, ui.jointQueue, currJoints);
+            ui.commandQueue = [ui.commandQueue, 8];
         end
         
     end
