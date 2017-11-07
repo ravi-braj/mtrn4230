@@ -24,7 +24,7 @@ QUIT = false;
 %%MAIN LOOP
 while(~QUIT)
     %%Show the Game
-    [P1GamePieces,P2GamePieces] = updateGameState(ui.tableRGB);
+    %[P1GamePieces,P2GamePieces] = updateGameState(ui.tableRGB);
     Game_Interface;
     
     %If missing pieces
@@ -32,7 +32,7 @@ while(~QUIT)
     
     
     %%Show the Game Again
-    [P1GamePieces,P2GamePieces] = updateGameState(im);
+    %[P1GamePieces,P2GamePieces] = updateGameState(im);
     Game_Interface;
     
     if Player == 1

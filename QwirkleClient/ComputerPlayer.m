@@ -11,6 +11,7 @@ if button ~= 113
         Valid = false;
         %SWAP ALL PIECES
         GamePieces = zeros(6,2);
+        ui.playGame.swapPieces(Player);
     else
         Valid = true;
     end
