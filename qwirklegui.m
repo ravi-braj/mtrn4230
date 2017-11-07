@@ -22,7 +22,7 @@ function varargout = qwirklegui(varargin)
 
 % Edit the above text to modify the response to help qwirklegui
 
-% Last Modified by GUIDE v2.5 26-Sep-2017 15:39:12
+% Last Modified by GUIDE v2.5 07-Nov-2017 18:40:11
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -81,3 +81,11 @@ function Load_Conveyor_Callback(hObject, eventdata, handles)
 global ui;
 ui.loadBox = 1;
 
+
+
+% --- Executes on button press in PlayQwirkle.
+function PlayQwirkle_Callback(hObject, eventdata, handles)
+% hObject    handle to PlayQwirkle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+QwirkleClient;
