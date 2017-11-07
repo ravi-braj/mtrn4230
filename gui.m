@@ -99,10 +99,15 @@ function vacuum_toggle_Callback(hObject, eventdata, handles)
         
     %%%%%% DELETE THIS --- ITS JUST FOR TESTING PICK AND PLACE %%%
     disp('replace');
-    ui.playGame.replacePiece(1, 1);
-
     
 
+    ui.playGame.replacePiece(ui.countp, ui.countb);
+    ui.countb = ui.countb + 1;
+    
+    if (ui.countb > 6)
+        ui.countp = 2;
+        ui.countb = 1;
+    end
 end
 
 
@@ -337,8 +342,8 @@ function choosePoint_conveyor_Callback(hObject, eventdata, handles)
     
     pxToMM = 0.659375;
     
-    RobFramey = (x - conveyorOffsetXPx)*pxToMM;
-    RobFramex = (-y + conveyorOffsetYPx)*pxToMM-16;
+    RobFramey = (x - conveyorOffsetXPx)*pxToMM-8;
+    RobFramex = (-y + conveyorOffsetYPx)*pxToMM-12;
     RobFramez = 40;
     ui.setPose(1) = RobFramex;
     ui.setPose(2) = RobFramey;

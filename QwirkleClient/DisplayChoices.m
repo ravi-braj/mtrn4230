@@ -11,6 +11,5 @@ PieceDisplay = cell.empty(6,0);
         tile = sprintf('%d%d.gif',Input(x,1),Input(x,2));
         PieceDisplay(x) = {tile};
     end
-`
 montage(PieceDisplay,'Size',[6 1]);
 end
