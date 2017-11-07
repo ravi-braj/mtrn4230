@@ -28,6 +28,9 @@ classdef motion < handle
         
         blocks;
         
+        %boxSpace
+        boxSpace;
+        
     end
     methods
         function obj = motion()
@@ -58,6 +61,8 @@ classdef motion < handle
             
             %set orientation point
             obj.orientationPoint = [288+175, 230];
+            
+           
             
             
 
@@ -216,7 +221,7 @@ classdef motion < handle
         function [x_p, y_p] = playerToPixel(obj, playerID, n)
             %alternatively, could use topcorner, bottomcorner and board
             %size to determine position of grid squares.
-            if(playerID == 0)
+            if(playerID == 1)
                 x_p = obj.p1_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
                 y_p = obj.p1_topLeft(1) + 0.5*obj.squareSize;
             else
@@ -224,6 +229,32 @@ classdef motion < handle
                 y_p = obj.p2_topLeft(1) + 0.5*obj.squareSize;
             end
         end
+        
+        %assumes a piece is being held. Locates a free space in the box to
+        %place it.
+        function obj = arrangeInBox(obj)
+            global ui;
+            if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
+                [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+                if(foundBox)
+                    obj.boxLocation = [box.x, box.y];
+                end
+            end
+            
+            
+            for i = 1:length(obj.boxSpace)
+                %empty space
+                if(obj.boxSpace(i) == 0)
+                    [r_box, c_box] = ind2sub(size(obj.boxSpace), i);
+                    xb = box_topLeft(1) + (c_box-1)*obj.squareSize+0.5*obj.squareSize;
+                    yb = box_topLeft(2) + (r_box-1)*obj.squareSize+0.5*obj.squareSize;
+                    obj.placeToPoint(xb, yb, 0);
+                    obj.boxSpace(i) = 1;
+                    return;
+                end
+            end
+        end
+        
     end
 end
 
