@@ -42,8 +42,11 @@ while(~QUIT)
         Player = 2;
     elseif Player == 2
         %PLAYER 2 (COMPUTER MOVE)
-        ComputerPlayer
-        %HumanPlayer
+        if (ui.playerbutton == 'Human')
+            HumanPlayer;
+        elseif (ui.playerbutton == 'AI')
+            ComputerPlayer;
+        end
         Player = 1;
     end
     
