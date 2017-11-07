@@ -64,6 +64,9 @@ mainTimer.TimerFcn = {@timerCallback, ui};
 
 start(mainTimer);
 
+
+
+
 %% %%%%%%%%%%% 5 WATCH FOR EXIT OF GUI %%%%%%%%%%%%%%%%%
 while(1)
     try 

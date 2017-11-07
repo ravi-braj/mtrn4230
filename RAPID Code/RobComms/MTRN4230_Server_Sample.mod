@@ -14,18 +14,18 @@ MODULE MTRN4230_Server_Sample
     ! Data stores   (persistent across tasks) (not directly compatible with UnpackRawBytes - use tmpf, tmpb)
     PERS byte jog_input := 0;
 
-    PERS byte write_io{4} := [0,0,0,1];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
-    PERS byte read_switches{6} := [1,0,1,1,0,1];    !E-STOP STATES AND SWITCHES
+    PERS byte read_switches{6} := [1,0,0,1,0,1];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [0,0,0];
+    PERS pos write_position := [229.564,235.877,200];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     PERS num write_orientation := 0;
     
-    PERS pos read_position := [0.295529,-438.955,625.077];
-    PERS jointtarget read_joints := [[-89.9614,0.0041762,0.0129134,-3.86987E-05,2.00447,0.00636272],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [229.554,235.866,199.995];
+    PERS jointtarget read_joints := [[45.777,20.9832,33.4889,-3.86987E-05,35.5339,45.7772],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
-    PERS speeddata speed := [100,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+    PERS speeddata speed := [500,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
@@ -61,7 +61,7 @@ MODULE MTRN4230_Server_Sample
         read_position := [0,0,0];
         read_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
         
-        speed := v100;       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
+        speed := v500;       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
         mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
         pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
         
@@ -207,7 +207,7 @@ MODULE MTRN4230_Server_Sample
             
             UnpackRawBytes raw_data, 1, tmpf \Float4;  ! 4 bytes per value
             speed.v_tcp := tmpf;
-            
+                        
             SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
             
         ELSEIF requestMsg{1} = StrToByte("M" \Char) THEN   ! Client wants to set motion mode

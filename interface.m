@@ -38,6 +38,12 @@ classdef interface < handle
         h_plotConveyor
         h_textConveyor
         
+        % Handle for qwirkle data
+        h_P1Hand
+        h_P2Hand
+        h_QBoard
+        
+        
         %RGB data for conveyor
         conveyorObj
         conveyorRGB
@@ -86,7 +92,17 @@ classdef interface < handle
         
         %Qwirkle
         loadBox
+        Board
+        P1GamePieces
+        P2GamePieces
+        Player
+        P1Action
+        P2Action
+        P1TotalScore
+        P2TotalScore
         
+        countp
+        countb
     end
     methods
         
@@ -110,6 +126,8 @@ classdef interface < handle
             obj.error = [0,0,0,0,0,0];
             obj.motionMode = string('linear');
             
+            obj.countp = 1;
+            obj.countb = 1;
             
             %obj.robotTCP.openTCP('127.0.0.1', 1025);
             obj.robotTCP.openTCP('192.168.125.1', 1025);

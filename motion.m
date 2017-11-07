@@ -16,6 +16,7 @@ classdef motion < handle
         orientationPoint;
         
         boardOrientation;
+
         
         %position definitions of the board
         board_topLeft;
@@ -28,38 +29,37 @@ classdef motion < handle
         
         blocks;
         
+        %boxSpace
+        boxSpace;
+        
     end
     methods
         function obj = motion()
-            %ptablehome: centre point of robot
-            %[175,0,147]
             %define board positions
-            %width: 35mm +1mm borders
-            %obj.board_topLeft = [551, 286];
-            %obj.board_bottomRight = [1042, 785];
+            obj.board_topLeft = [551, 286];
+            obj.board_bottomRight = [1042, 785];
             
-            %obj.p1_topLeft = [418, 286];
-            %obj.p2_topLeft = [1130, 286];
+            obj.p1_topLeft = [418, 286];
+            obj.p2_topLeft = [1130, 286];
             
-            %obj.squareSize = 56;
+            obj.squareSize = 56;
             
             %set orientation point
-            %obj.orientationPoint = [1140, 709];
+            obj.orientationPoint = [1140, 709];
             
             obj.boxLocation = [0, 0];
             
-            obj.board_topLeft = [0+175, -162];
-            %obj.board_bottomRight = [1042, 785];
-            
-            obj.p1_topLeft = [0+175, -230];
-            obj.p2_topLeft = [0+175, 230];
-            
-            obj.squareSize = 36;
-            
-            %set orientation point
-            obj.orientationPoint = [288+175, 230];
-            
-            
+
+%             obj.board_topLeft = [0+175, -162];
+%             %obj.board_bottomRight = [1042, 785];
+%             
+%             obj.p1_topLeft = [0+175, -230];
+%             obj.p2_topLeft = [0+175, 230];
+%             
+%             obj.squareSize = 36;
+%             
+%             %set orientation point
+%             obj.orientationPoint = [288+175, 230];
 
         end
         
@@ -183,10 +183,13 @@ classdef motion < handle
             %read orientation of piece
             
             %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
-            orientation = 0;
+            global ui;
+            
+            correction = correctBlock(ui.tableRGB);
+            orientation = correction(3);
             
             %rotate the end effector by some amount
-            global ui;
+            
             %current end effector angle
             currJoints = ui.pose(9);
             %add 20 degrees (may need to convert to radians)
@@ -207,8 +210,8 @@ classdef motion < handle
         %takes in the grid square on the board and returns a pixel
         %coordinate. Top left of board is (0, 0)
         function [x_p, y_p] = boardToPixel(obj, x, y)
-            x_p = obj.board_topLeft(1) + y*obj.squareSize + 0.5*obj.squareSize;
-            y_p = obj.board_topLeft(2) + x*obj.squareSize + 0.5*obj.squareSize;
+            x_p = obj.board_topLeft(1) + x*obj.squareSize + 0.5*obj.squareSize;
+            y_p = obj.board_topLeft(2) + y*obj.squareSize + 0.5*obj.squareSize;
         end
         
         %takes in a player number and square and returns a pixel
@@ -216,14 +219,68 @@ classdef motion < handle
         function [x_p, y_p] = playerToPixel(obj, playerID, n)
             %alternatively, could use topcorner, bottomcorner and board
             %size to determine position of grid squares.
-            if(playerID == 0)
+
+            if(playerID == 1)
                 x_p = obj.p1_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
                 y_p = obj.p1_topLeft(1) + 0.5*obj.squareSize;
             else
-                x_p = obj.p2_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
-                y_p = obj.p2_topLeft(1) + 0.5*obj.squareSize;
+                y_p = obj.p2_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
+                x_p = obj.p2_topLeft(1) + 0.5*obj.squareSize;
             end
         end
+        
+        %assumes a piece is being held. Locates a free space in the box to
+        %place it.
+        function obj = arrangeInBox(obj)
+            global ui;
+            if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
+                [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+                if(foundBox)
+                    obj.boxLocation = [box.x, box.y];
+                    obj.boxOrientation = box.orient;
+                end
+            end
+            
+            
+            for i = 1:length(obj.boxSpace)
+                %empty space
+                if(obj.boxSpace(i) == 0)
+                    [r_box, c_box] = ind2sub(size(obj.boxSpace), i);
+                    xb = box_topLeft(1) + (c_box-1)*obj.squareSize+0.5*obj.squareSize;
+                    yb = box_topLeft(2) + (r_box-1)*obj.squareSize+0.5*obj.squareSize;
+                    obj.placeToPoint(xb, yb, 0);
+                    obj.boxSpace(i) = 1;
+                    return;
+                end
+            end
+        end
+        
+        function obj = orientForBox(obj)
+            obj.placeToPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
+            %read orientation of piece
+            
+            %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
+            orientation = obj.boxOrientation;
+            
+            %rotate the end effector by some amount
+            global ui;
+            %current end effector angle
+            currJoints = ui.pose(9);
+            %add 20 degrees (may need to convert to radians)
+            adjJoints = currJoints + orientation;
+            ui.jointQueue = cat(1, ui.jointQueue, adjJoints);
+            ui.commandQueue = [ui.commandQueue, 8];
+            
+            %pick up piece
+            obj.pickUpFromPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
+            
+            
+            %rotate the end effector by some amount opposite way (orienting
+            %piece)
+            ui.jointQueue = cat(1, ui.jointQueue, currJoints);
+            ui.commandQueue = [ui.commandQueue, 8];
+        end
+        
     end
 end
 
@@ -236,52 +293,48 @@ function [rs_x, rs_y, rs_z] = convertCoordsConveyor(x, y)
 % hObject    handle to choosePoint_table (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-%     global ui;
-% 
-% 
-%     M = undistortPoints([x,y], ui.conveyorParams);
-%     x = M(1,1);
-%     y = M(1,2);
-%     z = 10;
-%     y =1200 - y;
-%     if(x>1600) || (y>1200) || (x<0) || (y<0)
-%         x = NaN;
-%         y = NaN;
-%         z = NaN;
-%     end
-%     
-%     conveyorOffsetXPx = 215;
-%     conveyorOffsetYPx = 683;
-%     
-%     pxToMM = 0.659375;
-%     
-%     rs_y = (x - conveyorOffsetXPx)*pxToMM;
-%     rs_x = (-y + conveyorOffsetYPx)*pxToMM-16;
-    rs_x = x;
-    rs_y = y;
+    global ui;
+
+
+    M = undistortPoints([x,y], ui.conveyorParams);
+    x = M(1,1);
+    y = M(1,2);
+    z = 10;
+    y =1200 - y;
+    if(x>1600) || (y>1200) || (x<0) || (y<0)
+        x = NaN;
+        y = NaN;
+        z = NaN;
+    end
+    
+    conveyorOffsetXPx = 215;
+    conveyorOffsetYPx = 683;
+    
+    pxToMM = 0.659375;
+    
+    rs_y = (x - conveyorOffsetXPx)*pxToMM-8;
+    rs_x = (-y + conveyorOffsetYPx)*pxToMM-12;
     rs_z = 33;
 end
 
 function [rs_x, rs_y, rs_z] = convertCoordsTable(x, y)
     global ui;
-%     M = undistortPoints([x,y], ui.tableParams);
-%     x = M(1,1);
-%     y = M(1,2);
-%     y =1200 - y;
-%     if(x>1600) || (y>1200) || (x<0) || (y<0)
-%         x = NaN;
-%         y = NaN;
-%         z = NaN;
-%     end
-%     
-%     pxToMM = 0.659375;
-%     
-%     tableXoffsetPx = 800; 
-%     tableYoffsetPx = 1178;
-%     
-%     rs_y = (x - tableXoffsetPx)*pxToMM;
-%     rs_x = (-y + tableYoffsetPx)*pxToMM;    
-    rs_x = x;
-    rs_y = y;
+    M = undistortPoints([x,y], ui.tableParams);
+    x = M(1,1);
+    y = M(1,2);
+    y =1200 - y;
+    if(x>1600) || (y>1200) || (x<0) || (y<0)
+        x = NaN;
+        y = NaN;
+        z = NaN;
+    end
+    
+    pxToMM = 0.659375;
+    
+    tableXoffsetPx = 800; 
+    tableYoffsetPx = 1178;
+    
+    rs_y = (x - tableXoffsetPx)*pxToMM;
+    rs_x = (-y + tableYoffsetPx)*pxToMM;    
     rs_z = 147+7;
 end
