@@ -97,6 +97,12 @@ function timerCallback(obj, event, ui)
         end
     end
     
+        %% ---------- Display Game Board ---------------------
+    % 1) receive the serial data
+    % 2) use gui plot handle for setting the data in the conveyor camera plot
+    % display game board here using Game_Interface function if required
+    % every iteration, for now testing if it can just be updated when a
+    % move is made
     %% Check Box position
     if ui.loadBox == 1
         % If Box is not in position. Turn on conveyor. If on leave it on
