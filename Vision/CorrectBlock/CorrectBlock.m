@@ -45,8 +45,8 @@ function [x,y,theta,valid] = CorrectBlock(im)
         y = stats.Centroid(Idx, 2);
 
         % Extract block orientation
-        [~, i1] = min(stats.PixelList{1}(:,1));
-        [~, i2] = max(stats.PixelList{1}(:,2));
+        [~, i1] = max(stats.PixelList{1}(:,1));
+        [~, i2] = min(stats.PixelList{1}(:,2));
         x_ = abs(stats.PixelList{1}(i1,1) - stats.PixelList{1}(i2,1));
         y_ = abs(stats.PixelList{1}(i1,2) - stats.PixelList{1}(i2,2));
         theta = rad2deg(atan2(y_,x_));
