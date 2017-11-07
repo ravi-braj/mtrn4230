@@ -50,19 +50,19 @@ classdef gameplay < handle
         
         %looks at all the pieces on the table and places them in the box
         %assumes that the box is empty.
-        function cleanTable(obj, player, n)
+        function cleanTable(obj)
             %get array of pieces on table - in pixels
-            pieces = detectOnTable();
-            
+            global ui;
+            pieces = detectOnTable(ui.tableRGB); %n by 6
+
             toIterate = max(length(pieces), 12);
             
             for i = 1:toIterate
-               pieceX = 0;
-               pieceY = 0;
+               pieceX = pieces(i, 1);
+               pieceY = pieces(i, 2);
                obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
                obj.motionMaker.arrangeInBox();
             end
-            
         end
         
     end
