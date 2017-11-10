@@ -2,6 +2,10 @@ function sortDecks(obj)
 global ui;
 %%Detect all the pieces on Table
 pieces = detectTable(ui.tableRGB);
+%%Remove Pieces NOT IN RANGE
+pieces = pieces(find(pieces(:,1)<=1120),:);
+pieces = pieces(find(pieces(:,1)>=488),:);
+
 %%Find the Matching Colour and Shape for P1 and P2
 M = mode(pieces);
 checkingColour = M(4);
