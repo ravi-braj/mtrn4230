@@ -1,5 +1,4 @@
 function c = detectBlocks(im,source)
-
     
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
