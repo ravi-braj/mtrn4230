@@ -97,7 +97,7 @@ classdef interface < handle
         htexttable
         hquivtable
         hdottable
-        
+
         %Qwirkle
         loadBox
         Board
@@ -202,8 +202,6 @@ classdef interface < handle
             %axis([0 1600 0 1200], 'parent', obj.clientGUIData.camera_table);
             %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
             hold(obj.clientGUIData.camera_table,'off');
-            
-            
             
 
             %----------- OTHER HANDLES ----------------%
