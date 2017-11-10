@@ -90,9 +90,13 @@ classdef interface < handle
         %Counter
         count
         
-        handletext
-        handlequiv
-        handledot
+        htextconveyor
+        hquivconveyor
+        hdotconveyor
+        
+        htexttable
+        hquivtable
+        hdottable
         %Qwirkle
         loadBox
         Board
@@ -186,7 +190,8 @@ classdef interface < handle
             hold(obj.clientGUIData.camera_table,'off');
             
             
-            obj.handledot = plot(0,0,'*w');
+            obj.hdotconveyor = plot(0,0,'*w','Parent', obj.clientGUIData.camera_conveyor);
+            obj.hdottable = plot(0,0,'*w','Parent', obj.clientGUIData.camera_table);
 
             %----------- OTHER HANDLES ----------------%
             

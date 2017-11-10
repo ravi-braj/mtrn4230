@@ -29,17 +29,24 @@ function plotBlocks(source) % Table = 0; Conveyor = 1;
     for i = 1:n
         s{i} = sprintf('[C: %d,S: %d,R: %d]',c(i,4),c(i,5),c(i,6));
     end
-    delete(ui.handletext)
-    ui.handletext = text(x + 45,y,s,'HorizontalAlignment','left','Color','g');
+    
     %set(handletext,'Position',[(x+45) y],'String',s)
     %plot(x,y,'*w');
-    set(ui.handledot,'xdata',x,'ydata',y);
-    delete(ui.handlequiv)
-    if source
-        ui.handlequiv = quiver(x,y,u,v,0.35,'w','linewidth',1.2);
+    
+    
+    if (source == 1)
+        delete(ui.hquivconveyor);
+        delete(ui.htextconveyor);
+        ui.htextconveyor = text(ui.clientGUIData.camera_conveyor, x + 45,y,s,'HorizontalAlignment','left','Color','g');
+        ui.hquivconveyor = quiver(x,y,u,v,0.35,'w','linewidth',1.2);
+        set(ui.hdotconveyor,'xdata',x,'ydata',y);
         %set(handlequiv,'xdata',x,'ydata','udata',u,'vdata',v,'AutoScaleFactor',0.35,'linewidth',1.2);
-    else
-        ui.handlequiv = quiver(x,y,u,v,0.1,'w','linewidth',1.2);
+    elseif (source == 0)
+        delete(ui.hquivtable);
+        delete(ui.htexttable);
+        ui.htexttable = text(ui.clientGUIData.camera_table, x + 45,y,s,'HorizontalAlignment','left','Color','g');
+        ui.hquivtable = quiver(x,y,u,v,0.1,'w','linewidth',1.2);
+        set(ui.hdottable,'xdata',x,'ydata',y);
         %set(handlequiv,'xdata',x,'ydata','udata',u,'vdata',v,'AutoScaleFactor',0.1,'linewidth',1.2);
     end
         
