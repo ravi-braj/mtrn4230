@@ -3,7 +3,7 @@ function Visualise_Pattern (json)
     nblocks = size(blocks);
     ncol = 9;
     nrow = 9;
-    fig1 = figure ();
+    fig1 = figure (2);
     axe1 = axes (fig1);
     col_row1 = robotics.BinaryOccupancyGrid (ncol, nrow, 1);
     hold (axe1, 'on');

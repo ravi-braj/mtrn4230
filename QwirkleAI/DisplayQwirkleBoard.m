@@ -17,7 +17,7 @@ for y  = 1:9
     end
 end
 %%Display Qwirkle Board
-% fig1 = figure();
+ fig1 = figure(1);
 % axes1 = axes;
 % axis(axes1,'ij');
 % % Set the remaining axes properties
