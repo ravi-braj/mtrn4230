@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 07-Nov-2017 21:29:00
+    % Last Modified by GUIDE v2.5 10-Nov-2017 19:21:21
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -695,8 +695,159 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
 % hObject    handle to make_qwirkle_move (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-global ui;
-figure(10);
-ui.ginputFlag = 1;
-[ui.qwirkleX, ui.qwirkleY,ui.qwirkleButton] = ginput(2);
+    global ui;
+    
+    guiEnable(handles, 0);
+    pause(5);
+    guiEnable(handles,1);
+
+% %send move to quirkle game engine / make the move
+%     if(ui.Player == 1)
+%         if(1)%get options == ai on
+%             ComputerPlayer;
+%         else
+%             ui.Player = 2;
+%         end
+%     end
+end
+
+
+% --- Executes on button press in play_quirkle.
+function play_quirkle_Callback(hObject, eventdata, handles)
+% hObject    handle to play_quirkle (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+% leave empty
+function q_col_Callback(hObject, eventdata, handles)
+% hObject    handle to q_col (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q_col as text
+%        str2double(get(hObject,'String')) returns contents of q_col as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+%leave emepty
+function q_col_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q_col (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+%leave emepty
+function q_row_Callback(hObject, eventdata, handles)
+% hObject    handle to q_row (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q_row as text
+%        str2double(get(hObject,'String')) returns contents of q_row as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+%leave emepty
+function q_row_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q_row (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+% --- Executes on button press in swap_piece.
+function swap_piece_Callback(hObject, eventdata, handles)
+% hObject    handle to swap_piece (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+
+function q_piece_Callback(hObject, eventdata, handles)
+% hObject    handle to q_piece (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of q_piece as text
+%        str2double(get(hObject,'String')) returns contents of q_piece as a double
+end
+
+% --- Executes during object creation, after setting all properties.
+function q_piece_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to q_piece (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+    if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+        set(hObject,'BackgroundColor','white');
+    end
+end
+
+
+% --- Executes on button press in clean_table.
+function clean_table_Callback(hObject, eventdata, handles)
+% hObject    handle to clean_table (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+% --- Executes on button press in sort_decks.
+function sort_decks_Callback(hObject, eventdata, handles)
+% hObject    handle to sort_decks (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+% --- Executes on button press in pvp.
+function pvp_Callback(hObject, eventdata, handles)
+% hObject    handle to pvp (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of pvp
+end
+
+% --- Executes on button press in ai_enable.
+function ai_enable_Callback(hObject, eventdata, handles)
+% hObject    handle to ai_enable (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of ai_enable
+end
+
+%takes in a 1 to enable the gui, 0 to disable
+function guiEnable(handles, enable)
+    if(enable)
+        set(handles.swap_piece,'Enable','on')
+        set(handles.play_quirkle,'Enable','on') 
+        set(handles.load_conveyor_box,'Enable','on') 
+        set(handles.clean_table,'Enable','on') 
+        set(handles.sort_decks,'Enable','on') 
+        set(handles.pvp,'Enable','on') 
+        set(handles.ai_enable,'Enable','on') 
+    else
+        set(handles.swap_piece,'Enable','off')
+        set(handles.play_quirkle,'Enable','off') 
+        set(handles.load_conveyor_box,'Enable','off') 
+        set(handles.clean_table,'Enable','off') 
+        set(handles.sort_decks,'Enable','off') 
+        set(handles.pvp,'Enable','off') 
+        set(handles.ai_enable,'Enable','off') 
+    end
+        
 end
