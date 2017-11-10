@@ -21,7 +21,6 @@ classdef gameplay < handle
         function replacePiece(obj, player, n)
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromBox();
-            %obj.motionMaker.orientPiece();
             obj.motionMaker.placeToPoint(pieceX, pieceY, 1);
         end
         
@@ -44,7 +43,7 @@ classdef gameplay < handle
         function discardPiece(obj, player, n)
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
-            obj.motionMaker.placeInBox();
+            obj.motionMaker.arrangeInBox(0);
         end
         
         
@@ -70,9 +69,14 @@ classdef gameplay < handle
             for i = 1:toIterate
                pieceX = pieces(i, 1);
                pieceY = pieces(i, 2);
-               obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
-               obj.motionMaker.orientForBox();
-               obj.motionMaker.arrangeInBox();
+               orientation = pieces(i, 3);
+               reachable = pieces(i, 6);
+               if(reachable)
+                   obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
+                   obj.motionMaker.arrangeInBox(orientation);
+               else
+                   disp('piece not reachable')
+               end
             end
         end
         

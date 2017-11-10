@@ -32,6 +32,8 @@ classdef motion < handle
         %boxSpace
         boxSpace;
         
+        safePoint;
+        
     end
     methods
         function obj = motion()
@@ -49,17 +51,7 @@ classdef motion < handle
             
             obj.boxLocation = [0, 0];
             
-
-%             obj.board_topLeft = [0+175, -162];
-%             %obj.board_bottomRight = [1042, 785];
-%             
-%             obj.p1_topLeft = [0+175, -230];
-%             obj.p2_topLeft = [0+175, 230];
-%             
-%             obj.squareSize = 36;
-%             
-%             %set orientation point
-%             obj.orientationPoint = [288+175, 230];
+            obj.safePoint = [1140, 709];
 
         end
         
@@ -81,18 +73,11 @@ classdef motion < handle
             ui.poseQueue = cat(1, ui.poseQueue, [x, y, z]);
             ui.commandQueue = [ui.commandQueue, 7];
 
-            
-            %turn on vacuum
-            %if(length(ui.ioQueue>0))
-            %    newIOs = ui.ioQueue(length(ui.ioQueue));
-            %else
             newIOs = ui.IOs;
             newIOs(1) = 1;
             newIOs(2) = 1;
             ui.ioQueue = cat(1, ui.ioQueue, newIOs);
             ui.commandQueue = [ui.commandQueue, 9]; 
-            
-
             
             %go to a point just above the table
             ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
@@ -123,8 +108,6 @@ classdef motion < handle
             ui.ioQueue = cat(1, ui.ioQueue, newIOs);
             ui.commandQueue = [ui.commandQueue, 9];            
 
-
-            
             %go to a point just above the table
             ui.poseQueue =cat(1, ui.poseQueue, [x, y, 200]);
             ui.commandQueue = [ui.commandQueue, 7];
@@ -135,26 +118,32 @@ classdef motion < handle
         %picks up a piece from the box. Stores its coordinates in the box
         %array. Takes in the xy coordinates of the piece
         function obj = pickUpFromBox(obj)
-
             %need a function to return the xy coords of a piece in the box
-            [x, y] = obj.findFromBox();
-            
-            
-            obj.pickUpFromPoint(x, y, 0);
+            [x, y, orientation, reachable] = obj.findFromBox();
+
+            if(reachable)
+                obj.pickUpFromPoint(x, y, 0);
+                obj.orientPiece(orientation);
+            else 
+                disp('piece not reachable');
+            end
         end
         
-        function [x, y] = findFromBox(obj)
+        function [x, y, orientation, reachable] = findFromBox(obj)
            global ui;
-           [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+           [obj.blocks, box, foundBox] = detectConveyor(ui.conveyorRGB);
            if(length(obj.blocks) > 0 && foundBox == 1)
                index = 1;
                x = obj.blocks(index, 1);
                y = obj.blocks(index, 2);
+               orientation = obj.blocks(index, 3);
+               reachable = obj.blocks(index, 6);
            else
               x = 0;
               y = 0;
+              orientation = 0;
+              reachable = 0;
            end
-           
         end
         
         %places piece into the box at some random location from the center.
@@ -163,47 +152,32 @@ classdef motion < handle
             %set the position of the box.
             global ui;
             if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
-                [obj.blocks, box, foundBox] = detectConveyorBlocks(ui.conveyorRGB);
+                [obj.blocks, box, foundBox] = detectConveyor(ui.conveyorRGB);
                 if(foundBox)
                     obj.boxLocation = [box.x, box.y];
                     obj.boxOrientation = -box.orient;
                 end
             end
-            
-            
+
             %random distance from box center so that not all pieces are
             %placed in the centre of the box.
             randX = randi([-20,20]);
             randY = randi([-20,20]);
+            obj.goToInterimPoint();
             obj.placeToPoint(obj.boxLocation(1)+randX, obj.boxLocation(2)+randY, 0); 
+            obj.goToInterimPoint();
         end
-           
-        function obj = orientPiece(obj)
-            obj.placeToPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
-            %read orientation of piece
-            
-            %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
+        
+        %positive offset is clockwise correction
+        %negative offset is anti-clockwise correction
+        function obj = orientPiece(obj, orientationOffset)
             global ui;
-            
-            correction = correctBlock(ui.tableRGB);
-            orientation = correction(3);
-            
-            %rotate the end effector by some amount
-            
+
             %current end effector angle
             currJoints = ui.pose(9);
-            %add 20 degrees (may need to convert to radians)
-            adjJoints = currJoints + orientation;
+
+            adjJoints = currJoints - orientationOffset;
             ui.jointQueue = cat(1, ui.jointQueue, adjJoints);
-            ui.commandQueue = [ui.commandQueue, 8];
-            
-            %pick up piece
-            obj.pickUpFromPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
-            
-            
-            %rotate the end effector by some amount opposite way (orienting
-            %piece)
-            ui.jointQueue = cat(1, ui.jointQueue, currJoints);
             ui.commandQueue = [ui.commandQueue, 8];
         end
         
@@ -230,8 +204,9 @@ classdef motion < handle
         end
         
         %assumes a piece is being held. Locates a free space in the box to
-        %place it.
-        function obj = arrangeInBox(obj)
+        %place it. It will rotate the piece by the angle of the box plus
+        %the offset in the arguments
+        function obj = arrangeInBox(obj, angleOffset)
             global ui;
             
             if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
@@ -246,13 +221,10 @@ classdef motion < handle
             box_topLeft(1) = obj.boxLocation(1)-3*obj.squareSize;
             box_topLeft(2) = obj.boxLocation(2) + obj.squareSize;
             
-            %box_topLeft(1) = bX*cosd(obj.boxOrientation)-bY*sind(obj.boxOrientation);
-            %box_topLeft(2) = bX*sind(obj.boxOrientation)+bY*cosd(obj.boxOrientation);
-            
+            %orient the piece
+            obj.orientPiece(angleOffset+obj.boxOrientation);
+           
 
-            
-            
-            
             for i = 1:length(obj.boxSpace)
                 %empty space
                 if(obj.boxSpace(i) == 0)
@@ -276,37 +248,17 @@ classdef motion < handle
             end
         end
         
-        function obj = orientForBox(obj)
-            obj.placeToPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
-            %read orientation of piece
-            
-            %orientation = readOrientation(obj.orientationPoint(1), obj.orientationPoint(2))
-            orientation = obj.boxOrientation;
-            
-            %rotate the end effector by some amount
+        %a safe point so that linear mode can be used
+        function obj = goToInterimPoint(obj)
             global ui;
-            %current end effector angle
-            currJoints = ui.pose(9);
-            %add 20 degrees (may need to convert to radians)
-            adjJoints = currJoints + orientation;
-            ui.jointQueue = cat(1, ui.jointQueue, adjJoints);
-            ui.commandQueue = [ui.commandQueue, 8];
-            
-            %pick up piece
-            obj.pickUpFromPoint(obj.orientationPoint(1), obj.orientationPoint(2), 1);
-            
-            
-            %rotate the end effector by some amount opposite way (orienting
-            %piece)
-            ui.jointQueue = cat(1, ui.jointQueue, currJoints);
-            ui.commandQueue = [ui.commandQueue, 8];
+            %point on table
+            [x, y, z] = convertCoordsTable(obj.safePoint(1), obj.safePoint(2));
+            %go to the point
+            ui.poseQueue = cat(1, ui.poseQueue, [x, y, 200]);
+            ui.commandQueue = [ui.commandQueue, 7];            
         end
-        
     end
 end
-
-
-
 
 
 
