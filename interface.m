@@ -101,6 +101,7 @@ classdef interface < handle
         P1TotalScore
         P2TotalScore
         playerbutton
+        emptyboard
 
 %         qwirkleX
 %         qwirkleY

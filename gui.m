@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 10-Nov-2017 19:21:21
+    % Last Modified by GUIDE v2.5 10-Nov-2017 20:01:46
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -689,26 +689,113 @@ function load_conveyor_box_Callback(hObject, eventdata, handles)
     ui.loadBox = 1;
 end
 
-
+%%
+%%Qwirkle CallBacks
 % --- Executes on button press in make_qwirkle_move.
 function make_qwirkle_move_Callback(hObject, eventdata, handles)
 % hObject    handle to make_qwirkle_move (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
-    
+    [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
     guiEnable(handles, 0);
-    pause(5);
-    guiEnable(handles,1);
+    PieceNum = str2num(get(handles.q_piece,'String'));
+    X = str2num(get(handles.q_col,'String'));
+    Y = str2num(get(handles.q_row,'String'));
+    
+    if(ui.Player == 1)
+        Valid = isMoveValid(ui.P1GamePieces(PieceNum,:),X,Y,ui.Board)
+        if ui.emptyboard == 1
+           Valid = true;
+           ui.emptyboard = 0;
+        end
+    elseif(ui.Player == 2)
+        Valid = isMoveValid(ui.P2GamePieces(PieceNum,:),X,Y,ui.Board)
+    end
+    
+    if Valid == true
+        if(ui.Player == 1)
+            %Grab the piece
+            MovingPiece = ui.P1GamePieces(PieceNum,:);
+            ui.P1GamePieces(PieceNum,:) = [0 0];
+            %%Place Piece
+            ui.Board(X,Y,:) = MovingPiece;
+            
+            %Robot Action
+            ui.playGame.placePiece(ui.Player, PieceNum, [X, Y]);
+            ui.playGame.replacePiece(ui.Player,PieceNum);
+            
+            %Calculate Score
+            [TotalScore,~,~] = CalculateMoveScore(ui.Board,MovingPiece,X,Y);
+            %Update Score and Action
+            ui.P1TotalScore = ui.P1TotalScore + TotalScore;
+            ui.P1Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
+            ui.P2Action = sprintf('Your Turn');
+            %%Change Player
+            ui.Player = 2;
+        elseif(ui.Player == 2)
+            %Grab the piece
+            MovingPiece = ui.P2GamePieces(PieceNum,:);
+            ui.P2GamePieces(PieceNum,:) = [0 0];
+            %%Place Piece
+            ui.Board(X,Y,:) = MovingPiece;
+            
+            %Robot Action
+            ui.playGame.placePiece(ui.Player, PieceNum, [X, Y]);
+            ui.playGame.replacePiece(ui.Player,PieceNum);
+            
+            %Calculate Score
+            [TotalScore,~,~] = CalculateMoveScore(ui.Board,MovingPiece,X,Y);
+            %Update Score and Action
+            ui.P2TotalScore = ui.P2TotalScore + TotalScore;
+            ui.P2Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
+            ui.P1Action = sprintf('Your Turn');
+            %%Change Player
+            ui.Player = 1;
+        end
+ 
+        Game_Interface;
+        pause(20);
+        [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
+        Game_Interface;
+        AI = get(handles.ai_enable,'Value');
+        if (AI == 1 && ui.Player == 2)
+            [PieceNum,X,Y] = QwirkleAI(ui.Board,ui.P2GamePieces);
+            if PieceNum == 0
+                %SWAP ALL PIECES
+                ui.P2GamePieces = zeros(6,2);
+                ui.playGame.swapPieces(ui.Player);
+            else
+                %Grab the piece
+                MovingPiece = ui.P2GamePieces(PieceNum,:);
+                ui.P2GamePieces(PieceNum,:) = [0 0];
+                %%Place Piece
+                ui.Board(X,Y,:) = MovingPiece;
 
-% %send move to quirkle game engine / make the move
-%     if(ui.Player == 1)
-%         if(1)%get options == ai on
-%             ComputerPlayer;
-%         else
-%             ui.Player = 2;
-%         end
-%     end
+                %Robot Action
+                ui.playGame.placePiece(ui.Player, PieceNum, [X, Y]);
+                ui.playGame.replacePiece(ui.Player,PieceNum);
+
+                %Calculate Score
+                [TotalScore,~,~] = CalculateMoveScore(ui.Board,MovingPiece,X,Y);
+                %Update Score and Action
+                ui.P2TotalScore = ui.P2TotalScore + TotalScore;
+                ui.P2Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
+                ui.P1Action = sprintf('Your Turn');
+            
+            end
+           %%Change Player
+           ui.Player = 1;
+           Game_Interface;
+           pause(20); 
+           [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
+           Game_Interface;
+        end
+    else
+        set(handles.qwirkle_errors,'String','INVALID MOVE');
+    end
+    
+    guiEnable(handles,1);
 end
 
 
@@ -717,6 +804,16 @@ function play_quirkle_Callback(hObject, eventdata, handles)
 % hObject    handle to play_quirkle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    ui.Board = zeros(9,9,2);
+    ui.Player = 1;
+    ui.P1Action = 'Waiting';
+    ui.P2Action = 'Waiting';
+    ui.P1TotalScore = 0;
+    ui.P2TotalScore = 0;
+    
+    [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
+    ui.emptyboard = 1;
 end
 
 % leave empty
@@ -772,6 +869,12 @@ function swap_piece_Callback(hObject, eventdata, handles)
 % hObject    handle to swap_piece (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+    global ui;
+    guiEnable(handles, 0);
+    ui.playGame.swapPieces(ui.Player);   
+    pause(20);
+    guiEnable(handles,1);
 end
 
 
@@ -803,6 +906,11 @@ function clean_table_Callback(hObject, eventdata, handles)
 % hObject    handle to clean_table (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    guiEnable(handles, 0);
+    ui.playGame.cleanTable();
+    pause(20);
+    guiEnable(handles,1);
 end
 
 % --- Executes on button press in sort_decks.
@@ -810,6 +918,11 @@ function sort_decks_Callback(hObject, eventdata, handles)
 % hObject    handle to sort_decks (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    guiEnable(handles, 0);
+    ui.playGame.sort();
+    pause(20);
+    guiEnable(handles,1);
 end
 
 % --- Executes on button press in pvp.
@@ -817,8 +930,10 @@ function pvp_Callback(hObject, eventdata, handles)
 % hObject    handle to pvp (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
 % Hint: get(hObject,'Value') returns toggle state of pvp
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 4];
+    set(ui.clientGUIData.ai_enable, 'Value', 0);
 end
 
 % --- Executes on button press in ai_enable.
@@ -826,8 +941,10 @@ function ai_enable_Callback(hObject, eventdata, handles)
 % hObject    handle to ai_enable (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-
 % Hint: get(hObject,'Value') returns toggle state of ai_enable
+    global ui;
+    ui.commandQueue = [ui.commandQueue, 4];
+    set(ui.clientGUIData.pvp, 'Value', 0);
 end
 
 %takes in a 1 to enable the gui, 0 to disable
