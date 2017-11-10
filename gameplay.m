@@ -53,9 +53,9 @@ classdef gameplay < handle
         function cleanTable(obj)
             %get array of pieces on table - in pixels
             global ui;
-            pieces = detectOnTable(ui.tableRGB); %n by 6
+            pieces = detectTable(ui.tableRGB); %n by 6
 
-            toIterate = min(length(pieces), 12);
+            toIterate = min(length(pieces(:,1)), 12);
             
             obj.motionMaker.boxSpace = zeros(6,2);
             
