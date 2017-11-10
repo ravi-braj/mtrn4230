@@ -74,7 +74,14 @@ function timerCallback(obj, event, ui)
         set(ui.h_camTable, 'CData', I);
     end
     
-    
+    %Plot Blocks
+    if (ui.countdetect > 20)
+    [ui.conveyorRGB,~] = undistortImage(ui.conveyorRGB,ui.conveyorParams);
+    [ui.tableRGB,~] = undistortImage(ui.tableRGB,ui.tableParams);
+    plotBlocks(1);
+    plotBlocks(0);
+    end
+    ui.countdetect = ui.countdetect + 1;
     %Only redetect the blocks and Box pose and properties every 6 periods 
     %to increase speed of program execution
     
@@ -94,6 +101,8 @@ function timerCallback(obj, event, ui)
 
             delete(ui.h_textConveyor);
             ui.h_textConveyor = text(ui.clientGUIData.camera_conveyor, centroid(:,1), centroid(:,2), boxtext, 'Color', 'red', 'FontSize',6);
+            
+            
         end
     end
     
@@ -131,10 +140,6 @@ function timerCallback(obj, event, ui)
         
     end
     
-<<<<<<< HEAD
-=======
-        
->>>>>>> 8b0a062590a228c75b92fa2bfc8b8299d3e6d7ac
     %% ----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
     

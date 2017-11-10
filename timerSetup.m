@@ -26,7 +26,8 @@ function timerSetup(obj, event, interface)
     ui.conveyorParams = ui.conveyorParams.conveyorParams;
     ui.tableParams = load('cameraParamsTable.mat');
     ui.tableParams = ui.tableParams.cameraParamsTable;
-
+    ui.plotted = 0;
+    ui.countdetect = 0;
 %     % Initialize Qwirkle Board
 %     StartBoard = zeros(9,9,2);
 %     ui.Board = StartBoard;

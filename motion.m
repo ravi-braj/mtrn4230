@@ -122,8 +122,10 @@ classdef motion < handle
             [x, y, orientation, reachable] = obj.findFromBox();
 
             if(reachable)
+                %obj.goToInterimPoint();
                 obj.pickUpFromPoint(x, y, 0);
                 obj.orientPiece(orientation);
+                %obj.goToInterimPoint();
             else 
                 disp('piece not reachable');
             end
@@ -131,9 +133,12 @@ classdef motion < handle
         
         function [x, y, orientation, reachable] = findFromBox(obj)
            global ui;
-           [obj.blocks, box, foundBox] = detectConveyor(ui.conveyorRGB);
-           if(length(obj.blocks) > 0 && foundBox == 1)
-               index = 1;
+           
+           if(ui.findNewBlocks == 1)
+                [obj.blocks, box, foundBox] = detectConveyor(ui.conveyorRGB);
+           end
+           if(length(obj.blocks) >= ui.blockIndex)
+               index = ui.blockIndex;
                x = obj.blocks(index, 1);
                y = obj.blocks(index, 2);
                orientation = obj.blocks(index, 3);
@@ -195,8 +200,8 @@ classdef motion < handle
             %size to determine position of grid squares.
 
             if(playerID == 1)
-                x_p = obj.p1_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
-                y_p = obj.p1_topLeft(1) + 0.5*obj.squareSize;
+                y_p = obj.p1_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
+                x_p = obj.p1_topLeft(1) + 0.5*obj.squareSize;
             else
                 y_p = obj.p2_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
                 x_p = obj.p2_topLeft(1) + 0.5*obj.squareSize;
@@ -238,8 +243,8 @@ classdef motion < handle
                     xb_ = xb_+ box_topLeft(1);
                     yb_ = yb_ + box_topLeft(2);
                     
-                    disp(xb_)
-                    disp(yb_)
+                    disp(xb_);
+                    disp(yb_);
                     
                     obj.placeToPoint(xb_, yb_, 0);
                     obj.boxSpace(i) = 1;
@@ -287,7 +292,7 @@ function [rs_x, rs_y, rs_z] = convertCoordsConveyor(x, y)
     
     rs_y = (x - conveyorOffsetXPx)*pxToMM-8;
     rs_x = (-y + conveyorOffsetYPx)*pxToMM-12;
-    rs_z = 33;
+    rs_z = 30;
     %rs_z = 33+100;
 end
 

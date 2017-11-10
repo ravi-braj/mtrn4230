@@ -90,6 +90,14 @@ classdef interface < handle
         %Counter
         count
         
+        htextconveyor
+        hquivconveyor
+        hdotconveyor
+        
+        htexttable
+        hquivtable
+        hdottable
+        
         %Qwirkle
         loadBox
         Board
@@ -111,11 +119,24 @@ classdef interface < handle
         
         countp
         countb
+        plotted
+        
+        countdetect
+        
+        
+        %for finding the box
+        findNewBlocks
+        blockIndex
+        
     end
     methods
         
         %% Constructor
         function obj = interface()
+            
+            obj.findNewBlocks = 1;
+            obj.blockIndex = 1;
+            
             %INTERFACE constructs an interface 
             %sets default values for the gui. Starts gui and attempts to
             %connect client.
@@ -181,6 +202,9 @@ classdef interface < handle
             %axis([0 1600 0 1200], 'parent', obj.clientGUIData.camera_table);
             %obj.h_textTable = text(NaN, NaN, '', 'Parent', obj.clientGUIData.camera_table);
             hold(obj.clientGUIData.camera_table,'off');
+            
+            
+            
 
             %----------- OTHER HANDLES ----------------%
             

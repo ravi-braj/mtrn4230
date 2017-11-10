@@ -101,13 +101,10 @@ function vacuum_toggle_Callback(hObject, eventdata, handles)
     disp('replace');
     
 
-    ui.playGame.replacePiece(ui.countp, ui.countb);
-    ui.countb = ui.countb + 1;
+    ui.playGame.replacePiece(1, 1);
     
-    if (ui.countb > 6)
-        ui.countp = 2;
-        ui.countb = 1;
-    end
+    
+
 end
 
 
@@ -685,8 +682,8 @@ function load_conveyor_box_Callback(hObject, eventdata, handles)
 % hObject    handle to load_conveyor_box (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-    global ui;
-    ui.loadBox = 1;
+
+
 end
 
 %%
@@ -814,6 +811,17 @@ function play_quirkle_Callback(hObject, eventdata, handles)
     
     [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
     ui.emptyboard = 1;
+    
+    ui.findNewBlocks = 1;
+    ui.blockIndex = 1;
+    
+    for player = 1:2
+        for p=1:6
+            ui.playGame.replacePiece(player, p);
+            ui.findNewBlocks = 0;
+            ui.blockIndex = ui.blockIndex +1;
+        end
+    end
 end
 
 % leave empty
