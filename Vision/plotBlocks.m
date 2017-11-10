@@ -1,4 +1,8 @@
 function plotBlocks()
+    global ui;
+
+    % ui.clientGUIData.camera_table
+    % ui.clientGUIData.camera_conveyor
     close all; clear all;
     im = imread('con2.jpg');
     
