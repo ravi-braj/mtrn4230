@@ -131,25 +131,6 @@ function timerCallback(obj, event, ui)
         
     end
     
-    %% Qwirkle Movements
-%     if ui.Player == 1
-%         HumanPlayer
-%         %%%%%
-%         %%%%%
-%         ui.Player = 2;
-%     elseif ui.Player == 2
-%         ComputerPlayer
-%         ui.Player = 1;
-%     end
-    
-%     if button == 113
-%         QUIT = true;
-%         disp('QUIT');
-%     end
-    
-    
-
-    
         
     %% ----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
