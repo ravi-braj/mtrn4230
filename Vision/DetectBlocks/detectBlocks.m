@@ -1,5 +1,4 @@
 function c = detectBlocks(im,source)
-
     
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
@@ -11,6 +10,7 @@ function c = detectBlocks(im,source)
 %     figure(1); 
 %     subplot(1,3,1);
 %     imshow(Block_BW);
+
     if (source)
         % Table
         se = strel('cube',4);
@@ -24,6 +24,7 @@ function c = detectBlocks(im,source)
         se = strel('cube',4);
         Block_BW = imdilate(Block_BW, se);
     end
+    
 %     subplot(1,3,2);
 %     imshow(Block_BW);
     
@@ -78,6 +79,7 @@ function c = detectBlocks(im,source)
         
         % Extract a player1 grid slot
         rgbBlock1 = ExtractBlockIm(im, c(k,1), c(k,2), c(k,3), 50);
+        
 %         figure(2);
 %         imshow(rgbBlock1);
 

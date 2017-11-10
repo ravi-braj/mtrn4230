@@ -4,6 +4,7 @@ MODULE MTRN4230_Move_Sample
     PERS byte jog_input;
 
     PERS byte write_io{4};   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte load;		! load = 0, unload = 1
     PERS byte read_io{5};    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
     
     PERS pos write_position;
@@ -170,7 +171,19 @@ MODULE MTRN4230_Move_Sample
                 jTarget := CJointT(\TaskRef:=T_ROB1Id);
                 jTarget.robax.rax_6 := write_orientation;
                 MoveAbsJ jTarget, speed, fine, tSCup;
-                
+
+            ELSEIF command = 6 THEN		! load/unload
+            	! IO commands (Change conveyor direction)
+                IF load = 1 THEN
+                    ConDirTowards;
+                ELSEIF load = 0 THEN
+                    ConDirAway;
+                ENDIF
+
+                TurnConOnSafely;
+                WaitTime 4;
+                TurnConOff;
+
             ENDIF
             
             ready := 1;

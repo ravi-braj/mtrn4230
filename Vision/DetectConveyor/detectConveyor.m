@@ -64,6 +64,14 @@ function [blocks, box, FoundBox] = detectConveyor(im)
         %figure(1); imshow(im); hold on; plot(box.x,box.y,'*');
         
         blocks = detectBlocks(im,0);
+        
+        Origin.x = 215; Origin.y = 517;
+        ReachableRadius = 832;
+
+        Dist = sqrt((blocks(:,1) - Origin.x).^2 + (blocks(:,2) - Origin.y).^2);
+        Dist(Dist <= ReachableRadius) = 1;  % reachable
+        Dist(Dist > ReachableRadius) = 0;   % not reachable
+        blocks(:,6) = Dist;
     else
         blocks = [];
         box.x = []; box.y = []; box.orient = [];

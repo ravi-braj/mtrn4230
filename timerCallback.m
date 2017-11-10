@@ -131,6 +131,10 @@ function timerCallback(obj, event, ui)
         
     end
     
+<<<<<<< HEAD
+=======
+        
+>>>>>>> 8b0a062590a228c75b92fa2bfc8b8299d3e6d7ac
     %% ----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
     
