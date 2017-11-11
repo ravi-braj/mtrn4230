@@ -1,4 +1,4 @@
-function c = detectBlocks(im,source)
+    function c = detectBlocks(im,source)
     %Table = 1
     b = true;
 
@@ -22,9 +22,9 @@ function c = detectBlocks(im,source)
     
     if (source)
         % Table
-        se = strel('cube',5);
+        se = strel('cube',1);
         Block_BW = imerode(Block_BW, se);
-        se = strel('cube',4);
+        se = strel('cube',1);
         Block_BW = imdilate(Block_BW, se);
     else
         % Conveyor
