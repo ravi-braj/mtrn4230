@@ -1,13 +1,18 @@
 function c = detectBlocks(im,source)
-
+    %Table = 1
     b = true;
-    
+
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
     load('convnetColour.mat'); % For colours
     
     % Generate block mask
     Block_BW = createBlockMask(im);
+    
+    if (source == 1)
+        gridmask = load('gridMask.mat');
+        Block_BW(gridmask.BW) = 0;
+    end
     
     if (b)
         figure(4); 

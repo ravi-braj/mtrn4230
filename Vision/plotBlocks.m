@@ -2,13 +2,10 @@ function plotBlocks(source) % Table = 0; Conveyor = 1;
     %ui.clientGUIData.camera_conveyor
     %ui.clientGUIData.camera_table
     
-
-    
     %handletext = text(0,0,'','HorizontalAlignment','left','Color','g');
     %handlequiv = quiver(0,0,0,0,0,'w','linewidth',1.2);
     
-    global ui
-    
+    global ui;
     c = [];
     
     %%%% Jay's Test code
