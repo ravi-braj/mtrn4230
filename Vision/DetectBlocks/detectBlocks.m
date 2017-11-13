@@ -11,6 +11,8 @@
     
     if (source == 1)
         gridmask = load('gridMask.mat');
+        se = strel('cube',4);
+        gridmask.BW = imdilate(gridmask.BW, se);
         Block_BW(gridmask.BW) = 0;
     end
     
@@ -24,7 +26,7 @@
         % Table
         se = strel('cube',1);
         Block_BW = imerode(Block_BW, se);
-        se = strel('cube',1);
+        se = strel('cube',5);
         Block_BW = imdilate(Block_BW, se);
     else
         % Conveyor
