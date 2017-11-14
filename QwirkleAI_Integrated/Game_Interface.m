@@ -9,7 +9,7 @@
     figure(10);hold on;
     subplot('Position',BoardVector)
     DisplayQwirkleBoard(ui.Board);
-    titletext = sprintf('Qwirkle Game!!\n(Press Q to quit)\nLeftClick to Move\nRightClick to SWAP');
+    titletext = sprintf('Qwirkle Game!!\n');
     title(titletext);
     
     subplot('Position',P1Vector)

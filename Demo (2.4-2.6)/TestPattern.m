@@ -3,7 +3,7 @@ Board = StartBoard;
 counter = 1;
 toggle = 1;
 while(1)
-    toggle = 1-toggle;
+    toggle = 1-toggle     ;
     %%Generate JSON FILE
     string = Pattern_Generator(randi([1 100],1),randi([6],1),toggle);
     %2.5 - READING JSON AND CONVERTING TO BOARD DISPLAY
