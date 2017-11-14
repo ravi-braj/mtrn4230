@@ -210,6 +210,8 @@ end
 function set_pose_z_Callback(hObject, eventdata, handles)
     global ui;
     ui.setPose(3) = str2double(get(hObject,'String'));
+    
+    
 % hObject    handle to set_pose_z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
@@ -689,6 +691,7 @@ function load_conveyor_box_Callback(hObject, eventdata, handles)
 % hObject    handle to load_conveyor_box (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
     global ui;
     if(ui.conveyorDirection == 1)
         ui.conveyorDirection = 0;
@@ -696,6 +699,7 @@ function load_conveyor_box_Callback(hObject, eventdata, handles)
         ui.conveyorDirection = 1;
     end
     ui.commandQueue = [ui.commandQueue, 10];
+
 
 
 end
