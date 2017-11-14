@@ -22,7 +22,7 @@ function varargout = gui(varargin)
 
     % Edit the above text to modify the response to help gui
 
-    % Last Modified by GUIDE v2.5 10-Nov-2017 20:01:46
+    % Last Modified by GUIDE v2.5 14-Nov-2017 18:06:21
 
     % Begin initialization code - DO NOT EDIT
     gui_Singleton = 1;
@@ -99,9 +99,15 @@ function vacuum_toggle_Callback(hObject, eventdata, handles)
         
     %%%%%% DELETE THIS --- ITS JUST FOR TESTING PICK AND PLACE %%%
     disp('replace');
+   
     
+    for player = 1:2
+        for i = 1:6
+            ui.playGame.replacePiece(player, i);
+            ui.blockIndex = ui.blockIndex+1;
+        end
+    end
 
-    ui.playGame.replacePiece(1, 1);
     
     
 
@@ -679,9 +685,17 @@ end
 
 % --- Executes on button press in load_conveyor_box.
 function load_conveyor_box_Callback(hObject, eventdata, handles)
+    
 % hObject    handle to load_conveyor_box (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+    global ui;
+    if(ui.conveyorDirection == 1)
+        ui.conveyorDirection = 0;
+    else
+        ui.conveyorDirection = 1;
+    end
+    ui.commandQueue = [ui.commandQueue, 10];
 
 
 end
@@ -694,12 +708,14 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
+   % ui.playGame.placePiece(ui.Player,str2num(get(handles.q_piece,'String')), [str2num(get(handles.q_col,'String')),str2num(get(handles.q_row,'String'))]);
     [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
     guiEnable(handles, 0);
     PieceNum = str2num(get(handles.q_piece,'String'));
     X = str2num(get(handles.q_col,'String'));
     Y = str2num(get(handles.q_row,'String'));
     
+    ui.Player = 1;
     if(ui.Player == 1)
         Valid = isMoveValid(ui.P1GamePieces(PieceNum,:),X,Y,ui.Board)
         if ui.emptyboard == 1
@@ -752,7 +768,7 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
         end
  
         Game_Interface;
-        pause(20);
+        %pause(20);
         [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
         Game_Interface;
         AI = get(handles.ai_enable,'Value');
@@ -784,7 +800,7 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
            %%Change Player
            ui.Player = 1;
            Game_Interface;
-           pause(20); 
+           %pause(20); 
            [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
            Game_Interface;
         end
@@ -815,13 +831,13 @@ function play_quirkle_Callback(hObject, eventdata, handles)
     ui.findNewBlocks = 1;
     ui.blockIndex = 1;
     
-    for player = 1:2
-        for p=1:6
-            ui.playGame.replacePiece(player, p);
-            ui.findNewBlocks = 0;
-            ui.blockIndex = ui.blockIndex +1;
-        end
-    end
+    %for player = 1:2
+    %    for p=1:6
+    %        ui.playGame.replacePiece(player, p);
+    %        ui.findNewBlocks = 0;
+    %        ui.blockIndex = ui.blockIndex +1;
+    %    end
+    %end
 end
 
 % leave empty
@@ -917,7 +933,7 @@ function clean_table_Callback(hObject, eventdata, handles)
     global ui;
     guiEnable(handles, 0);
     ui.playGame.cleanTable();
-    pause(20);
+    %pause(20);
     guiEnable(handles,1);
 end
 
@@ -928,8 +944,7 @@ function sort_decks_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
     global ui;
     guiEnable(handles, 0);
-    ui.playGame.sort();
-    pause(20);
+    ui.playGame.sortDecks();
     guiEnable(handles,1);
 end
 
@@ -975,4 +990,35 @@ function guiEnable(handles, enable)
         set(handles.ai_enable,'Enable','off') 
     end
         
+end
+
+
+% --- Executes on button press in complete_turn.
+function complete_turn_Callback(hObject, eventdata, handles)
+    global ui;
+    if(ui.Player == 1)
+        ui.Player = 2;
+    else
+        ui.Player = 1;
+    end
+    %ui
+% hObject    handle to complete_turn (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+
+% --- Executes on button press in pick_up.
+function pick_up_Callback(hObject, eventdata, handles)
+
+% hObject    handle to pick_up (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+end
+
+% --- Executes on button press in place.
+function place_Callback(hObject, eventdata, handles)
+% hObject    handle to place (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
 end

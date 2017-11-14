@@ -115,7 +115,7 @@ classdef gameplay < handle
                         P1deckNum = P1deckNum +1;
                     else
                         [handX, handY] = obj.motionMaker.playerToPixel(2, P2deckNum);
-                        obj.motionMaker.placeToPoint(handX, handY, 1);
+                        obj.motionMaker.placeToPoint(handX, handY-4, 1);
                         P2deckNum = P2deckNum +1;
                     end
                 elseif pieceShape == checkingShape %%Same Shape ->P2
@@ -125,7 +125,7 @@ classdef gameplay < handle
                         P2deckNum = P2deckNum +1;
                     else
                         [handX, handY] = obj.motionMaker.playerToPixel(1, P1deckNum);
-                        obj.motionMaker.placeToPoint(handX, handY, 1);
+                        obj.motionMaker.placeToPoint(handX, handY-4, 1);
                         P1deckNum = P1deckNum +1;
                     end
                 else %%Didnt detect color/shape so place in player 1s hand (assuming color messes up more often)
@@ -135,7 +135,7 @@ classdef gameplay < handle
                         P1deckNum = P1deckNum +1;
                     else
                         [handX, handY] = obj.motionMaker.playerToPixel(2, P2deckNum);
-                        obj.motionMaker.placeToPoint(handX, handY, 1);
+                        obj.motionMaker.placeToPoint(handX, handY-4, 1);
                         P2deckNum = P2deckNum +1;
                     end
                 end

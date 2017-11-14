@@ -181,7 +181,7 @@ MODULE MTRN4230_Move_Sample
                 ENDIF
 
                 TurnConOnSafely;
-                WaitTime 4;
+                WaitTime 11;
                 TurnConOff;
 
             ENDIF

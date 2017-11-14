@@ -17,17 +17,17 @@ MODULE MTRN4230_Server_Sample
     PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
     PERS byte looad := 0;    ! looad = 0, unlooad = 1
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
-    PERS byte read_switches{6} := [1,0,1,1,0,1];    !E-STOP STATES AND SWITCHES
+    PERS byte read_switches{6} := [1,1,1,1,0,1];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [0,0,0];
+    PERS pos write_position := [303.371,235.845,200];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     PERS num write_orientation := 0;
     
-    PERS pos read_position := [0.0129419,-438.922,625.044];
-    PERS jointtarget read_joints := [[-89.9983,0.000952941,0.00421139,-0.00201624,2.0566,-0.000668528],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [303.372,235.846,200.001];
+    PERS jointtarget read_joints := [[37.862,30.3201,19.6146,-3.86987E-05,40.0649,37.8622],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
     PERS speeddata speed := [500,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
-    PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
+    PERS byte mode := 112;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
     PERS byte pause := 0;         ! pause = 0 (moving), pause = 1 (paused)
     
     PERS byte errorMsg{1} := [0];
@@ -277,8 +277,8 @@ MODULE MTRN4230_Server_Sample
 
             SocketReceive client_socket \RawData:=raw_data;
             
-            UnpackRawBytes raw_data, 1, tmpf \Hex1;  ! 1 byte
-            looad := tmpf;
+            UnpackRawBytes raw_data, 1, tmpb \Hex1;  ! 1 byte
+            looad := tmpb;
             
             command := 6;   ! Execute looad/unlooad
             

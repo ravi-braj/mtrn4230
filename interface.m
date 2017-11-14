@@ -128,6 +128,8 @@ classdef interface < handle
         findNewBlocks
         blockIndex
         
+        conveyorDirection;
+        
     end
     methods
         
@@ -164,6 +166,7 @@ classdef interface < handle
             obj.detectBlocks = 0;
             
             obj.count = 0;
+            obj.conveyorDirection = 0;
             
             %Disable connect button
             if(obj.robotTCP.connected)
@@ -173,7 +176,7 @@ classdef interface < handle
             
             %----------- MOTION MAKER ----------------%
             obj.playGame = gameplay();
-
+            obj.Player = 1;
             
             
             
@@ -391,6 +394,15 @@ classdef interface < handle
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending IOs');
                         
+                     case 10
+                        obj.robotTCP.loadConveyorBox(obj.conveyorDirection)
+                        if(obj.conveyorDirection == 1)
+                            comm = sprintf('Loading box')
+                        else
+                            comm = sprintf('Unloading box')
+                        end
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                        disp('(un)loading conveyor box');
                         
                     otherwise
                         disp('cannot decipher queue object');
