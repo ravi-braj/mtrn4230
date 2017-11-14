@@ -16,11 +16,11 @@ function timerSetup(obj, event, interface)
         ui.tableObj = webcam(1); % table
         ui.conveyorObj = webcam(2); %conveyor
         %Set Resolutions to the 1600x1200 if available
-        interface.tableObj.Resolution = '1600x1200';
-        interface.conveyorObj.Resolution = '1600x1200';
+        ui.tableObj.Resolution = '1600x1200';
+        ui.conveyorObj.Resolution = '1600x1200';
         disp('yes');
     catch
-        
+        disp('----WEBCAM SETUP ERROR----');
     end
     ui.conveyorParams = load('conveyorParams.mat');
     ui.conveyorParams = ui.conveyorParams.conveyorParams;
