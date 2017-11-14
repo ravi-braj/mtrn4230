@@ -310,6 +310,24 @@ classdef abb_tcp < handle
             
         end
         
+        function loadConveyorBox(obj, forward)
+
+           try
+               %send request ot set speed
+               fwrite(obj.socket, 'L', 'char');
+
+               %write direction. 1 is towards robot. 0 is away
+               fwrite(obj.socket, forward, 'uchar');
+
+               %read error message
+               obj.error = fread(obj.socket, 1, 'uchar');
+           catch
+               disp('Socket error');
+               obj.connected = false;                
+           end
+            
+        end
+        
         function ready = readyForNextCommand(obj)
            ready = 0;
            try

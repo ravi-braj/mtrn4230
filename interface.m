@@ -90,6 +90,9 @@ classdef interface < handle
         %Counter
         count
         
+        %conveyor direction for loadBlocks
+        conveyorDirection
+        
         %Qwirkle
         loadBox
         Board
@@ -142,6 +145,8 @@ classdef interface < handle
             obj.detectBlocks = 0;
             
             obj.count = 0;
+            
+            obj.conveyorDirection = 1;
             
             %Disable connect button
             if(obj.robotTCP.connected)
@@ -367,6 +372,16 @@ classdef interface < handle
                         comm = sprintf('Setting I/Os (Q): [%d, %d, %d, %d]', newIO(1), newIO(2), newIO(3), newIO(4));
                         obj.commandHistory = [obj.commandHistory; string(comm)];
                         disp('sending IOs');
+                    
+                    case 10
+                        obj.robotTCP.loadConveyorBox(obj.conveyorDirection)
+                        if(obj.conveyorDirection == 1)
+                            comm = sprintf('Loading box')
+                        else
+                            comm = sprintf('Unloading box')
+                        end
+                        obj.commandHistory = [obj.commandHistory; string(comm)];
+                        disp('(un)loading conveyor box');
                         
                         
                     otherwise

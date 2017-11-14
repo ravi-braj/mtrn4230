@@ -207,6 +207,8 @@ end
 function set_pose_z_Callback(hObject, eventdata, handles)
     global ui;
     ui.setPose(3) = str2double(get(hObject,'String'));
+    
+    
 % hObject    handle to set_pose_z (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
