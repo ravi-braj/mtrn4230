@@ -1,6 +1,7 @@
-function c = detectBlocks(im,source)
+    function c = detectBlocks(im,source)
+    %Table = 1
+    b = true;
 
-    
     % Load our neural nets
     load('convnetShape.mat'); % For shapes
     load('convnetColour.mat'); % For colours
@@ -8,14 +9,24 @@ function c = detectBlocks(im,source)
     % Generate block mask
     Block_BW = createBlockMask(im);
     
-%     figure(1); 
-%     subplot(1,3,1);
-%     imshow(Block_BW);
+    if (source == 1)
+        gridmask = load('gridMask.mat');
+        se = strel('cube',4);
+        gridmask.BW = imdilate(gridmask.BW, se);
+        Block_BW(gridmask.BW) = 0;
+    end
+    
+    if (b)
+        figure(4); 
+        subplot(1,3,1);
+        imshow(Block_BW);
+    end
+    
     if (source)
         % Table
-        se = strel('cube',4);
+        se = strel('cube',1);
         Block_BW = imerode(Block_BW, se);
-        se = strel('cube',6);
+        se = strel('cube',5);
         Block_BW = imdilate(Block_BW, se);
     else
         % Conveyor
@@ -24,8 +35,11 @@ function c = detectBlocks(im,source)
         se = strel('cube',4);
         Block_BW = imdilate(Block_BW, se);
     end
-%     subplot(1,3,2);
-%     imshow(Block_BW);
+    
+    if(b)
+        subplot(1,3,2);
+        imshow(Block_BW);
+    end
     
     %Insert Filled Image and create BlockMask
     bw_stats = regionprops('table',Block_BW,'Area','BoundingBox','FilledImage');
@@ -48,9 +62,11 @@ function c = detectBlocks(im,source)
         BlockMask(row:(row+sz(1)-1),col:(col+sz(2)-1)) = bw_stats.FilledImage{idx(j)};
     end
     
-%     subplot(1,3,3);
-%     imshow(BlockMask);
-
+    if (b)
+        subplot(1,3,3);
+        imshow(BlockMask);
+    end
+    
     im = imadjust(im, [0, 0, 0; 0.50, 0.48, 0.47], []);
     
     stats = regionprops('table',BlockMask,'Centroid','Area','PixelList');
@@ -78,9 +94,12 @@ function c = detectBlocks(im,source)
         
         % Extract a player1 grid slot
         rgbBlock1 = ExtractBlockIm(im, c(k,1), c(k,2), c(k,3), 50);
-%         figure(2);
-%         imshow(rgbBlock1);
-
+        
+        if (b)
+            figure(5);
+            imshow(rgbBlock1);
+        end
+        
         % Classify each the grid slot
         [colour, shape] = ClassifyBlock(rgbBlock1, ...
             convnetColour, convnetShape);

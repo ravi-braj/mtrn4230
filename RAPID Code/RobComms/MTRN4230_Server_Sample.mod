@@ -15,15 +15,16 @@ MODULE MTRN4230_Server_Sample
     PERS byte jog_input := 0;
 
     PERS byte write_io{4} := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+    PERS byte looad := 0;    ! looad = 0, unlooad = 1
     PERS byte read_io{5} := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
-    PERS byte read_switches{6} := [1,0,0,1,0,1];    !E-STOP STATES AND SWITCHES
+    PERS byte read_switches{6} := [1,0,1,1,0,1];    !E-STOP STATES AND SWITCHES
     
-    PERS pos write_position := [229.564,235.877,200];
+    PERS pos write_position := [0,0,0];
     PERS jointtarget write_joints := [[0,0,0,0,0,0],[0,0,0,0,0,0]];
     PERS num write_orientation := 0;
     
-    PERS pos read_position := [229.554,235.866,199.995];
-    PERS jointtarget read_joints := [[45.777,20.9832,33.4889,-3.86987E-05,35.5339,45.7772],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
+    PERS pos read_position := [0.0129419,-438.922,625.044];
+    PERS jointtarget read_joints := [[-89.9983,0.000952941,0.00421139,-0.00201624,2.0566,-0.000668528],[9E+09,9E+09,9E+09,9E+09,9E+09,9E+09]];
     
     PERS speeddata speed := [500,500,5000,1000];       ! v_tcp, v_ori, v_leax, v_reax, begun at v100
     PERS byte mode := 1;          ! mode = 0 (execute joint motion); mode = 1 (execute linear motion)
@@ -42,7 +43,7 @@ MODULE MTRN4230_Server_Sample
     ! Message requests and replies
     VAR byte requestMsg{1};
     VAR bool connected;
-        
+    
     PROC main()
         
         errorMsg{1} := 0;
@@ -52,6 +53,7 @@ MODULE MTRN4230_Server_Sample
         jog_input := 0;
 
         write_io := [0,0,0,0];   ! DO10_1, DO10_2, DO10_3, DO10_4 (off = 0, on = 1)
+        looad := 0; ! looad = 0, unlooad = 1;
         read_io := [0,0,0,0,0];    ! DO10_1, DO10_2, DO10_3, DO10_4, DI10_1 (off = 0, on = 1)
         read_switches := [0,0,0,0,0,0];
         
@@ -68,7 +70,7 @@ MODULE MTRN4230_Server_Sample
         command := 0;
         quit := FALSE;
         connected := FALSE;
-               
+        
         WHILE TRUE DO     ! Keep server alive until close command recieved
             ListenForAndAcceptConnection;
             connected := TRUE;
@@ -271,6 +273,17 @@ MODULE MTRN4230_Server_Sample
             
             SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
             
+        ELSEIF requestMsg{1} = StrToByte("L" \Char) THEN   ! Client wants to looad/unlooad conveyor
+
+            SocketReceive client_socket \RawData:=raw_data;
+            
+            UnpackRawBytes raw_data, 1, tmpf \Hex1;  ! 1 byte
+            looad := tmpf;
+            
+            command := 6;   ! Execute looad/unlooad
+            
+            SocketSend client_socket \Data:= errorMsg \NoOfBytes:=1;    ! Send error status
+
         ENDIF
         
         ! Receive a new request from the client.

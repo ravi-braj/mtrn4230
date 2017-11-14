@@ -24,11 +24,11 @@ if Valid == true
     [TotalScore,PieceScore,Qwirkle] = CalculateMoveScore(Board,MovingPiece,X,Y);
     
     if Player == 1
-    P1TotalScore = P1TotalScore + TotalScore
+    P1TotalScore = P1TotalScore + TotalScore;
     P1Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
     P2Action = sprintf('Your Turn');
     elseif Player == 2
-    P2TotalScore = P2TotalScore + TotalScore
+    P2TotalScore = P2TotalScore + TotalScore;
     P2Action = sprintf('Piece %d to [%d ,%d]',PieceNum,X,Y);
     P1Action = sprintf('Your Turn');
     end

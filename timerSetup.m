@@ -16,30 +16,32 @@ function timerSetup(obj, event, interface)
         ui.tableObj = webcam(1); % table
         ui.conveyorObj = webcam(2); %conveyor
         %Set Resolutions to the 1600x1200 if available
-        interface.tableObj.Resolution = '1600x1200';
-        interface.conveyorObj.Resolution = '1600x1200';
+        ui.tableObj.Resolution = '1600x1200';
+        ui.conveyorObj.Resolution = '1600x1200';
         disp('yes');
     catch
-        
+        disp('----WEBCAM SETUP ERROR----');
     end
     ui.conveyorParams = load('conveyorParams.mat');
     ui.conveyorParams = ui.conveyorParams.conveyorParams;
     ui.tableParams = load('cameraParamsTable.mat');
     ui.tableParams = ui.tableParams.cameraParamsTable;
-
+    ui.plotted = 0;
+    ui.countdetect = 0;
 %     % Initialize Qwirkle Board
 %     StartBoard = zeros(9,9,2);
 %     ui.Board = StartBoard;
 %     % Insert first piece in the middile
-%     % Will create random piece in center to start game. Need to tell robot
-%     % studio to do this. Better to do this with vision and choose a random
-%     % piece from the box.
+%     % The like below will create random piece in center to start game. 
+%     % Better to do this with vision and choose a random piece from the box.
+%     
+%     % Need to tell robot studio to do this movement too. 
 %     ui.Board(5,5,:) = [randi([1 6]),randi([1 6])]; 
 %     % Initialize Pieces
 %     GamePieces = zeros(6,2);
 %     ui.P1GamePieces = GamePieces;
 %     ui.P2GamePieces = GamePieces;
-%     %Check function name with dan
+%     % Check function name with dan
 %     [ui.P1GamePieces, ui.P2GamePieces] = updateGameState(ui.tableRGB);
 %     
 %     ui.Player = 1;
@@ -48,9 +50,9 @@ function timerSetup(obj, event, interface)
 %     ui.P1TotalScore = 0;
 %     ui.P2TotalScore = 0;
 %     
-    % Update Qwirkle Interface
+%     % Update Qwirkle Interface
 %     Game_Interface;
-    
+%     
     pause(1);
 
 end

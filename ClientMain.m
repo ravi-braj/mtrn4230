@@ -4,7 +4,7 @@
 
 
 %% %%%%%%%%%%% 1 SETUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%imaqreset
 close all; clc(); clear;
 global ui;
 
@@ -74,7 +74,7 @@ disp('closing');
 %Delete webcam objects when exiting function
 delete(ui.tableObj)
 delete(ui.conveyorObj)
-imaqreset
+
 %Deleter the User Interface
 delete(ui.clientGUI);
 

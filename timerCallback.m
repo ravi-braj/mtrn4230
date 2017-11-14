@@ -74,7 +74,14 @@ function timerCallback(obj, event, ui)
         set(ui.h_camTable, 'CData', I);
     end
     
-    
+    %Plot Blocks
+    if (ui.countdetect > 20)
+    [ui.conveyorRGB,~] = undistortImage(ui.conveyorRGB,ui.conveyorParams);
+    [ui.tableRGB,~] = undistortImage(ui.tableRGB,ui.tableParams);
+    plotBlocks(1);
+    plotBlocks(0);
+    end
+    ui.countdetect = ui.countdetect + 1;
     %Only redetect the blocks and Box pose and properties every 6 periods 
     %to increase speed of program execution
     
@@ -94,6 +101,8 @@ function timerCallback(obj, event, ui)
 
             delete(ui.h_textConveyor);
             ui.h_textConveyor = text(ui.clientGUIData.camera_conveyor, centroid(:,1), centroid(:,2), boxtext, 'Color', 'red', 'FontSize',6);
+            
+            
         end
     end
     
@@ -105,26 +114,6 @@ function timerCallback(obj, event, ui)
     % move is made
 
     
-    %% Qwirkle Movements
-%     if ui.Player == 1
-%         HumanPlayer
-%         %%%%%
-%         %%%%%
-%         ui.Player = 2;
-%     elseif ui.Player == 2
-%         ComputerPlayer
-%         ui.Player = 1;
-%     end
-    
-%     if button == 113
-%         QUIT = true;
-%         disp('QUIT');
-%     end
-    
-    
-
-    
-        
     %% ----------- execute queued commands (added by GUI) ------
     ui.nextCommand();
     

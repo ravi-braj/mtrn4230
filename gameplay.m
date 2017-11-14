@@ -27,7 +27,7 @@ classdef gameplay < handle
         %swaps all pieces of player with pieces from the box
         function swapPieces(obj, player)
             for p=1:6
-                obj.motionMaker.discardPiece(player, p);
+                obj.discardPiece(player, p);
             end
             for p=1:6
                 obj.replacePiece(player, p);
