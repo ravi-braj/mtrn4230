@@ -1,4 +1,8 @@
     function c = detectBlocks(im,source)
+    % Vision detection of Blocks on Table or Conveyor depending on source variable
+    % written by Daniel Casitillo and Jay Motwani
+    % Last updated 14 November 2017
+    
     %Table = 1
     b = false;
 

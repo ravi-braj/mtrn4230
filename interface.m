@@ -259,7 +259,7 @@ classdef interface < handle
         end
         
         function obj = datafromConveyorCam(obj)
-            %Get RGB image from conveyor camera object - updates conveyorRGB
+            % Get RGB image from conveyor camera object - updates conveyorRGB
             % written by Jay Motwani
             % Last updated 15 September 2017
             

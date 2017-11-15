@@ -1,14 +1,12 @@
 function plotBlocks(source) % Table = 0; Conveyor = 1;
-    %ui.clientGUIData.camera_conveyor
-    %ui.clientGUIData.camera_table
-    
-    %handletext = text(0,0,'','HorizontalAlignment','left','Color','g');
-    %handlequiv = quiver(0,0,0,0,0,'w','linewidth',1.2);
+    % Plot Block position, quivers and c matrix on gui.fig
+    % written by Jay Motwani and Daniel Castillo
+    % Last updated 10 November 2017
+
     
     global ui;
     c = [];
     
-    %%%% Jay's Test code
     if (source == 1)
         %im = imread('conv2.jpg');
         im = ui.conveyorRGB;
