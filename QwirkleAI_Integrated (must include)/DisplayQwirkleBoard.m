@@ -17,18 +17,5 @@ for y  = 1:9
     end
 end
 %%Display Qwirkle Board
-% fig1 = figure();
-% axes1 = axes;
-% axis(axes1,'ij');
-% % Set the remaining axes properties
-% set(axes1,'XAxisLocation','top','XTick',...
-%     [25 75 125 175 225 275 325 375 425],'XTickLabel',...
-%     {'1','2','3','4','5','6','7','8','9'},'YTick',...
-%     [25 75 125 175 225 275 325 375 425],'YTickLabel',...
-%     {'1','2','3','4','5','6','7','8','9'});
-% xlim(axes1,[0 500]);
-% ylim(axes1,[0 500]);
-% title ('Board Display');
-% hold on;
 montage(BoardDisplay,'Size',[9 9]);
 end

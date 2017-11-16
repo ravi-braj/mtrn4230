@@ -81,6 +81,14 @@ classdef gameplay < handle
         end
         
         function sortDecks(obj)
+            %%As described in the Asst 4 specifications
+            %Assuming there are 12 pieces on the table (reachable)
+            %This function will automomously detect the pieces and sort the
+            %pieces into their corresponding positions in the players hands
+
+            %%Player 1 ---> COLOUR
+            %%Player 2 ---> SHAPE
+            
             global ui;
             %%Detect all the pieces on Table
             pieces = detectTable(ui.tableRGB);
@@ -89,12 +97,13 @@ classdef gameplay < handle
             pieces = pieces(find(pieces(:,1)>=488),:);
 
             %%Find the Matching Colour and Shape for P1 and P2
+            %%Sorting is based on the most popular colour and shape detected
             M = mode(pieces);
             checkingColour = M(4);
             checkingShape =  M(5);
-
+            %%Finding the amount of detected pieces (should be 12 or less)
             toIterate = min(length(pieces(:,1)), 12);
-
+            %%Create counters to keep track of pieces in hands
             P1deckNum = 1;
             P2deckNum = 1;
             for i = 1:toIterate
@@ -109,7 +118,7 @@ classdef gameplay < handle
 
                 %Decide if belongs in P1 or P2
                 if pieceColour == checkingColour %%Same Colour ->P1
-                    if P1deckNum <= 6
+                    if P1deckNum <= 6 %%Always check if the hand is full if so then place in the other hand
                         [handX, handY] = obj.motionMaker.playerToPixel(1, P1deckNum);
                         obj.motionMaker.placeToPoint(handX, handY, 1);
                         P1deckNum = P1deckNum +1;
@@ -119,7 +128,7 @@ classdef gameplay < handle
                         P2deckNum = P2deckNum +1;
                     end
                 elseif pieceShape == checkingShape %%Same Shape ->P2
-                    if P2deckNum <= 6
+                    if P2deckNum <= 6 %%Always check if the hand is full if so then place in the other hand
                         [handX, handY] = obj.motionMaker.playerToPixel(2, P2deckNum);
                         obj.motionMaker.placeToPoint(handX, handY, 1);
                         P2deckNum = P2deckNum +1;
@@ -129,7 +138,7 @@ classdef gameplay < handle
                         P1deckNum = P1deckNum +1;
                     end
                 else %%Didnt detect color/shape so place in player 1s hand (assuming color messes up more often)
-                    if P1deckNum <= 6
+                    if P1deckNum <= 6 %%Always check if the hand is full if so then place in the other hand
                         [handX, handY] = obj.motionMaker.playerToPixel(1, P1deckNum);
                         obj.motionMaker.placeToPoint(handX, handY, 1);
                         P1deckNum = P1deckNum +1;

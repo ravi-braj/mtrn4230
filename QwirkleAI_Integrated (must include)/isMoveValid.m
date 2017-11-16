@@ -1,7 +1,11 @@
 function [Move_Found]= isMoveValid(CheckingPiece,x,y,Board)
 %%isMoveValid returns a boolean [True or False]
+%%Checks to see if the move that is desired is allowable based on the
+%%boundaries and the state of the board
 %Inputs are the Piece[1x2], X, Y positions corresponding to the
 %Board[9x9x2]
+
+%%A Move_Found is also used as a flag to detect cases
 Move_Found = 0; %% 1 is true and 2 is Invalid
 Match = 0;
 %%Check if position is availiable
@@ -18,8 +22,8 @@ if isEmptyBoundary(x,y,Board) == true
                 Move_Found =2;
             end
             if Move_Found ~= 2
-            Match = Match*-1 + 3;
-            Move_Found = CheckDirection(CheckingPiece,Match,'left',x-1,y,Board,1);
+                Match = Match*-1 + 3;
+                Move_Found = CheckDirection(CheckingPiece,Match,'left',x-1,y,Board,1);
             end
         else
             Move_Found = 2; %%INVALID MOVE FOUND

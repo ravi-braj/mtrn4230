@@ -1,4 +1,7 @@
+%%Used to allow a human player to make a decision during gameplay
 global ui
+
+%%Storing the hands
 if ui.Player == 1
     GamePieces = ui.P1GamePieces;
 elseif Player == 2
@@ -13,6 +16,7 @@ while (Valid == false)
 %     end
     PieceX = x1;
     PieceY = y1;
+    %%Choosing a piece from your hand
     if (PieceX>=0 && PieceX<=50) && (PieceY>=0 && PieceY<=300)
         PieceNum = ceil(PieceY/50);
         disp('Piece ');
@@ -23,6 +27,8 @@ while (Valid == false)
             break;
         end;
     end
+    
+    %%Choosing a position to place the piece
     [x2, y2,button] = ginput(1);
     PlaceX = x2;
     PlaceY = y2;
@@ -38,6 +44,7 @@ end
 
 UpdateMoveState
 
+%%Restoring the hand (after updating the state of the game)
 if Player == 1
     P1GamePieces = GamePieces;
 elseif Player == 2

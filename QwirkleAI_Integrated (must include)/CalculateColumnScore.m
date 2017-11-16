@@ -1,4 +1,11 @@
 function [ColumnScore,ColumnQwirkle] = CalculateColumnScore(Board,MovedPiece,Xpos,Ypos)
+%%Calculates the score of the moving piece in the vertical direction
+%%(column)
+
+%%Input = Board, Piece, and X Y
+%%Output = ColumnScore and if a Qwirkle is detected ie. 6 pieces
+%%connected
+
 %ColumnScore = 0;
 ColumnQwirkle = 0;
 

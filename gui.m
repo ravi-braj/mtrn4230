@@ -711,14 +711,20 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
 % hObject    handle to make_qwirkle_move (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%%Qwirkle GamePlay is Integrated HERE!!
     global ui;
    % ui.playGame.placePiece(ui.Player,str2num(get(handles.q_piece,'String')), [str2num(get(handles.q_col,'String')),str2num(get(handles.q_row,'String'))]);
     [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
+    
+    %%Disable an inputs until processing is complete
     guiEnable(handles, 0);
+    %%Receive move from GUI
     PieceNum = str2num(get(handles.q_piece,'String'));
     X = str2num(get(handles.q_col,'String'));
     Y = str2num(get(handles.q_row,'String'));
     
+    %%Check if moves are valid
     ui.Player = 1;
     if(ui.Player == 1)
         Valid = isMoveValid(ui.P1GamePieces(PieceNum,:),X,Y,ui.Board)
@@ -730,6 +736,8 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
         Valid = isMoveValid(ui.P2GamePieces(PieceNum,:),X,Y,ui.Board)
     end
     
+    %%Update the state of the game and add the robot move to the
+    %command queue
     if Valid == true
         if(ui.Player == 1)
             %Grab the piece
@@ -770,14 +778,19 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
             %%Change Player
             ui.Player = 1;
         end
- 
+        %%SHOW THE GAME (User Interface)
         Game_Interface;
         %pause(20);
         [ui.P1GamePieces,ui.P2GamePieces] = updateGameState(ui.tableRGB);
+        %%SHOW THE GAME (User Interface)
         Game_Interface;
         AI = get(handles.ai_enable,'Value');
+        
+        %%Determing if Secondary Player is AI
         if (AI == 1 && ui.Player == 2)
+            %%Qwirkle AI determines a valid move
             [PieceNum,X,Y] = QwirkleAI(ui.Board,ui.P2GamePieces);
+            %%If no moves found!
             if PieceNum == 0
                 %SWAP ALL PIECES
                 ui.P2GamePieces = zeros(6,2);
@@ -812,6 +825,7 @@ function make_qwirkle_move_Callback(hObject, eventdata, handles)
         set(handles.qwirkle_errors,'String','INVALID MOVE');
     end
     
+    %%All processes are done and the GUI is re-enabled
     guiEnable(handles,1);
 end
 
@@ -821,6 +835,8 @@ function play_quirkle_Callback(hObject, eventdata, handles)
 % hObject    handle to play_quirkle (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+%% Allows the game to begin and initialize all the game variables
     global ui;
     ui.Board = zeros(9,9,2);
     ui.Player = 1;
@@ -835,6 +851,8 @@ function play_quirkle_Callback(hObject, eventdata, handles)
     ui.findNewBlocks = 1;
     ui.blockIndex = 1;
     
+    %%Uncomment if the table is assumed empty at the start of the game
+    %Load the decks
     %for player = 1:2
     %    for p=1:6
     %        ui.playGame.replacePiece(player, p);

@@ -1,4 +1,6 @@
 function Visualise_Pattern (json)
+    %%Using the given code to read json files and
+    %%generate a basic display of the pieces
     blocks = jsondecode(json);
     nblocks = size(blocks);
     ncol = 9;
