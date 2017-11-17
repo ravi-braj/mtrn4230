@@ -1,17 +1,6 @@
 %%Update Pieces and the Board
-%in a running loop
-%NOTE: Every time replacePiece is called, some flag (fullHand), should be
-%set to false
-
-%mainloop()
-% if(fullHand == false)
-    %p1hand = ui.playGame.getPieces()
-    %if(p1hand == complete)
-        %fullHand = true
-
-
-
-
+% Author: Ken Le
+% Last updated 15 November 2017
 
 if Valid == true
     %Grab the piece

@@ -1,4 +1,7 @@
 function [RowScore,RowQwirkle] = CalculateRowScore(Board,MovedPiece,Xpos,Ypos)
+% Author: Ken Le
+% Last updated 15 November 2017
+
 %RowScore = 0;
 RowQwirkle = 0;
 

@@ -1,5 +1,7 @@
 %%This script is used for testing
 %%Demonstration of how a game board and player's hands are created and manipulated
+% Author: Ken Le
+% Last updated 15 November 2017
 %%Making Fake GameState
 clear all; close all; clc; 
 

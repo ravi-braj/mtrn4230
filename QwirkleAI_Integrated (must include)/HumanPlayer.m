@@ -1,4 +1,7 @@
 %%Used to allow a human player to make a decision during gameplay
+% Author: Ken Le
+% Last updated 15 November 2017
+
 global ui
 
 %%Storing the hands

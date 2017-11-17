@@ -1,7 +1,8 @@
 function [TotalScore,PieceScore,Qwirkle] = CalculateMoveScore(Board,MovedPiece,Xpos,Ypos)
 
 %%Calculate the score of a player's move based on an existing board
-
+% Author: Ken Le
+% Last updated 15 November 2017
 
 %TotalScore = 0;
 %PieceScore = 0;

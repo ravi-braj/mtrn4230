@@ -1,6 +1,7 @@
 %%Beginning of Computer/AI moves during gameplay
 %%Does not run as a function but called during gameplay to make the action
-
+% Author: Ken Le
+% Last updated 15 November 2017
 %%Receive the correct pieces (store)
 if Player == 1
     GamePieces = P1GamePieces;

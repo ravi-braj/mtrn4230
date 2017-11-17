@@ -1,4 +1,7 @@
 function [ColumnScore,ColumnQwirkle] = CalculateColumnScore(Board,MovedPiece,Xpos,Ypos)
+% Author: Ken Le
+% Last updated 15 November 2017
+
 %ColumnScore = 0;
 ColumnQwirkle = 0;
 

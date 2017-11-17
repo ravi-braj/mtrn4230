@@ -1,4 +1,7 @@
 %%Making Fake GameState
+% Author: Ken Le
+% Last updated 15 November 2017
+
 clear all; close all; clc; 
 RandomGameBoard = zeros(9,9,2);
 for y  = 1:9

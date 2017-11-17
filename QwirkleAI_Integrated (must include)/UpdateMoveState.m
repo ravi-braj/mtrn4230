@@ -1,4 +1,7 @@
 %%Update Pieces and the Board
+% Author: Ken Le
+% Last updated 15 November 2017
+
 
 %%Checking the flag to see if a valid move was found
 if Valid == true

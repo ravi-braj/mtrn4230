@@ -6,6 +6,9 @@ function [ColumnScore,ColumnQwirkle] = CalculateColumnScore(Board,MovedPiece,Xpo
 %%Output = ColumnScore and if a Qwirkle is detected ie. 6 pieces
 %%connected
 
+% Author: Ken Le
+% Last updated 15 November 2017
+
 %ColumnScore = 0;
 ColumnQwirkle = 0;
 

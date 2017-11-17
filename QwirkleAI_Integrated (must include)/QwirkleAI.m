@@ -3,6 +3,10 @@ function [MovePiece,Xpos,Ypos] = QwirkleAI(Board,Pieces)
 %This function will return the MovePiece Number [1 to 6]
 %and also the X,Y board position corresponding to the correct move
 %It will return 0 for all 3 outputs if no moves found
+
+% Author: Ken Le
+% Last updated 15 November 2017
+
 MovePiece = 0;
 Xpos=0;
 Ypos=0;

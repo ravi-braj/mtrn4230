@@ -2,6 +2,9 @@ function [Move_Found]= isMoveValid(CheckingPiece,x,y,Board)
 %%isMoveValid returns a boolean [True or False]
 %Inputs are the Piece[1x2], X, Y positions corresponding to the
 %Board[9x9x2]
+% Author: Ken Le
+% Last updated 15 November 2017
+
 Move_Found = 0; %% 1 is true and 2 is Invalid
 Match = 0;
 %%Check if position is availiable

@@ -5,6 +5,9 @@ function DisplayQwirkleBoard(Input)
 %%Colour {1 = red, 2 = orange, 3 = yellow, 4 = green, 5 = blue, 6 = purple, 0 = white}
 %%Shape {1 = square, 2 = diamond, 3 = circle, 4 = club, 5 = cross, 6 = star, 0 = Empty}
 
+% Author: Ken Le
+% Last updated 15 November 2017
+
 %%Create Empty board and Populate the BoardDisplay
 BoardDisplay = cell.empty(81,0);
 for y  = 1:9

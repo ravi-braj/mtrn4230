@@ -1,4 +1,7 @@
 function [TotalScore,PieceScore,Qwirkle] = CalculateMoveScore(Board,MovedPiece,Xpos,Ypos)
+% Author: Ken Le
+% Last updated 15 November 2017
+
 %TotalScore = 0;
 %PieceScore = 0;
 %Qwirkle = 0;

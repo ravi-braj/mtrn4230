@@ -1,6 +1,9 @@
 %%The Game_Interface is the front end of the game
 %%Shows how the players can move and swap pieces with the board
 
+% Author: Ken Le
+% Last updated 15 November 2017
+
 global ui; %%Variable used to store all the states of the game
 
 %%Display Game Interface

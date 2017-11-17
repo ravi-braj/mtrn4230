@@ -6,6 +6,9 @@ function [Output] = PieceMatch(Piece,X,Y,Board)
 %     Shape Match = 2;
 %If the piece is IDENTICAL = 0;
 
+% Author: Ken Le
+% Last updated 15 November 2017
+
 ColorMatch = 0;
 ShapeMatch = 0;
 Output = 0;

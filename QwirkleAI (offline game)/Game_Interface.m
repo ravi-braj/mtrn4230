@@ -1,4 +1,7 @@
     %%Display Game Interface
+    % Author: Ken Le
+    % Last updated 15 November 2017
+
     %Positon Vector [bottomleftcornerX bottomleftcornerY width height]
     BoardVector = [0.21 ,0.1, 0.585, 0.585];
     P1Vector = [0.1, 0.1, 0.1, 0.6];

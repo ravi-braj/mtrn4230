@@ -6,6 +6,10 @@ function [RowScore,RowQwirkle] = CalculateRowScore(Board,MovedPiece,Xpos,Ypos)
 %%Input = Board, Piece, and X Y
 %%Output = RowScore and if a Qwirkle is detected ie. 6 pieces
 %%connected
+
+% Author: Ken Le
+% Last updated 15 November 2017
+
 %RowScore = 0;
 RowQwirkle = 0;
 

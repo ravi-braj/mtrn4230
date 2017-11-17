@@ -5,6 +5,9 @@ function DisplayChoices(Input)
 %%Colour {1 = red, 2 = orange, 3 = yellow, 4 = green, 5 = blue, 6 = purple, 0 = white}
 %%Shape {1 = square, 2 = diamond, 3 = circle, 4 = club, 5 = cross, 6 = star, 0 = Empty}
 
+% Author: Ken Le
+% Last updated 15 November 2017
+
 PieceDisplay = cell.empty(6,0);
     for x = 1:6
         %%Extract the correct image tile

@@ -1,6 +1,9 @@
 function [Output] = isEmptyBoundary(X,Y,Board)
 %%Check if the X,Y position on the board
 %%is either Empty/Boundary = 1 or Full = 0;
+% Author: Ken Le
+% Last updated 15 November 2017
+
 Empty = 1;
 Full = 0;
 

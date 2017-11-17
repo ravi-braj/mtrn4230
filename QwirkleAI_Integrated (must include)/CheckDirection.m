@@ -11,6 +11,9 @@ function [Output] = CheckDirection(Piece,Match,Direction,StartX,StartY,Board,Cla
           %  Clash -> 1 looking for clash
           %           0 looking for all similar
 
+% Author: Ken Le
+% Last updated 15 November 2017
+
 Output = 2;
 %%Starting Point
 X = StartX;
