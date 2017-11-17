@@ -293,6 +293,10 @@ classdef abb_tcp < handle
         end
         
         function setEndEffector(obj, effectorAngle)
+            %Sends an end effector angle to ABB
+            %Takes in a number between 0 and 360
+            %Written by Aravind Baratha Raj
+            %Last modified 10 November 2017
 
            try
                %send request ot set speed
@@ -311,7 +315,10 @@ classdef abb_tcp < handle
         end
         
         function loadConveyorBox(obj, forward)
-
+            %sends command to ABB to start conveyor to load box
+            %takes in a 1 or a 0 to indicate direciton
+            %Written by Aravind Baratha Raj
+            %Last modified 10 November 2017
            try
                %send request ot set speed
                fwrite(obj.socket, 'L', 'char');
@@ -329,6 +336,11 @@ classdef abb_tcp < handle
         end
         
         function ready = readyForNextCommand(obj)
+            %Sends a call to the robot to ask if it is ready for the next
+            %command in the queue
+            %Takes in nothing
+            %Last Modified 25 October 2017
+            
            ready = 0;
            try
                %send request ot set speed

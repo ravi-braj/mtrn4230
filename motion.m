@@ -1,6 +1,6 @@
-%moves implemented to facilitate qwirkle playing
+%Motion engine for implementing qwirkle game play
+%contains really useful movements such as 'pick up from point' and 'place'
 %mostly just manipulation of qwirkle pieces
-
 % Author: Ravi
 % Last updated 15 November 2017
 
@@ -38,6 +38,10 @@ classdef motion < handle
     end
     methods
         function obj = motion()
+            %constructor for a motion object
+            %Written by Aravind Baratha Raj
+            %Last updated 25 October 2017
+            
             %define board positions
             obj.board_topLeft = [551, 286];
             obj.board_bottomRight = [1042, 785];
@@ -60,6 +64,12 @@ classdef motion < handle
         %picks up a quirkle block from a particular point. Takes in matlab
         %coords. If table is false, it goes to conveyor
         function obj = pickUpFromPoint(obj, x, y, table)
+            %Picks up a qwirkle block from a point on the table or conveyor
+            %Takes in the pixel coordinates in the table/conveyor frame
+            %Takes in a 1 if table, 0 if conveyor
+            %Written by Aravind Baratha Raj
+            %Last modified 10 November 2017
+            
             global ui;
             %point on table
             if(table == 1)
@@ -88,6 +98,12 @@ classdef motion < handle
         
         %assumes that gripper is holding piece
         function obj = placeToPoint(obj, x, y, table)
+            %Places a qwirkle piece to a point on the table/conveyor
+            %Takes in the x y pixel values of the point
+            %takes in a 1 or 0 depending on table or conveyor
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017
+            
             global ui;
             %point on table
             if(table == 1)
@@ -119,6 +135,12 @@ classdef motion < handle
         %picks up a piece from the box. Stores its coordinates in the box
         %array. Takes in the xy coordinates of the piece
         function obj = pickUpFromBox(obj)
+            %Picks up a piece from the box if there is one
+            %Takes in nothing
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017
+            
+            
             %need a function to return the xy coords of a piece in the box
             [x, y, orientation, reachable] = obj.findFromBox();
 
@@ -133,6 +155,12 @@ classdef motion < handle
         end
         
         function [x, y, orientation, reachable] = findFromBox(obj)
+            %Looks for pieces in the box
+            %Returns the X Y pixel positions. Returns 1 or 0 depending on
+            %reachable. Returns orientation angle.
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017.
+            
            global ui;
            
            if(ui.findNewBlocks == 1)
@@ -155,6 +183,10 @@ classdef motion < handle
         %places piece into the box at some random location from the center.
         %Assumes the robot is holding a piece.
         function obj = placeInBox(obj)
+            %Places a piece in the box
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017
+            
             %set the position of the box.
             global ui;
             if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
@@ -177,6 +209,11 @@ classdef motion < handle
         %positive offset is clockwise correction
         %negative offset is anti-clockwise correction
         function obj = orientPiece(obj, orientationOffset)
+            %Corrects the orientation of a held qwirkle piece
+            %Takes in the offset of the piece
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017
+            
             global ui;
 
             %current end effector angle
@@ -190,6 +227,13 @@ classdef motion < handle
         %takes in the grid square on the board and returns a pixel
         %coordinate. Top left of board is (0, 0)
         function [x_p, y_p] = boardToPixel(obj, x, y)
+            %Converts the x y grid position of the board to a pixel
+            %position
+            %Takes in the x y grid position of the board
+            %Returns the x y position in pixels
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017
+            
             x_p = obj.board_topLeft(1) + x*obj.squareSize + 0.5*obj.squareSize;
             y_p = obj.board_topLeft(2) + y*obj.squareSize + 0.5*obj.squareSize;
         end
@@ -197,8 +241,11 @@ classdef motion < handle
         %takes in a player number and square and returns a pixel
         %coordinate of the centre of the square.
         function [x_p, y_p] = playerToPixel(obj, playerID, n)
-            %alternatively, could use topcorner, bottomcorner and board
-            %size to determine position of grid squares.
+            %Converts the players deck position to pixel values
+            %Takes in the player ID and the position in the deck
+            %Returns the x y position in pixels
+            %Written by Aravind Baratha Raj
+            %Last modified 1 November 2017.
 
             if(playerID == 1)
                 y_p = obj.p1_topLeft(2) + (n-1)*obj.squareSize+0.5*obj.squareSize;
@@ -213,6 +260,11 @@ classdef motion < handle
         %place it. It will rotate the piece by the angle of the box plus
         %the offset in the arguments
         function obj = arrangeInBox(obj, angleOffset)
+            %Places a qwirkle piece back in the box in an orderly fashion.
+            %Takes in the table angular offset of the piece
+            %Written by Aravind baratha Raj
+            %Last modified 1 November 2017.
+            
             global ui;
             
             if(obj.boxLocation(1) == 0 && obj.boxLocation(2) == 0)
@@ -256,6 +308,12 @@ classdef motion < handle
         
         %a safe point so that linear mode can be used
         function obj = goToInterimPoint(obj)
+            %Sends the arm to a set point on the board. Used for preventing
+            %collisions between the arm and the table when in linear mode
+            %and making sure all positions are reachable.
+            %Written by Aravind baratha Raj
+            %Last modified 1 November 2017
+            
             global ui;
             %point on table
             [x, y, z] = convertCoordsTable(obj.safePoint(1), obj.safePoint(2));
@@ -269,9 +327,13 @@ end
 
 
 function [rs_x, rs_y, rs_z] = convertCoordsConveyor(x, y)
-% hObject    handle to choosePoint_table (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
+%Converts the conveyor pixel coordinates to the robot coordinate system
+%Takes in x and y pixel coordinates
+%Returns the x y and z coordinates in the robot frame
+%Written by Aravind Baratha Raj
+%Last Modified 1 November 2017.
+
+
     global ui;
 
 
@@ -298,6 +360,13 @@ function [rs_x, rs_y, rs_z] = convertCoordsConveyor(x, y)
 end
 
 function [rs_x, rs_y, rs_z] = convertCoordsTable(x, y)
+%Converts the table pixel coordinates to the robot coordinate system
+%Takes in x and y pixel coordinates
+%Returns the x y and z coordinates in the robot frame
+%Written by Aravind Baratha Raj
+%Last Modified 1 November 2017.
+
+
     global ui;
     M = undistortPoints([x,y], ui.tableParams);
     x = M(1,1);

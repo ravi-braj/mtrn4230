@@ -1,6 +1,7 @@
-%class for qwirkle game actions
+%class for qwirkle gameplay motions
+%deals with all of the command-tcp-queuing architecture and simplifies
+%implementation of qwirkle game to just some easy function calls.
 % Author: Ravi and Ken
-
 % Last updated 15 November 2017
 
 classdef gameplay < handle
@@ -12,8 +13,14 @@ classdef gameplay < handle
             obj.motionMaker = motion();
         end
         
-        %places the players nth piece on board location
+
         function placePiece(obj, player, n, board)
+            %places the players nth piece on board location when a piece is
+            %being held. Assumes piece being held
+            %Takes in the player (0 or 1) the piece number in the players
+            %deck and the [x y] of the board position
+            %Author: Aravind Baratha Raj
+            %Last updated 1 November 2017
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromPoint(pieceX, pieceY, 1);
             [boardX, boardY] = obj.motionMaker.boardToPixel(board(1),board(2));
@@ -22,6 +29,11 @@ classdef gameplay < handle
         
         %places a new piece from the box in players nth space
         function replacePiece(obj, player, n)
+            %Used to put a new qwirkle piece on an empty deck square.
+            %Takes in the player (0 or 1) and the position in the deck of
+            %the piece to be replaced
+            %Author: Aravind Baratha Raj
+            %Last updated 1 november 2017
             [pieceX, pieceY] = obj.motionMaker.playerToPixel(player, n);
             obj.motionMaker.pickUpFromBox();
             obj.motionMaker.placeToPoint(pieceX, pieceY, 1);
@@ -29,6 +41,11 @@ classdef gameplay < handle
         
         %swaps all pieces of player with pieces from the box
         function swapPieces(obj, player)
+            %Used for swapping all of a players pieces with a new set of
+            %pieces from the box.
+            %Takes in a player ID.
+            %Author: Aravind Baratha Raj
+            %Last updated 1 November 2017
             for p=1:6
                 obj.discardPiece(player, p);
             end
@@ -37,8 +54,11 @@ classdef gameplay < handle
             end
         end
         
-        %gets the current hand of the player
         function pieces = getPieces(obj, player)
+            %used for populating the User interface with test data for decks.
+            %Takes in player (0 or 1)
+            %Written by Aravind Baratha Raj 
+            %Last updated 1 November 2017
             pieces = rand(6);
         end
         
@@ -53,6 +73,12 @@ classdef gameplay < handle
         %looks at all the pieces on the table and places them in the box
         %assumes that the box is empty.
         function cleanTable(obj)
+            %Used for removing all pieces on the table and placing them
+            %back into the box.
+            %Takes in no inputs
+            %Written by Aravind Baratha Raj
+            %Last updated 1 November 2017
+            
             %get array of pieces on table - in pixels
             global ui;
             pieces = detectTable(ui.tableRGB); %n by 6
@@ -91,6 +117,8 @@ classdef gameplay < handle
 
             %%Player 1 ---> COLOUR
             %%Player 2 ---> SHAPE
+            %Written by Ken Le
+            %Last updated 5 November 2017
             
             global ui;
             %%Detect all the pieces on Table
