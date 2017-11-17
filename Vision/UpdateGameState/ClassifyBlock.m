@@ -1,7 +1,12 @@
 function [colour, shape] = ClassifyBlock(blockRGB, convnetColour, convnetShape)
+    % Function receives input of a 50 x 50 RGB image of a block to
+    % classify, a neural net for colour and a neural net for shape. The
+    % classification of run on the block image and returns a value for
+    % colour and shape.
+    % written by Daniel Castillo
+    % Last updated 4 November 2017
 
-%% Function configuration
-
+%%
 % Classify colour
 colourCat = classify(convnetColour, blockRGB);
 if  (colourCat == '1')
@@ -18,7 +23,8 @@ elseif (colourCat == '6')
     colour = 6;
 end
 
-% Classify shape
+%%
+%Classify shape
 shapeCat = classify(convnetShape, blockRGB);
 if (shapeCat == '1')
     shape = 1;

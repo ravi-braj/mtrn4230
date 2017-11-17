@@ -1,8 +1,16 @@
 function [blocks, box, FoundBox] = detectConveyor(im)
-    % This function takes in a 1200 x 1600 image and detects a set of 
-    % blocks which reside within a carry box. It returns blocks which is 
-    % structured [x, y]. This allows the robot arm to swap blocks.
-    
+    % This function takes in a 1200 x 1600 image and runs the preliminary
+    % masking operations before passing the function to lower level block
+    % classification. The function first identifies a Conveyor Box
+    % returning a block struct [x,y,orientation] and flag indicating the 
+    % box was found successfully. Then, everything outside
+    % the box is masked such that classification may be run on the inside
+    % of the box. The result is returned in a matrix with columns
+    % x,y,orient,colour,shape,reachability for all blocks inside the box.
+    % written by Daniel Castillo
+    % Last updated 12 November 2017
+    %%
+    % initialise flag and apply baseline masks 
     FoundBox = false;
     
     % Load our neural nets
@@ -16,12 +24,14 @@ function [blocks, box, FoundBox] = detectConveyor(im)
     Conveyor_BW(705:end,:) = 0;
     %figure(1); imshow(Conveyor_BW);
     
+    %%
     %Insert Filled Image and create BoxMask
     con_stats = regionprops('table',Conveyor_BW,'Area','BoundingBox','FilledImage');
     [~, idx] = max(con_stats.Area);
     
     BoxMask = false(size(Conveyor_BW));
    
+    % Area must be of sufficient size to be a box. Fill in box region
     if con_stats.Area(idx) > 40000
         
         col = floor(con_stats.BoundingBox(idx,1));
@@ -41,6 +51,8 @@ function [blocks, box, FoundBox] = detectConveyor(im)
     
     %figure(2); imshow(BoxMask);
     
+    %%
+    % If box mask found 
     if (any(BoxMask(:)))
         % Extract box regionprops
         box_stats = regionprops('table',BoxMask,'Centroid','Area','PixelList');
@@ -64,7 +76,8 @@ function [blocks, box, FoundBox] = detectConveyor(im)
         %figure(1); imshow(im); hold on; plot(box.x,box.y,'*');
         
         blocks = detectBlocks(im,0);
-        
+
+        % Calculate reachability based on distance
         Origin.x = 215; Origin.y = 517;
         ReachableRadius = 832;
 
@@ -73,6 +86,7 @@ function [blocks, box, FoundBox] = detectConveyor(im)
         Dist(Dist > ReachableRadius) = 0;   % not reachable
         blocks(:,6) = Dist;
     else
+        % return empty if no box found
         blocks = [];
         box.x = []; box.y = []; box.orient = [];
     end

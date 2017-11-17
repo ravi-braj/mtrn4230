@@ -1,8 +1,6 @@
 %moves implemented to facilitate qwirkle playing
 %mostly just manipulation of qwirkle pieces
 
-
-
 classdef motion < handle
     properties (Access = public)
         %variables regarding the board
