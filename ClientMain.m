@@ -2,6 +2,8 @@
 % 15 August 2017
 % User interface for ABB robot
 
+% Written by Aravind Baratha Raj
+% Last modified 2 November 2017
 
 %% %%%%%%%%%%% 1 SETUP %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %imaqreset

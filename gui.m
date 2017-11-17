@@ -21,7 +21,7 @@ function varargout = gui(varargin)
     % See also: GUIDE, GUIDATA, GUIHANDLES
 
     % Edit the above text to modify the response to help gui
-
+    % Written by Aravind Baratha Raj
     % Last Modified by GUIDE v2.5 14-Nov-2017 18:06:21
 
     % Begin initialization code - DO NOT EDIT
