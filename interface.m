@@ -93,10 +93,12 @@ classdef interface < handle
         %conveyor direction for loadBlocks
         conveyorDirection
         
+        % Plotting Detect Blocks for Conveyor
         htextconveyor
         hquivconveyor
         hdotconveyor
         
+        % Plotting Detect Blocks for Table
         htexttable
         hquivtable
         hdottable
@@ -130,8 +132,6 @@ classdef interface < handle
         %for finding the box
         findNewBlocks
         blockIndex
-        
-        conveyorDirection;
         
     end
     methods

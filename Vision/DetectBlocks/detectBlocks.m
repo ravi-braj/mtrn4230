@@ -13,10 +13,14 @@
     % Generate block mask
     Block_BW = createBlockMask(im);
     
+    % Load GridMask on table to seperate close blocks
+    % Required as grid lines are black making it harder to seperate blocks
     if (source == 1)
         gridmask = load('gridMask.mat');
         se = strel('cube',4);
+        % Dilate Grid Mask to make a bigger gap
         gridmask.BW = imdilate(gridmask.BW, se);
+        % Make the grid line pixel values 0 on Block_BW mask
         Block_BW(gridmask.BW) = 0;
     end
     

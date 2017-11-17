@@ -7,6 +7,7 @@ tableObj = webcam(1); % table
 tableObj.Resolution = '1600x1200';
 
 while(1)
+    % Iterate evey 10 seconds for vision block detection to Process
     tableRGB = snapshot(tableObj);
     figure(23);
     imshow(tableRGB);

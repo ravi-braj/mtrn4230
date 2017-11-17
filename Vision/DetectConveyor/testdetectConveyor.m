@@ -7,6 +7,7 @@ coveyorObj = webcam(2); % coveyor
 coveyorObj.Resolution = '1600x1200';
 
 while(1)
+    % Iterate evey 10 seconds for vision block detection to Process
     coveyorRGB = snapshot(coveyorObj);
     figure(25);
     imshow(coveyorRGB);
